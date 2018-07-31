@@ -1,10 +1,12 @@
-\chapter{Hashtable Baselines Note}
+\chapter{Note to Matko}
 \label{baselines_note}
 
-\textit{This is a note to explain the current situation of the project, and to decide what might need doing in the last few weeks of the project. 
-I'm aware I have a lot of different ways of chopping the data set, and differnet models, so there is potential to investigate a lot.}
+\textit{
+This is a note to explain the current situation of the project, and to decide what might need doing in the last few weeks of the project. 
+I'm aware I have a lot of different ways of chopping the data set, and differnet models, so there is potential to investigate a lot.
+As such this note is just to clarify thoughts for this last week.}
 
-\section{The Dataset} % (fold)
+\section{The Dataset (A Reminder)} % (fold)
 \label{sec:the_dataset}
 
 The raw dataset is the set of all functions that obey the \mintinline{python}{numpy} or \mintinline{python}{google} standard of docstrings, from top 300 libraries as available on \mintinline{python}{pip}. 
@@ -17,19 +19,139 @@ In terms of the amount of data collected:
     \item 39,205 (argument, description) pairs were collected
 \end{itemize}
 
-In examining this data, I found there data to be 
-\begin{itemize}
-    \item heavily biased towards scientific libraries
-    \item to have a number of duplicates of (argument, description) pairs
-\end{itemize}
+In examining this data, I found the data to be highly biased towards scientific libraries, and also within these libraries, many functions containing identical pairs of (argument, description). 
+The reasons for this are simple: 
+\begin{enumerate}
+    \item Scientific libraries have vast API's, so need good documentation for inputs and outputs.
+    \item Some the arguments for these apis are likely to be identical, leading coders to copy them. 
+    E.G \mintinline{python}{name} for a tensor in \mintinline{python}{tensorflow}.
+\end{enumerate} 
 
 \subsection{Data Set Investigation} % (fold)
 \label{ssub:datasetinvestigation}
 
-% subsubsection datasetinvestigation (end)
+In the report I aim present an investigation of the dataset from a statistical point of view, but also a qualitative point of view.
+I want to both know: 
+\begin{itemize}
+    \item Statistics about natural language: eg - variable names, description lengths, uniqueness of variable names and (variable, description) pairs, vocabulary size
+    \item Statistics about code and syntax trees: eg - tree sizes, paths, uniquenesses of paths
+    \item Clustering of natural language: eg how similar are the libraries? is there a distinction between scientific and other libraries, based on either description, or argument name, or names of source code. How much `bias' is there in the dataset?
+\end{itemize}
 
-% section the_dataset (end)
+I have done the first two investigations, on Jupyter notebooks but I am yet to do the third.
 
+The results of the the first two investigations I will paste here fully in due time, but the in summary I noticed that there are a often arguments have identical descriptions, even if they come from different functions with different code. 
+This allows a dumb learner that effectively just memorizes previous descriptions and names, to perform with  significant hit rate.  
+As a result, I created various datasets that effectively capped the number of duplicate (argument, description) pairs.
+
+\begin{center}
+\begin{tabular}{|| c | c | c ||}
+  \hline
+   Name of DataSet & No of Duplicates & Data Set Size \\
+  \hline
+   UnsplitND1 & 0 & 22917 \\
+   UnsplitND2 & 1 & 28771 \\
+   UnsplitND3 & 2 & 31063 \\
+   UnsplitND4 & 3 & 32487 \\
+   UnsplitND5 & 4 & 33398 \\
+   UnsplitNDX & 9 & 35551 \\
+   Unsplit    & NA & 39205\\ 
+  \hline
+\end{tabular}
+\end{center}
+
+Finally I also had the option of choosing whether to divide my dataset along repository lines for training and validation/test, or whetehr to keep the function together. 
+That is: should code from a the test and validation set be from different libraries as the train set. 
+
+I have so far prepared one of these data sets but I have not prepared the no duplicates set.
+
+\begin{center}
+\begin{tabular}{|| c | c | c ||}
+  \hline
+   Name of DataSet & No of Duplicates & Data Set Size \\
+  \hline
+   Split    & NA & 39205\\ 
+  \hline
+\end{tabular}
+\end{center}
+
+\section{Hashtable Baselines} % (fold)
+\label{sub:hashtable_baseline}
+
+All hashtable baseline models shared a common idea: identify a feature to match, and randomly choose a stored description from the training set, whose data matches this feature. 
+Although this led to several differnt models (largely based on what consitutes a match, and which features are available to the model), this baseline proved vital to compare to the LSTM models, as it indicated the limits of "overfitting". 
+Surpassing these models should indicat that something generalizable in the data has been learnt.
+
+\subsection{Natural Language Lookup} % (fold)
+\label{sub:natural_language_lookup}
+When dealing with natural language text data, the model attempted to find the largest overlapping n-character-gram, and drew randomly from the set of matched descriptions.
+
+There were four available tokenizations of the data that only pertained to the natural language of the function signiature, and they were concatenated with unique character separators, to form long strings for the lookup table
+
+% subsection natural_language_lookup (end)
+
+\begin{enumerate}
+    \item the argument name
+    \item the argument name + the function name
+    \item the argument name + the names of the other arguments
+    \item the argument name + the function name + the names of the other arguments
+\end{enumerate}
+
+\subsection{Code Path Lookup} % (fold)
+\label{sub:code_path_lookup}
+
+In a similar spirit, the hashtable model aims to memorise `code paths' as defined in the code2vec paper, and then for each test point, return a randomly chosen description from the set of best matches.
+
+In this case what constitutes a match can vary, so a delineation is based on whether full paths (`hard') need to be matched, or subpaths can be matched (`soft')
+\begin{enumerate}
+    \item \textit{hardest} - chose from the set of descriptions which have the most matching full paths.
+    \item \textit{hard} - chose from the set of descriptions in proportion to the number of matching full paths.
+    \item \textit{soft} - chose from the set of descriptions with the greatest matched subpaths.
+    \item \textit{softest} - chose from the set of descriptions  with proportion to the number of matching subpaths.
+\end{enumerate}
+
+Of these, I run into memory issues with the soft (for some reason), and still need to run it on the full datasets. 
+% subsection code_path_lookup (end)
+
+\subsection{Combined Lookup} % (fold)
+\label{sub:combined_lookup}
+
+To do a combined lookup, simply add the two possible sets of descriptions together, before randomly choosing. 
+
+% subsection combined_lookup_and_results (end)
+
+\subsection{Results} % (fold)
+\label{sub:results}
+
+In terms of results, I first ran the hashtable baseline with just text and different tokenizations. If you remove the duplicates the model performs significantly worse.
+
+Then I have on the same dataset run the code sections.
+
+I found this.
+
+
+
+\section{Neural Models} % (fold)
+\label{sec:neural_models}
+
+\subsection{CharToWord Seq to Seq} % (fold)
+\label{sub:chartoword_seq_to_seq}
+
+So far this model has failed to beat the baseline. At best it seems capable of matching it. My theories as to why this is:
+ \begin{enumerate}
+     \item Unlike in sentences where words depend on each other in a confusing syntactic patterns with long range dpependencies, words in a sentence have shorter range dependencies, often neighbouring matters the most or sub phrases.
+     \item Therefore ngram overlap is a very significant feature - indeed its what humans look for when trying to work out what variables are
+ \end{enumerate}
+
+ I expected cases such as including functon name or other arguments to hurt performance, and it would add a lot of noise. This turned out not to be the case. Perhaps the benchmark's advantage of always being able to generate well formed descriptions also came into play.
+
+ At any rate I have a significant number of experiments here, with the different tokenizations of the data, and different types of seq to seq model (attention no attention, bidirectional or not, trainable embeddings or not), that i could write about.
+
+ \subsection{CodeToVec to Seq} % (fold)
+ \label{sub:codetovec}
+
+ This model is an implementation of thde code2vec paper 
+ 
 
 
 
