@@ -1,0 +1,38 @@
+\chapter{Hashtable Baselines Note}
+\label{baselines_note}
+
+\textit{This is a note to explain the current situation of the project, and to decide what might need doing in the last few weeks of the project. 
+I'm aware I have a lot of different ways of chopping the data set, and differnet models, so there is potential to investigate a lot.}
+
+\section{The Dataset} % (fold)
+\label{sec:the_dataset}
+
+The raw dataset is the set of all functions that obey the \mintinline{python}{numpy} or \mintinline{python}{google} standard of docstrings, from top 300 libraries as available on \mintinline{python}{pip}. 
+These were collected by writing an extension to the \mintinline{python}{sphinx} documentation generator, which is the industry standard for automatic code documentation.
+
+In terms of the amount of data collected:
+\begin{itemize}
+    \item 133 libraries contributied to dataset
+    \item 12,079 function definitions were collected
+    \item 39,205 (argument, description) pairs were collected
+\end{itemize}
+
+In examining this data, I found there data to be 
+\begin{itemize}
+    \item heavily biased towards scientific libraries
+    \item to have a number of duplicates of (argument, description) pairs
+\end{itemize}
+
+\subsection{Data Set Investigation} % (fold)
+\label{ssub:datasetinvestigation}
+
+% subsubsection datasetinvestigation (end)
+
+% section the_dataset (end)
+
+
+
+
+
+
+
