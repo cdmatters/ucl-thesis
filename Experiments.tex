@@ -166,11 +166,17 @@ Investigate the Best Tokenizations adding Source Code
 \begin{tabular}{ c | c | c | c }
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
-    Rote Learner (best performer)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    Rote Learner  (code only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  (code only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     \hline
-    Code2Vec                             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec (masked)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec (whole tree)                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+    Rote Learner  (name only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Seq2Seq  (name only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+    \hline
+    Rote Learner (combined)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    Double Encoder                          & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  + Char to Seq                           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     \hline
 \end{tabular}
 \caption {Investigate code2vec combined with seq to seq}
@@ -199,8 +205,8 @@ Investigate the Best Tokenizations adding Source Code
 \end{table}
 
 
-\section{Sundry Analysis} % (fold)
-\label{sec:sundry_analysis}
+\section{Analysis} % (fold)
+\label{sec:analysis}
 
 % section sundry_analysis (end)
 
@@ -208,4 +214,7 @@ Investigate the Best Tokenizations adding Source Code
 \label{ssub:investigating_the_removal_of_duplicates}
 
 Investigate ND Datasets, see if performance improves.
+
+\subsubsection{Visualising Attention Weights} % (fold)
+\label{ssub:visualising_attention_weights}
 
