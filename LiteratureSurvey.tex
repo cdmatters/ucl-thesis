@@ -1,35 +1,86 @@
 \chapter{Literature Survey}
 \label{literature_survey}
 
-\section{Related Work} % (fold)
+\begin{itemize}
+    \item Code has become an integral part of the underpinnings of modern life. This seems likely to continue if not accelerate.
+    \item However the number of people who can read \& write code remains small as a percentage of the population. 
+    \item Tools that can help either read, write or analyse code hold the potential to provide great value, for both professional software engineers, and also non-coders.
+    \item With the proliferation of industry quality open source code, a great deal of research has gone into the field of trying do this translation.
+\end{itemize}
 
-This could be a very big section. 
+\section{Big Code \& Naturalness} % (fold)
 
-\subsubsection{Naturalness to English} % (fold)
-\label{ssub:naturalness_to_english}
+\subsection{The Naturalness Hypothesis} % (fold)
+\label{ssub:the_naturalness_hypothesis}
 
-Here we talk a bit about the big code and naturalness papers. Allamanis etc al.
+% subsubsection the_naturalness_hypothesis (end)
+\begin{itemize}
+    \item How does code vary from natural language?
+        \begin{itemize}
+            \item formal, executable, brittle, unique sentences, neologisms, reuse, ambiguity, two channels vs one channel
+        \end{itemize}
+    \item What similarities are there?
+        \begin{itemize}
+            \item naming, objects are anchored (metaphors of OOP), idiomatic writing, patterns
+        \end{itemize}
+    \item How does this lead to the naturalness hypothesis
+        \begin{itemize}
+            \item latter patterns are ignored by the computer yet present in large datasets \textbf{CITE}. 
+            therefore seem to indicate that asignificant part of code is communication for other humans, not the computer - cf literate programming Knuth
+            \item \textbf{Naturalness Hypothesis} - ``Software is a form of human communications; software corpora have a similar statistical properties to natural language coprora; and theses properties can be exploited to build better software tools'' 
+            \item The implication is therefore we can make use of the body of work and probabilistic models on natural language and transfer to code.
+        \end{itemize}
+\end{itemize}
 
-Papers such as: extreme summarization of source code, graph neural network, etc..
 
-We reference other datasets that are available, and analyse the problems with them
+\subsection{Related Work} % (fold)
+\label{ssub:related work}
+
+A number of different people have attempted to use probabilistic models for language, in this fields ranging in a variety of tasks:
+
+\textbf{Generating English}
+\begin{itemize}
+    \item Extreme summarization of source code (allamanis)
+    \item Summarization using neural attention model
+    \item Preidcting Programming COmmets
+\end{itemize}
+
+\textbf{Observing Patterns in Code}
+\begin{itemize}
+    \item Allamanis graph paper
+    \item Extracting patterns/idioms from source code (allamanis)
+    \item Program properties from big code
+\end{itemize}
+
+\textbf{Representation of Code}
+\begin{itemize}
+    \item Code2Vec
+    \item Code embeddings the other paper
+\end{itemize}
+
+\textbf{Datasets}
+\begin{itemize}
+    \item Edinburgh NLP
+    \item IFTTT
+    \item Django 
+\end{itemize}
 
 
-\subsubsection{Code to English} % (fold)
-\label{ssub:code_to_english}
+% \subsection{Useful datasets} % (fold)
+% \label{ssub:existing_datasets}
 
-Here we talk a bit about structured language to english. Semantic parsing. We talk about the datasets and the very limited fields. (Pointer networks)
-% subsubsection naturalness_to_english (end)
+% Here we talk a bit about structured language to english. Semantic parsing. We talk about the datasets and the very limited fields. (Pointer networks)
+% % subsubsection naturalness_to_english (end)
 
-We talk about maybe some english to code methods:
-* SQL
-* program synthesis
+% We talk about maybe some english to code methods:
+% * SQL
+% * program synthesis
 
-\subsection{Other Investigations with Code} % (fold)
-\label{sub:other_investigations_with_code}
+% \subsection{Other Investigations with Code} % (fold)
+% \label{sub:other_investigations_with_code}
 
-Here we refer to code to vec.
-And maybe some more stuff
-% subsection other_investigations_with_code (end)
+% Here we refer to code to vec.
+% And maybe some more stuff
+% % subsection other_investigations_with_code (end)
 
-\label{sec:related_work}
+% \label{sec:related_work}

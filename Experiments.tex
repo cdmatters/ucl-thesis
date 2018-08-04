@@ -1,17 +1,211 @@
-\chapter{Experiments}
-\label{experiments}
+\chapter{Experiments and Results}
+\label{experiments_and_results}
 
-\section{Investigating Naturalness Hypothesis} % (fold)
-\label{sec:investigating_naturalness_hypothesis}
+\section{Investigating Human Readable Channel} % (fold)
+\label{sec:investigating_human_readable_channel}
+
+
+% INVESTIGATION PURELY BASED ON NAME
+\subsubsection{Comparing Baseline Models} % (fold)
+\label{ssub:comparing_baseline_models}
+
+Investigate the limits of descriptions based purely on names.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner                      & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+    Seq to Seq                        & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    + \textit{attention}              & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    + \textit{bidirectional encoder}  & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    + \textit{dropout}                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+\end{tabular}
+\caption {Investigate the limits of descriptions based purely on names.}
+\label{table:name_baseline}
+\end{center}
+\end{table}
+
+
+
+
+% INVESTIGATION DIFFERENT TOKENIZATIONS
+\subsubsection{Investigating Different Tokenizations} % (fold)
+\label{ssub:investigating_different_tokenizations}
+
+% subsubsection investigating_different_tokenizations (end)
+Investigate the improvement based on different tokenizations of data.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c }
+    Model                               & BLEU Unsplit            & Perpelexity \\
+    \hline
+    \hline
+    Rote Learner                        &                  & \\    
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    - \textit{name + function name}     & $1.0 \pm 1.0 $   & \\
+    - \textit{name + other args}        & $1.0 \pm 1.0 $   & \\
+    - \textit{name + function name + other args}     & $1.0 \pm 1.0 $   & \\
+    \hline
+    \hline
+    Seq to Seq                          &                  &  \\
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    - \textit{name + function name}     & $1.0 \pm 1.0 $   & \\
+    - \textit{name + other args}        & $1.0 \pm 1.0 $   & \\
+    - \textit{name + function name + other args}     & $1.0 \pm 1.0 $   & \\
+    \hline
+\end{tabular}
+\caption {Investigate the effect of differnet code features}
+\label{table:tokenization}
+\end{center}
+\end{table}
+
+
+
+
+\subsubsection{Investigating Addition of Source Code} % (fold)
+\label{subs:investigating_tokenizations_with_source_code}
+
+Investigate the Best Tokenizations adding Source Code
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c }
+    Model                               & BLEU             & Perpelexity \\
+    \hline
+    \hline
+    Rote Learner                        &                  & \\    
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    - \textit{name + source code}       & $1.0 \pm 1.0 $   & \\
+    \hline
+    \hline
+    Seq to Seq                          &                  &  \\
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    \hline
+    \hline
+    Double Encoder to Seq               &                  &  \\
+    - \textit{name + sourcecode}        & $1.0 \pm 1.0 $   & \\
+    \hline
+\end{tabular}
+\caption {Investigate the descriptions with source code}
+\label{table:human_source_code}
+\end{center}
+\end{table}
+
+% subsubsection investigating_the_removal_of_duplicates (end)
+
+
+% subsubsection results (end)
 
 % section investigating_naturalness_hypothesis (end)
 
-\section{Investigating the Effects of Code} % (fold)
-\label{sec:investigating_the_effects_of_code}
+\section{Investigating the Computer Readable Channel} % (fold)
+\label{sec:investigating_the_computer_channel}
 
-% section investigating_the_effects_of_code (end)
+\subsubsection{Comparing Code2Vec to Baselines} % (fold)
+\label{ssub:comparing_code2vec_to_baselines}
 
-\section{Investigating the Combination} % (fold)
-\label{sec:investigating_the_combination}
+% subsubsection comparing_code2vec_to_baselines (end)
 
-% section investigating_the_combination (end)
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (codeonly)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - softest                         & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - soft                            & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - hard                            & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - hardest                         & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+    Code2Vec                          & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+\end{tabular}
+\caption {Investigate the limits of purely codepaths}
+\label{table:name_code2vec_solo}
+\end{center}
+\end{table}
+
+
+\subsubsection{Comparing Code2Vec Altered} % (fold)
+\label{ssub:comparing_code2vec_altered}
+
+% subsubsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (best performer)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+    Code2Vec                             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (masked)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (whole tree)                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+\end{tabular}
+\caption {Investigate code2vec but with masked variables}
+\label{table:name_baseline}
+\end{center}
+\end{table}
+
+
+\section{Investigating Combined Channels} % (fold)
+\label{sec:investigating_combined_channels}
+
+\subsubsection{Combined Code2Vec } % (fold)
+\label{ssub:comparing_code2vec_altered}
+
+% subsubsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (best performer)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+    Code2Vec                             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (masked)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (whole tree)                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+\end{tabular}
+\caption {Investigate code2vec combined with seq to seq}
+\label{table:name_baseline}
+\end{center}
+\end{table}
+
+
+
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (best performer)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    \hline
+    Code2Vec                             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (masked)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec (whole tree)                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    \hline
+\end{tabular}
+\caption {Investigate code2vec combined with seq to seq, for different tokenizations}
+\label{table:name_baseline}
+\end{center}
+\end{table}
+
+
+\section{Sundry Analysis} % (fold)
+\label{sec:sundry_analysis}
+
+% section sundry_analysis (end)
+
+\subsubsection{Investigating the Removal of Duplicates} % (fold)
+\label{ssub:investigating_the_removal_of_duplicates}
+
+Investigate ND Datasets, see if performance improves.
+
