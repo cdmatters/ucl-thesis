@@ -1,13 +1,41 @@
 \chapter{The Dataset}
 \label{the_dataset}
 
+\begin{enumerate}
+    \item The dataset is original, and presents a new opportunity, not seen in the literature thus far.
+    \item In particular it offers a close alignment between features of code, and descriptive elements that aim to tell you what to do.
+    \item In this section we will present the means of collection, the structure of the dataset, and finally an analysis of its composition. 
+    \item This analysis aims to be informative by both being quantitative, highlight the statistical composition of the dataset, and qualitative.
+
+    \item Finally we  also compare it and contrast it to other datasets.
+\end{enumerate}
+
 \section{Method of Collection} % (fold)
 \label{sec:method_of_collection}
 
+\begin{enumerate}
+    \item Python is a dynamically typed language with emphasis on documentation
+    \item Sphinx is the industry standard for automating documentation generation.
+    \item It contains an open source plugin `napoleon' that generate html web API documentation for docstrings formatted ether according to the Google Standard or the Numpy Standard (show examples of both).
+    \item This appears to be used extensively in industry by xyz
+    \item We wrote a plugin forked off napoleon that instead generated parsed the data and wrote it to an output yaml file (CITE)
+    \item Since we require libaries with good documentation, that are easy to install (for the plug in to read them - documentation is sources by syntax tree??) we decided to run on the most popular libraries in python. we used the pip wall of superpowers to search for 300 most popular libraries on pip.
+    \item After collecting these, we preprocessed by removing arguments without description (ie self), and those without code bodies (Ie (not implemented error) in abstract base class)
+\end{enumerate}
+
 % section method_of_collection (end)
 
-\section{Structure of Dataset} % (fold)
-\label{sec:structure_of_dataset}
+\section{Structure of a DataPoint} % (fold)
+\label{sec:structure_of_datapoint}
+
+The dataset is formed of X data points, each with the following structure
+\begin{itemize}
+    \item name: - string - 
+    \item desc: - string - 
+
+\end{itemize}
+...
+fill in 
 
 % section structure_of_dataset (end)
 
@@ -29,3 +57,16 @@
 
 % subsection qualitative_analysis_ (end)
 % section analysis_of_data (end)
+
+\subsection{Comparison To Other Datasets} % (fold)
+\label{sub:comparison_to_other_datasets}
+
+    This should be contrasted with comments, and overall docstrings, and full annotations.
+    \begin{itemize}
+        \item Comments data set - often comment is extra information when reading code. Why - not what
+        \item Docstrings - have much more context and can be unspecific. It is unclear what partof the code does what. The mapping is very unclear
+        \item Annotations - much more granular and good mapping of meaning to description, but not organic necessarily. DIfficult to source large dataset in.
+    \end{itemize}
+
+
+% subsection comparison_to_other_datasets (end)

@@ -36,13 +36,14 @@ Investigate the limits of descriptions based purely on names.
 \subsubsection{Investigating Different Tokenizations} % (fold)
 \label{ssub:investigating_different_tokenizations}
 
+
 % subsubsection investigating_different_tokenizations (end)
 Investigate the improvement based on different tokenizations of data.
 
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{ c | c | c }
-    Model                               & BLEU Unsplit            & Perpelexity \\
+    Model                               & BLEU Unsplit            & BLEU Split  \\
     \hline
     \hline
     Rote Learner                        &                  & \\    
@@ -148,7 +149,7 @@ Investigate the Best Tokenizations adding Source Code
     \hline
 \end{tabular}
 \caption {Investigate code2vec but with masked variables}
-\label{table:name_baseline}
+\label{table:code_2_vec_masked}
 \end{center}
 \end{table}
 
@@ -157,7 +158,7 @@ Investigate the Best Tokenizations adding Source Code
 \label{sec:investigating_combined_channels}
 
 \subsubsection{Combined Code2Vec } % (fold)
-\label{ssub:comparing_code2vec_altered}
+\label{ssub:combined_code2vec}
 
 % subsubsection comparing_code2vec_to_baselines (end)
 
@@ -166,43 +167,26 @@ Investigate the Best Tokenizations adding Source Code
 \begin{tabular}{ c | c | c | c }
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
-    Rote Learner  (code only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec  (code only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Rote Learner  (code only)         & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  (code only)             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     \hline
     \hline
-    Rote Learner  (name only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Seq2Seq  (name only)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Rote Learner  (name only)         & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Seq2Seq  (name only)              & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     \hline
     \hline
     Rote Learner (combined)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
-    Double Encoder                          & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec  + Char to Seq                           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  + Char to Seq           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     \hline
 \end{tabular}
 \caption {Investigate code2vec combined with seq to seq}
-\label{table:name_baseline}
+\label{table:code2vec_embed}
 \end{center}
 \end{table}
 
 
 
-
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
-    \hline
-    Rote Learner (best performer)           & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
-    \hline
-    Code2Vec                             & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec (masked)                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec (whole tree)                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    \hline
-\end{tabular}
-\caption {Investigate code2vec combined with seq to seq, for different tokenizations}
-\label{table:name_baseline}
-\end{center}
-\end{table}
 
 
 \section{Analysis} % (fold)
