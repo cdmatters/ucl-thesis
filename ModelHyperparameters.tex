@@ -1,0 +1,59 @@
+\chapter{Model Hyperparameters}
+\label{Model Hyperparameters}
+
+The hyperparameters of the best model for each experiment are presented in this section for ease of replication.
+
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    \hline
+    Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
+                                      % & samples                           & $50$  \\
+    \hline
+    Seq to Seq                        & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & lstm size                  & $300$           \\
+                                      & max arg. name sequence length         & $60$   \\
+                                      & max arg. description sequence length  & $120$  \\
+    + \textit{attention}              & \textit{attention size}    & $300$           \\
+    + \textit{bidirectional encoder}  & \textit{bi-lstm size}.     & $(300,300) $    \\
+    + \textit{dropout}                & \textit{dropout}           & $0.1$           \\
+    \hline
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
+\label{table:hyperparams_name_baseline}
+\end{center}
+\end{table}
+
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    \hline
+    Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
+                                      % & samples                           & $50$  \\
+    \hline
+    Seq to Seq  (basic)               & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & bi-lstm size               & $(300,300) $    \\
+                                      & attention size             & $300$           \\
+                                      & max arg. name sequence length         & $60$   \\
+                                      & max arg. description sequence length  & $120$  \\
+    \hdashline
+    - \textit{name only}              & (basic) + \textit{dropout}           & $0.1$           \\
+    - \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
+    - \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
+    - \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\label{table:hyperparams_different_tokenizations}
+\end{center}
+\end{table}
+

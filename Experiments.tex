@@ -50,35 +50,9 @@ Since good naming is a feature of good programming, we expected some reasonable 
 
 \subsubsection{Hyperparameters}
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ c | c | c  }
-    Model                           {}  & Hyperparameter  & Value    \\
-    \hline
-    -                                 & vocabulary size            & $40,000$ \\
-    \hline
-    Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
-                                      % & samples                           & $50$  \\
-    \hline
-    Seq to Seq                        & learning rate              & $0.001$         \\
-                                      & batch size                 & $128$           \\
-                                      & lstm size                  & $300$           \\
-                                      & max arg. name sequence length         & $60$   \\
-                                      & max arg. description sequence length  & $120$  \\
-    + \textit{attention}              & \textit{attention size}    & $300$           \\
-    + \textit{bidirectional encoder}  & \textit{bi-lstm size}.     & $(300,300) $    \\
-    + \textit{dropout}                & \textit{dropout}           & $0.1$           \\
-    \hline
-\end{tabular}
-\caption {Hyperparameters of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
-\label{table:hyperparams_name_baseline}
-\end{center}
-\end{table}
-
-
 \subsubsection{Results} % (fold)
 
-The results are displayed in Table \ref{table:name_baseline}.
+The results are displayed in Table \ref{table:name_baseline}. The hyperparameters for this models found in Table \ref{table:hyperparams_name_baseline}
 \textbf{Visualise Attention}
 
 \begin{table}[h!]
@@ -116,33 +90,6 @@ Once again we hypothesised that variable and function and other argument naming 
 
 \subsubsection{Hyperparameters}
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ c | c | c  }
-    Model                             & Hyperparameter  & Value    \\
-    \hline
-    -                                 & vocabulary size            & $40,000$ \\
-    \hline
-    Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
-                                      % & samples                           & $50$  \\
-    \hline
-    Seq to Seq  (basic)               & learning rate              & $0.001$         \\
-                                      & batch size                 & $128$           \\
-                                      & bi-lstm size               & $(300,300) $    \\
-                                      & attention size             & $300$           \\
-                                      & max arg. name sequence length         & $60$   \\
-                                      & max arg. description sequence length  & $120$  \\
-    \hdashline
-    - \textit{name only}              & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
-\end{tabular}
-\caption {Hyperparameters of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
-\label{table:hyperparams_name_baseline}
-\end{center}
-\end{table}
-
 
 \begin{table}[h!]
 \begin{center}
@@ -168,6 +115,7 @@ Once again we hypothesised that variable and function and other argument naming 
 \label{table:tokenization}
 \end{center}
 \end{table}
+
 
 
 

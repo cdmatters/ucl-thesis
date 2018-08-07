@@ -35,13 +35,20 @@
 \include{Introduction}
 \include{LiteratureSurvey}
 \include{TheoreticalBackground}
-\include{TheModels}
 \include{TheDataset}
+\include{TheModels}
 \include{Experiments}
 % \include{Results}
 \include{Conclusions}
-
 \include{BaselinesNote}
+
+
+% The \appendix command resets the chapter counter, and changes the chapter numbering scheme to capital letters.
+%\chapter{Appendices}
+\addcontentsline{toc}{chapter}{Appendices}
+\appendix
+\include{ModelHyperparameters} 
+
 \include{Appendices} 
   
 % This line manually adds the Bibliography to the table of contents.
