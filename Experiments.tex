@@ -1,28 +1,32 @@
 \chapter{Experiments and Results}
 \label{experiments_and_results}
 
+
 \section{Experimental Setup} % (fold)
 \label{sec:experimental_setup}
 
-% section experimental_setup (end)
+Although there are distinct differences between some of the models (neural vs non neural) all experiments followed the same pattern of execution.
+This general setup will be elaborated here, with additional methods described in more detail in the relevant sections.
 
-\section{Investigating Human Readable Channel} % (fold)
-\label{sec:investigating_human_readable_channel}
 
-% INVESTIGATION PURELY BASED ON NAME
-\subsection{Comparing Baseline Models} % (fold)
-\label{sub:comparing_baseline_models}
+\subsubsection{Tokenization} % (fold)
+\label{ssub:tokenization}
 
-\subsubsection{Experiment Objective} % (fold)
+\subsubsection{Training} % (fold)
+\label{ssub:training}
 
-As a baseline, we first wanted to investigate the informative power of simply the names of variables, with regards to different architectures of our baseline model.
-Since good naming is a feature of good programming, we expected some reasonable signal to come from just the variable name, some signal should be learnable by both our seq-to-seq model and rote learner.
+\subsubsection{Evaluation} % (fold)
+\label{ssub:evaluation}
 
-\subsubsection{Method} % (fold)
+% subsection training (end)
+
+
 
 \begin{enumerate}
-    \item For this experiment we used the deduplicated data set \mintinline{python}{UnsplitNoDuplicates}, as described in section \ref{sec:our_final_datasets}. 
-    Given the lack of additional features such as code, we felt this removal of duplicates was a sensible way of removing an artificial improvement of our BLEU score. 
+    \item First we would choose a dataset, as described in section \ref{sec:our_final_datasets}. 
+    This was rarely changed for sets of experiments, but was relevant in the use of code vs non code.
+
+
     \item We then generated a vocabulary for our training data by:
     \begin{enumerate}
         \item first generating a provisional vocabulary of tokens used more than 4 times in the training data.
@@ -39,7 +43,7 @@ Since good naming is a feature of good programming, we expected some reasonable 
     \item Finally our models were trained in the standard way:
     \begin{enumerate}
         \item The Rote Learner was trained determininstically, in this case using `ngram overlap' feature, as mentioned in\ref{sec:rote_learner_model}. It was evaluated with different random seeds 50 times on the hold out dataset.
-        \item The Seq-to-Seq modl was trained using the backpropagation algorithm and adaptive momentum optimisation. The hyperparameters are presented in table X. 80 Epochs were evaluated, and the best and average scores were taken \textbf{EDIT}
+        \item The Seq-to-Seq model was trained using the backpropagation algorithm and adaptive momentum optimisation. The hyperparameters are presented in table X. 80 Epochs were evaluated, and the best and average scores were taken \textbf{EDIT}
     \end{enumerate}
 
     \item Finally when it came to evaluating our models on held-out datasets, we would ran translations on the dataset and calculated the BLEU score using the BLEU method found in \textbf{HERE}.
@@ -48,9 +52,24 @@ Since good naming is a feature of good programming, we expected some reasonable 
 
 \end{enumerate}
 
-\subsubsection{Hyperparameters}
+% section experimental_setup (end)
 
-\subsubsection{Results} % (fold)
+\section{Investigating Human Readable Channel} % (fold)
+\label{sec:investigating_human_readable_channel}
+
+% INVESTIGATION PURELY BASED ON NAME
+\subsection{Comparing Baseline Models} % (fold)
+\label{sub:comparing_baseline_models}
+
+\subsubsection{Experiment Objective} % (fold)
+
+As a baseline, we first wanted to investigate the informative power of simply the names of variables, with regards to different architectures of our baseline model.
+Since good naming is a feature of good programming, we expected some reasonable signal to come from just the variable name, some signal should be learnable by both our seq-to-seq model and rote learner.
+
+\subsubsection{Method \& Results} % (fold)
+We chose to use the x data
+
+Given the lack of additional features such as code, we felt this removal of duplicates was a sensible way of removing an artificial improvement of our BLEU score. 
 
 The results are displayed in Table \ref{table:name_baseline}. The hyperparameters for this models found in Table \ref{table:hyperparams_name_baseline}
 \textbf{Visualise Attention}
@@ -84,11 +103,9 @@ The results are displayed in Table \ref{table:name_baseline}. The hyperparameter
 Having established a naive baseline, we decided to investigate the limits of how other named variables and function names could help our translation.
 Once again we hypothesised that variable and function and other argument naming should play an important role, but that with this extra information, the attention in the LSTM would outpeform the rote learner in recognising the important parts of variable naming.
 
-\subsubsection{Method} % (fold)
+\subsubsection{Method \& Results} % (fold)
 
-% subsubsection method (end)
 
-\subsubsection{Hyperparameters}
 
 
 \begin{table}[h!]
@@ -107,8 +124,8 @@ Once again we hypothesised that variable and function and other argument naming 
     Seq to Seq                          &                  & \\
     - \textit{name only}                & $ 11.90863 $ & $ 11.79199 $ \\
     - \textit{name + function name}     & $ 10.79592 $ & $ 10.58280 $  \\
-    - \textit{name + other args}        & $ 11.46794 $ & $ 11.23426 $ \\
-    - \textit{name + function name + other args}   & $ 13.40158 $ & $ 12.95127 $ \\
+    - \textit{name + other args}        & $ 13.40158 $ & $ 12.95127 $\\
+    - \textit{name + function name + other args}  & $ 11.46794 $ & $ 11.23426 $  \\
     \hline
 \end{tabular}
 \caption {Investigate the effect of differnet code features}
