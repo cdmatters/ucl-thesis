@@ -39,7 +39,7 @@ Since good naming is a feature of good programming, we expected some reasonable 
 
     \item Finally when it came to evaluating our models on held-out datasets, we would ran translations on the dataset and calculated the BLEU score using the BLEU method found in HERE.
     In particular BLEU scores were calculated over the whole corpus and WHAT SMOOTHING HYPERPARAMTERS.
-    \item It should be stressed that if a hyperparameter had to be tuned, it was always done on the validation set, with the test set untouched, until final evaluation.
+    \item It should be stressed that if a hyperparameter had to be tuned, it was always done on the validation set, with the test set untouched, until final evaluation. In the case of all neural models, the results presented are using the best hyperparameters under the validation set.
 
 \end{enumerate}
 
@@ -50,19 +50,19 @@ Since good naming is a feature of good programming, we expected some reasonable 
 \begin{tabular}{ c | c | c | c }
     Model                           {}  & Hyperparameter  & Value    & \\
     \hline
-    -                                 & Vocabulary Size                   & $40,000$ & \\
+    -                                 & vocabulary size                   & $40,000$ & \\
     \hline
-    Rote Learner                      & Feature                           & \textit{n}-character-gram overlap & \\
-                                      & Samples                           & $50$  & \\
+    Rote Learner                      & feature                           & \textit{n}-character-gram overlap & \\
+                                      % & samples                           & $50$  & \\
     \hline
-    Seq to Seq                        & Learning Rate                     & $0.001$  & \\
-                                      & Batch Size                        & $0.001$  & \\
-                                      & LSTM Size                         & $0.001$  & \\
-                                      & Arg. Name Sequence Length         & $0.001$  & \\
-                                      & Arg. Description Sequence Length  & $0.001$  & \\
-    + \textit{attention}              & \textit{Attention Size}           & $1.0 \pm 1.0 $  & \\
-    + \textit{bidirectional encoder}  & \textit{BiLSTM Size}.             & $1.0 \pm 1.0 $  & \\
-    + \textit{dropout}                & \textit{Dropout}                  & $1.0 \pm 1.0 $  & \\
+    Seq to Seq                        & learning rate                     & $0.001$  & \\
+                                      & batch size                        & $128$  & \\
+                                      & lstm size                         & $300$  & \\
+                                      & max arg. name sequence length         & $60$  & \\
+                                      & max arg. description sequence length  & $120$  & \\
+    + \textit{attention}              & \textit{attention size}           & $300$  & \\
+    + \textit{bidirectional encoder}  & \textit{bi-lstm size}.             & $(300,300) $  & \\
+    + \textit{dropout}                & \textit{dropout}                  & $0.1$  & \\
     \hline
 \end{tabular}
 \caption {Hyperparameters of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
@@ -77,18 +77,18 @@ The results are displayed in Table \ref{table:name_baseline}.
 
 \begin{table}[h!]
 \begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                           {}  & BLEU (Validation)  & BLEU (Test)    & Perpelexity \\
+\begin{tabular}{ c | c | c }
+    Model                           {}  & BLEU (Validation)  & BLEU (Test)    \\
     \hline
-    Rote Learner                      & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    Rote Learner                     & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
     \hline
-    Seq to Seq                        & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    + \textit{attention}              & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
-    + \textit{bidirectional encoder}  & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
-    + \textit{dropout}                & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    Seq to Seq                        & $ 7.65221 $  & $ 7.63131  $ \\
+    + \textit{attention}              & $ 9.77734 $  & $ 9.42463  $ \\
+    + \textit{bidirectional encoder}  & $ 10.94970 $ & $ 10.83105 $ \\
+    + \textit{dropout}                & $ 11.23303 $ & $ 11.30118 $ \\
     \hline
 \end{tabular}
-\caption {Investigate the limits of descriptions based purely on names.}
+\caption {Results of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
 \label{table:name_baseline}
 \end{center}
 \end{table}
