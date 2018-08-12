@@ -103,7 +103,7 @@ The results are displayed in Table \ref{table:name_baseline}. The hyperparameter
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{ c | c | c }
-    Model                            & BLEU (Validation)  & BLEU (Test)    \\
+    Model                             & BLEU (Validation)  & BLEU (Test)    \\
     \hline
     Rote Learner (x50)                & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
     \hline
@@ -111,6 +111,11 @@ The results are displayed in Table \ref{table:name_baseline}. The hyperparameter
     + \textit{attention}              & $ 9.77734 $  & $ 9.42463  $ \\
     + \textit{bidirectional encoder}  & $ 10.94970 $ & $ 10.83105 $ \\
     + \textit{dropout}                & $ 11.23303 $ & $ 11.30118 $ \\
+    \hline
+    Seq to Seq                        & $ 4.60169 $ & $ 4.97880 $  \\
+    + \textit{attention}              & $ 4.81255 $ & $ 5.42022 $  \\
+    + \textit{bidirectional encoder}  & $ 3.00068 $ & $ 3.05952 $  \\
+    + \textit{dropout}                & $ 6.37864 $ & $ 6.33307 $  \\
     \hline
 \end{tabular}
 \caption {Results of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
@@ -152,6 +157,14 @@ Once again we hypothesised that variable and function and other argument naming 
     - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $  \\
     - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $  \\
     - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $  \\
+
+    \hdashline
+    Seq to Seq                          &                  & \\
+    - \textit{name only}                & $ 5.54103 $ & $ 5.43827 $  \\
+    - \textit{name + function name}     & $ 4.76165 $ & $ 4.40557 $  \\
+    - \textit{name + other args}        & $ 5.70546 $ & $ 6.04723 $  \\
+    - \textit{name + function name + other args}     & $ 6.26783 $ & $ 6.24153 $ \\
+    
     \hline
 \end{tabular}
 \caption {Investigate the effect of differnet code features}
@@ -214,10 +227,12 @@ Investigate the Best Tokenizations adding Source Code
     Rote Learner (codeonly)           &  & & \\
     - softest                         & $ 0.70702 \pm  0.13979 $ & $ 0.73623 \pm 0.07094 $ &  \\
     - soft                            & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
-    - hard                             & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $ &\\
+    - hard                            & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $ &\\
     - hardest                         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
     \hline
     Code2Vec                          & $ 17.78034 $ & $ 17.84772 $ & \\
+    \hdashline
+    Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
 \end{tabular}
 \caption {Investigate the limits of purely codepaths}
@@ -241,6 +256,11 @@ Investigate the Best Tokenizations adding Source Code
     Code2Vec                              & $ 17.78034 $ & $ 17.84772 $ & \\
     Code2Vec (masked args)                & $ 16.88096 $ & $ 16.87028 $ & \\
     Code2Vec (masked all)                 & $ 12.13857 $ & $ 12.08905 $ & \\
+    \hdashline
+
+    Code2Vec                              & $ 12.64199 $ & $ 12.80257 $ & \\
+    Code2Vec (masked args)                & $ 12.10462 $ & $ 11.93314 $ & \\
+    Code2Vec (masked all)                 & $ 9.01463 $ & $ 9.15697 $ & \\
     \hline
 \end{tabular}
 \caption {Investigate code2vec but with masked variables}
@@ -264,15 +284,21 @@ Investigate the Best Tokenizations adding Source Code
     \hline
     Rote Learner  (code only)         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
     Code2Vec  (code only)             & $ 17.78034 $ & $ 17.84772 $ & \\
+    \hdashline
+    Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
     \hline
     Rote Learner  (name only)         & $ 19.01439 \pm  0.35091 $ & $ 19.64938 \pm 0.28085 $ & \\
     Seq2Seq  (name only)              & $ 25.13928 $ & $ 24.16031 $ & \\
+    \hdashline
+    Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
     \hline
     \hline
     Rote Learner (combined)            & $ 15.00288 \pm  0.44820 $ & $ 15.73580 \pm 0.29581 $ & \\
     Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
     Code2Vec  + Char to Seq           & $ 29.97250 $ & $ 28.36403 $ & \\
+    \hdashline
+    Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
     \hline
 \end{tabular}
 \caption {Investigate code2vec combined with seq to seq}
