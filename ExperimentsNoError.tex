@@ -1,0 +1,335 @@
+\chapter{Experiments and Results}
+\label{experiments_and_results}
+
+
+Despite the differences in what was being investigated, all experiments followed a similar general pattern of execution. 
+This pattern of execution is described in detail in Section \ref{sec:experimental_setup}, which covers the general pipeline of the preparation, training and evaluation for each experiment.
+Section \ref{sec:investigating_human_readable_channel} then describes the specific experiments and results of our investigations in to the human readable channel of code, whereas Section \ref{sec:investigating_the_computer_channel} covers the computer readable channel investivations.
+The the results of the experiments combining these channels is presented in \ref{sec:investigating_combined_channels}, and further experiments into the dataset are presented in section ??
+
+
+\section{Experimental Setup} % (fold)
+\label{sec:experimental_setup}
+
+
+
+
+\subsubsection{Preparing the Data} % (fold)
+\label{ssub:Preparing the Data}
+
+\begin{enumerate}
+    \item All our data would come from one of the datasets described in section \ref{sec:our_final_datasets}, depending on whether we allowed duplicates of "name", "description" pairs or not, and whether we split our repositories
+    This was rarely changed for sets of experiments. 
+
+    \item To tokenize variable names, function names and other arguments:
+    \begin{enumerate}
+        \item we generated a vocabulary of all possible tokens in valid python
+        \item We added separator tokens to the vocabulary, \mintinline{python}{"<SEPARATOR_1>"}
+        \item We then tokenizer as sequences of characters and adding an \mintinline{python}{"<END_OF_ARG>"} token to the end.
+    \end{enumerate}
+    
+    \item To tokenize the argument descriptions:
+    \begin{enumerate}
+        \item We then generated a vocabulary for our training data by:
+        \begin{enumerate}
+            \item first generating a provisional vocabulary of tokens used more than 4 times in the training data.
+            \item if these words existed in our Glove embedding vocabulary they were added to our the final vocabulary. We used the  \mintinline{python}{glove.6B.200d.txt} file of 200d embeddings trained on 6 billion tokens for our Glove embeddings, (CITE). 
+            \item when this provisional list was exhausted we took the remaining most popular words, as defined by the Glove embedding file, to fill our final vocabulary to our designated "vocab-size"
+        \end{enumerate}
+        \item We then tokenized the descriptions by moving to lower case, removing new lines, and  tokenizing them using the nltk punkt tokenizer (\mintinline{python}{nltk.word_tokenize})
+        \item We then replaced out of vocabulary tokens with an \mintinline{python}{"<UNK>"} token, and finally bookending our descriptions with \mintinline{python}{"<START>"} and \mintinline{python}{"<END>"} tokens.
+        \item Path - seq?
+
+    \end{enumerate}
+
+
+
+    \item In cases of tokenized code: 
+     \begin{enumerate}
+         \item  In the case of tokenizing code paths, we first extracted the syntax tree from the source code, and traversed it exploring all paths between two nodes.
+         \item CONTINUE
+     \end{enumerate}
+
+\end{enumerate}
+
+Once these tokenizations were complete we were ready to train our models.
+
+\subsubsection{Training} % (fold)
+\label{ssub:training}
+
+
+    Our models were trained in the standard way:
+    \begin{enumerate}
+        \item The Rote Learner was trained determininstically, in this case using `ngram overlap' feature, as mentioned in\ref{sec:rote_learner_model}. It was evaluated with different random seeds 50 times on the hold out dataset.
+        \item The Seq-to-Seq model was trained using the backpropagation algorithm and adaptive momentum optimisation. The hyperparameters are presented in table X. 80 Epochs were evaluated, and the best and average scores were taken \textbf{EDIT}
+    \end{enumerate}
+
+\subsubsection{Evaluation} % (fold)
+\label{ssub:evaluation}
+
+% subsection training (end
+\begin{enumerate}
+
+
+
+    \item Finally when it came to evaluating our models on held-out datasets, we would ran translations on the dataset and calculated the BLEU score using the BLEU method found in \textbf{HERE}.
+    In particular BLEU scores were calculated over the whole corpus and \textbf{WHAT SMOOTHING HYPERPARAMTERS}.
+    \item It should be stressed that if a hyperparameter had to be tuned, it was always done on the validation set, with the test set untouched, until final evaluation. In the case of all neural models, the results presented are using the best hyperparameters under the validation set.
+
+\end{enumerate}
+
+% section experimental_setup (end)
+
+\section{Investigating Human Readable Channel} % (fold)
+\label{sec:investigating_human_readable_channel}
+
+% INVESTIGATION PURELY BASED ON NAME
+\subsection{Comparing Baseline Models} % (fold)
+\label{sub:comparing_baseline_models}
+
+\subsubsection{Experiment Objective} % (fold)
+
+As a baseline, we first wanted to investigate the informative power of simply the names of variables, with regards to different architectures of our baseline model.
+Since good naming is a feature of good programming, we expected some reasonable signal to come from just the variable name, some signal should be learnable by both our seq-to-seq model and rote learner.
+
+\subsubsection{Method \& Results} % (fold)
+We chose to use the x data
+
+Given the lack of additional features such as code, we felt this removal of duplicates was a sensible way of removing an artificial improvement of our BLEU score. 
+
+The results are displayed in Table \ref{table:name_baseline}. The hyperparameters for this models found in Table \ref{table:hyperparams_name_baseline}
+\textbf{Visualise Attention}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c }
+    Model                            & BLEU (Validation)  & BLEU (Test)    \\
+    \hline
+    Rote Learner (x50)                & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
+    \hline
+    Seq to Seq                        & $ 7.65221 $  & $ 7.63131  $ \\
+    + \textit{attention}              & $ 9.77734 $  & $ 9.42463  $ \\
+    + \textit{bidirectional encoder}  & $ 10.94970 $ & $ 10.83105 $ \\
+    + \textit{dropout}                & $ 11.23303 $ & $ 11.30118 $ \\
+    \hline
+\end{tabular}
+\caption {Results of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
+\label{table:name_baseline}
+\end{center}
+\end{table}
+
+
+
+% INVESTIGATION DIFFERENT TOKENIZATIONS
+\subsection{Investigating Different Tokenizations} % (fold)
+\label{sub:investigating_different_tokenizations}
+
+\subsubsection{Experiment Objective} % (fold)
+
+Having established a naive baseline, we decided to investigate the limits of how other named variables and function names could help our translation.
+Once again we hypothesised that variable and function and other argument naming should play an important role, but that with this extra information, the attention in the LSTM would outpeform the rote learner in recognising the important parts of variable naming.
+
+\subsubsection{Method \& Results} % (fold)
+
+
+
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c }
+    Model                               & BLEU Validation            & BLEU Test  \\
+    \hline
+    \hline
+    Rote Learner                        &                  & \\    
+    - \textit{name only}                & $ 9.03242  \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $  \\
+    - \textit{name + function name}     & $ 12.22728 \pm  0.23408 $ & $ 14.33850 \pm 0.21622 $  \\
+    - \textit{name + other args}        & $ 12.06262 \pm  0.16356 $ & $ 14.21676 \pm 0.16067 $  \\
+    - \textit{name + function name + other args}  & $ 11.35728 \pm  0.13663 $ & $ 13.50626 \pm 0.13192 $ \\
+    \hline
+    \hline
+    Seq to Seq                          &                  & \\
+    - \textit{name only}                & $ 12.54776 $ & $ 12.66232 $  \\
+    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $  \\
+    - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $  \\
+    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $  \\
+    \hline
+\end{tabular}
+\caption {Investigate the effect of differnet code features}
+\label{table:tokenization}
+\end{center}
+\end{table}
+
+
+
+
+
+\subsection{Investigating Addition of Source Code} % (fold)
+\label{subs:investigating_tokenizations_with_source_code}
+
+Investigate the Best Tokenizations adding Source Code
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c }
+    Model                               & BLEU             & Perpelexity \\
+    \hline
+    \hline
+    Rote Learner                        &                  & \\    
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    - \textit{name + source code}       & $1.0 \pm 1.0 $   & \\
+    \hline
+    \hline
+    Seq to Seq                          &                  &  \\
+    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+    \hline
+    \hline
+    Double Encoder to Seq               &                  &  \\
+    - \textit{name + sourcecode}        & $1.0 \pm 1.0 $   & \\
+    \hline
+\end{tabular}
+\caption {Investigate the descriptions with source code}
+\label{table:human_source_code}
+\end{center}
+\end{table}
+
+% subsection investigating_the_removal_of_duplicates (end)
+
+
+% subsection results (end)
+
+% section investigating_naturalness_hypothesis (end)
+
+\section{Investigating the Computer Readable Channel} % (fold)
+\label{sec:investigating_the_computer_channel}
+
+\subsection{Comparing Code2Vec to Baselines} % (fold)
+\label{sub:comparing_code2vec_to_baselines}
+
+% subsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (codeonly)           &  & & \\
+    - softest                         & $ 0.70702 \pm  0.13979 $ & $ 0.73623 \pm 0.07094 $ &  \\
+    - soft                            & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - hard                             & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $ &\\
+    - hardest                         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    \hline
+    Code2Vec                          & $ 17.78034 $ & $ 17.84772 $ & \\
+    \hline
+\end{tabular}
+\caption {Investigate the limits of purely codepaths}
+\label{table:name_code2vec_solo}
+\end{center}
+\end{table}
+
+
+\subsection{Comparing Code2Vec Altered} % (fold)
+\label{sub:comparing_code2vec_altered}
+
+% subsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner (best performer)          & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    \hline
+    Code2Vec                              & $ 17.78034 $ & $ 17.84772 $ & \\
+    Code2Vec (masked args)                & $ 16.88096 $ & $ 16.87028 $ & \\
+    Code2Vec (masked all)                 & $ 12.13857 $ & $ 12.08905 $ & \\
+    \hline
+\end{tabular}
+\caption {Investigate code2vec but with masked variables}
+\label{table:code_2_vec_masked}
+\end{center}
+\end{table}
+
+
+\section{Investigating Combined Channels} % (fold)
+\label{sec:investigating_combined_channels}
+
+\subsection{Combined Code2Vec } % (fold)
+\label{sub:combined_code2vec}
+
+% subsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner  (code only)         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Code2Vec  (code only)             & $ 17.78034 $ & $ 17.84772 $ & \\
+    \hline
+    \hline
+    Rote Learner  (name only)         & $ 19.01439 \pm  0.35091 $ & $ 19.64938 \pm 0.28085 $ & \\
+    Seq2Seq  (name only)              & $ 25.13928 $ & $ 24.16031 $ & \\
+    \hline
+    \hline
+    Rote Learner (combined)            & $ 15.00288 \pm  0.44820 $ & $ 15.73580 \pm 0.29581 $ & \\
+    Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  + Char to Seq           & $ 29.97250 $ & $ 28.36403 $ & \\
+    \hline
+\end{tabular}
+\caption {Investigate code2vec combined with seq to seq}
+\label{table:code2vec_embed}
+\end{center}
+\end{table}
+
+
+
+
+
+\section{Analysis} % (fold)
+\label{sec:analysis}
+
+% section sundry_analysis (end)
+
+\subsection{Investigating the Removal of Duplicates} % (fold)
+\label{sub:investigating_the_removal_of_duplicates}
+
+\subsection{Combined Code2Vec } % (fold)
+\label{sub:combined_code2vec}
+
+% subsection comparing_code2vec_to_baselines (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+    \hline
+    Rote Learner  (code only)         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Code2Vec                          & $ 17.78034 $ & $ 17.84772 $ & \\
+    Code2Vec  (mask args)             & $ 0.1 $ & $ 0.1$ & \\
+    Code2Vec  (mask alls)             & $ 0.1 $ & $ 0.1 $ & \\
+    \hline
+    \hline
+    Rote Learner  (name only)         & $ 19.01439 \pm  0.35091 $ & $ 19.64938 \pm 0.28085 $ & \\
+    \hline
+    Seq2Seq                             & &  & \\
+     - \textit{name only}               & $ 25.13928 $ & $ 24.16031 $ & \\
+    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $  \\
+
+    - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $  \\
+
+    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $  \\
+    \hline
+    \hline
+    Rote Learner (combined)            & $ 15.00288 \pm  0.44820 $ & $ 15.73580 \pm 0.29581 $ & \\
+    Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Code2Vec  + Char to Seq           & $ 29.97250 $ & $ 28.36403 $ & \\
+    \hline
+\end{tabular}
+\caption {Investigate split datasets}
+\label{table:split_datasets_embed}
+\end{center}
+\end{table}
+
+
+\subsection{Visualising Attention Weights} % (fold)
+\label{sub:visualising_attention_weights}
+
