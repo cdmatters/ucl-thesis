@@ -28,22 +28,54 @@
 \section{Structure of a DataPoint} % (fold)
 \label{sec:structure_of_datapoint}
 
-The dataset is formed of X data points, each with the following structure
+The dataset is formed of X data points, each with the following structure: (yaml)
 \begin{itemize}
     \item name: - string - 
     \item desc: - string - 
+    \item details: 
 
 \end{itemize}
 ...
-fill in 
+
 
 % section structure_of_dataset (end)
 
+\section{Composition of the Dataset} % (fold)
+\label{sec:composition_of_the_dataset}
+
+% section composition_of_the_dataset (end)
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{c | c | c | c }
+    Library      & $ Functions $     & $ Arguments $ & Scientific \\
+\hline
+    tensorflow   & $ 17002 $     & $ 4340 $ & True \\
+    google   & $ 2829 $      & $ 1098 $ & False \\
+    scipy    & $ 2030 $      & $ 549 $ & True \\
+    networkx     & $ 1869 $      & $ 669 $ & True \\
+    matplotlib   & $ 1457 $      & $ 366 $ & True \\
+    sklearn      & $ 1403 $      & $ 368 $ & True \\
+    pandas   & $ 1317 $      & $ 419 $ & True \\
+    magenta      & $ 1045 $      & $ 357 $ & False \\
+    100 $<$ functions $<$ 1000   & $ 10172 $     & $ 3137 $ & True:6, False: 26 \\
+    0 $<$ functions $<$ 100      & $ 2300 $      & $ 1036 $ & True:9, False: 84 \\
+\hline
+\hline
+    TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
+\end{tabular}
+\caption {Investigate split datasets}
+\label{table:split_datasets_embed}
+\end{center}
+\end{table}
 \section{Analysis of Data} % (fold)
 \label{sec:analysis_of_data}
 
+
 \subsection{Statistical Analysis of Natural Language} % (fold)
 \label{sub:statistical_analysis_of_natural_language}
+
+
 
 % subsection statistical_analysis_of_natura_language (end)
 

@@ -176,33 +176,33 @@ Once again we hypothesised that variable and function and other argument naming 
 
 
 
-\subsection{Investigating Addition of Source Code} % (fold)
-\label{subs:investigating_tokenizations_with_source_code}
+% \subsection{Investigating Addition of Source Code} % (fold)
+% \label{subs:investigating_tokenizations_with_source_code}
 
-Investigate the Best Tokenizations adding Source Code
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{ c | c | c }
-    Model                               & BLEU             & Perpelexity \\
-    \hline
-    \hline
-    Rote Learner                        &                  & \\    
-    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
-    - \textit{name + source code}       & $1.0 \pm 1.0 $   & \\
-    \hline
-    \hline
-    Seq to Seq                          &                  &  \\
-    - \textit{name only}                & $1.0 \pm 1.0 $   & \\
-    \hline
-    \hline
-    Double Encoder to Seq               &                  &  \\
-    - \textit{name + sourcecode}        & $1.0 \pm 1.0 $   & \\
-    \hline
-\end{tabular}
-\caption {Investigate the descriptions with source code}
-\label{table:human_source_code}
-\end{center}
-\end{table}
+% Investigate the Best Tokenizations adding Source Code
+% \begin{table}[h!]
+% \begin{center}
+% \begin{tabular}{ c | c | c }
+%     Model                               & BLEU             & Perpelexity \\
+%     \hline
+%     \hline
+%     Rote Learner                        &                  & \\    
+%     - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+%     - \textit{name + source code}       & $1.0 \pm 1.0 $   & \\
+%     \hline
+%     \hline
+%     Seq to Seq                          &                  &  \\
+%     - \textit{name only}                & $1.0 \pm 1.0 $   & \\
+%     \hline
+%     \hline
+    % Double Encoder to Seq               &                  &  \\
+%     - \textit{name + sourcecode}        & $1.0 \pm 1.0 $   & \\
+%     \hline
+% \end{tabular}
+% \caption {Investigate the descriptions with source code}
+% \label{table:human_source_code}
+% \end{center}
+% \end{table}
 
 % subsection investigating_the_removal_of_duplicates (end)
 
@@ -226,7 +226,7 @@ Investigate the Best Tokenizations adding Source Code
     \hline
     Rote Learner (codeonly)           &  & & \\
     - softest                         & $ 0.70702 \pm  0.13979 $ & $ 0.73623 \pm 0.07094 $ &  \\
-    - soft                            & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
+    - soft                            & $ 1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  & \\
     - hard                            & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $ &\\
     - hardest                         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
     \hline
@@ -282,20 +282,19 @@ Investigate the Best Tokenizations adding Source Code
 \begin{tabular}{ c | c | c | c }
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
-    Rote Learner  (code only)         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ & \\
     Code2Vec  (code only)             & $ 17.78034 $ & $ 17.84772 $ & \\
     \hdashline
     Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
     \hline
-    Rote Learner  (name only)         & $ 19.01439 \pm  0.35091 $ & $ 19.64938 \pm 0.28085 $ & \\
+    Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ & \\
     Seq2Seq  (name only)              & $ 25.13928 $ & $ 24.16031 $ & \\
     \hdashline
     Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 15.00288 \pm  0.44820 $ & $ 15.73580 \pm 0.29581 $ & \\
-    Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
+    Rote Learner (combined)            & $ 15.01764 \pm  0.44897 $ & $ 15.75528 \pm 0.29560 $ & \\
     Code2Vec  + Char to Seq           & $ 29.97250 $ & $ 28.36403 $ & \\
     \hdashline
     Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
@@ -328,26 +327,23 @@ Investigate the Best Tokenizations adding Source Code
 \begin{tabular}{ c | c | c | c }
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
-    Rote Learner  (code only)         & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ & \\
     Code2Vec                          & $ 17.78034 $ & $ 17.84772 $ & \\
     Code2Vec  (mask args)             & $ 0.1 $ & $ 0.1$ & \\
     Code2Vec  (mask alls)             & $ 0.1 $ & $ 0.1 $ & \\
     \hline
     \hline
-    Rote Learner  (name only)         & $ 19.01439 \pm  0.35091 $ & $ 19.64938 \pm 0.28085 $ & \\
+    Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ & \\
     \hline
     Seq2Seq                             & &  & \\
      - \textit{name only}               & $ 25.13928 $ & $ 24.16031 $ & \\
-    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $  \\
-
-    - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $  \\
-
-    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $  \\
+    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $ & \\
+    - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $ & \\
+    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $ &  \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 15.00288 \pm  0.44820 $ & $ 15.73580 \pm 0.29581 $ & \\
-    Double Encoder                    & $1.0 \pm 1.0 $  & $1.0 \pm 1.0 $  &  \\
-    Code2Vec  + Char to Seq           & $ 29.97250 $ & $ 28.36403 $ & \\
+    Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ & \\
+    Code2Vec  + Char to Seq            & $ 29.97250 $ & $ 28.36403 $ & \\
     \hline
 \end{tabular}
 \caption {Investigate split datasets}
