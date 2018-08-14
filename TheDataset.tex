@@ -48,7 +48,7 @@ The dataset is formed of X data points, each with the following structure: (yaml
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{c | c | c | c }
-    Library      & $ Functions $     & $ Arguments $ & Scientific \\
+    Library      & $ Arguments $     & $ Functions $ & Scientific \\
 \hline
     tensorflow   & $ 17002 $     & $ 4340 $ & True \\
     google   & $ 2829 $      & $ 1098 $ & False \\
@@ -58,13 +58,13 @@ The dataset is formed of X data points, each with the following structure: (yaml
     sklearn      & $ 1403 $      & $ 368 $ & True \\
     pandas   & $ 1317 $      & $ 419 $ & True \\
     magenta      & $ 1045 $      & $ 357 $ & False \\
-    100 $<$ functions $<$ 1000   & $ 10172 $     & $ 3137 $ & True:6, False: 26 \\
-    0 $<$ functions $<$ 100      & $ 2300 $      & $ 1036 $ & True:9, False: 84 \\
+    100 $<$ arguments $<$ 1000   & $ 10172 $     & $ 3137 $ & True:6, False: 26 \\
+    0 $<$ arguments $<$ 100      & $ 2300 $      & $ 1036 $ & True:9, False: 84 \\
 \hline
 \hline
     TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
 \end{tabular}
-\caption {Investigate split datasets}
+\caption {Break down of the libraries}
 \label{table:split_datasets_embed}
 \end{center}
 \end{table}
@@ -75,18 +75,31 @@ The dataset is formed of X data points, each with the following structure: (yaml
 \subsection{Statistical Analysis of Natural Language} % (fold)
 \label{sub:statistical_analysis_of_natural_language}
 
-
+\begin{enumerate}
+    \item variable name frequencies
+    \item function name frequencies
+    \item description lengths
+    \item duplicates 
+    \item tf-idf
+    \item descpriptions per arg
+\end{enumerate}
 
 % subsection statistical_analysis_of_natura_language (end)
 
 \subsection{Statistical Analysis of Code} % (fold)
 \label{sub:statistical_analysis_of_code}
 
+\begin{enumerate}
+    \item path frequencies
+    \item paths per point
+\end{enumerate}
+
 % subsection statistical_analysis_of_code (end)
 
 \subsection{Qualitative Analysis of Dataset} % (fold)
 \label{sub:qualitative_analysis_}
 
+tfidf
 % subsection qualitative_analysis_ (end)
 % section analysis_of_data (end)
 
