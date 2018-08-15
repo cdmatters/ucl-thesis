@@ -13,12 +13,49 @@
 The dataset used in the our investigation was entirely original, presenting a new opportunity to investigate the machine translation of code not seen in the literature thus far. \textbf{CITE}
 In particular it offers a close and granular alignment between elements of code (argument names) and their natural language descriptions, as extracted from the most popular open source Python libraries.
 In this section we present first an overview of the dataset, and elaborate on  the means of collection. 
-We then present an in-depth analysis of its structure and composition, which aims to be both quantitative, and qualitive, also compare the dataset to others in the field. 
+We then present an in-depth analysis of its structure and composition, which aims to be both quantitative, and qualitive, comparing the dataset to others in the field. 
 
 \section{Overview} % (fold)
 \label{sec:overview}
 
-The dataset is 
+The dataset comprises of a list of Python function arguments, their natural language descriptions and surrounding metadata. 
+This metadata is extensive, containing numerous fields including the source code of the function, function name and filename, among others. 
+The full structure of the data fields is enumerated in Table \ref{table:metadata}. 
+
+This data is sourced exclusively from the top 300 most downloaded libraries on "PyPI", the python package manager. 
+This ensured that the libraries were both good quality, well documented, and very much ``real world code.''
+The data was then stored in YAML format, for human readability. 
+A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{lst:single_point}
+
+
+\begin{table}[h!]
+    \begin{center}
+    \begin{tabular}{| c | c | c | c |}
+    \hline
+        Name &  Description     &    Field    & Type  \\
+    \hline
+        Argument Name & the name of the argument  & arg\_name & string \\
+        Argument Description & the description of the argument & arg\_desc & string \\
+        Argument Type & the annotated type for the argument & arg\_type & string or null \\
+        All Arguments & all arguments used in the function & args & list of strings \\
+        Other Argument Info & name, desc. and type for all other arguments & arg\_info & dict of dicts\\
+        Function Name & the name of the function & name & string\\
+        Signature & the function signature & sig & string\\
+        Path & the full path to the file & filename & string \\
+        Library & the library of the function & pkg & string\\
+        Source & the source code of the function & src & string\\
+        Docstring & the sphinx annotated docstring & docstring & string\\
+
+    \hline
+
+
+    \end{tabular}
+    \caption {Fields collected for each single datapoint. Field refers to the actual key used in YAML file, and Type indicates the type of the data as stored in the file.}
+    \label{table:metadata}
+    \end{center}
+\end{table}
+
+
 % section overview (end)
 
 \section{Method of Collection} % (fold)
@@ -35,18 +72,6 @@ The dataset is
     \item more on filtering
 \end{enumerate}
 
-% section method_of_collection (end)
-
-\section{Structure of a DataPoint} % (fold)
-\label{sec:structure_of_datapoint}
-
-The dataset is formed of X data points, each with the following structure: (yaml)
-\begin{itemize}
-    \item name: - string - 
-    \item desc: - string - 
-    \item details: 
-
-\end{itemize}
 
 
 % section structure_of_dataset (end)
