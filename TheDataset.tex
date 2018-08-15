@@ -6,21 +6,23 @@
     \item In particular it offers a close alignment between features of code, and descriptive elements that aim to tell you what to do.
     \item In this section we will present the means of collection, the structure of the dataset, and finally an analysis of its composition. 
     \item This analysis aims to be informative by both being quantitative, highlight the statistical composition of the dataset, and qualitative.
-
     \item Finally we  also compare it and contrast it to other datasets.
 \end{enumerate}
+
+
 
 \section{Method of Collection} % (fold)
 \label{sec:method_of_collection}
 
 \begin{enumerate}
-    \item Python is a dynamically typed language with emphasis on documentation
+    \item Python is a dynamically typed language, with emphasis on documentation, and naturalness .
     \item Sphinx is the industry standard for automating documentation generation.
     \item It contains an open source plugin `napoleon' that generate html web API documentation for docstrings formatted ether according to the Google Standard or the Numpy Standard (show examples of both).
     \item This appears to be used extensively in industry by xyz
     \item We wrote a plugin forked off napoleon that instead generated parsed the data and wrote it to an output yaml file (CITE)
     \item Since we require libaries with good documentation, that are easy to install (for the plug in to read them - documentation is sources by syntax tree??) we decided to run on the most popular libraries in python. we used the pip wall of superpowers to search for 300 most popular libraries on pip.
     \item After collecting these, we preprocessed by removing arguments without description (ie self), and those without code bodies (Ie (not implemented error) in abstract base class)
+    \item more on filtering
 \end{enumerate}
 
 % section method_of_collection (end)
@@ -35,7 +37,6 @@ The dataset is formed of X data points, each with the following structure: (yaml
     \item details: 
 
 \end{itemize}
-...
 
 
 % section structure_of_dataset (end)
@@ -43,30 +44,30 @@ The dataset is formed of X data points, each with the following structure: (yaml
 \section{Composition of the Dataset} % (fold)
 \label{sec:composition_of_the_dataset}
 
-% section composition_of_the_dataset (end)
+The total list of libraries scraped is available as an appendix, with a full break down of composition. Below are the libraries largely taken from. 
 
 \begin{table}[h!]
-\begin{center}
-\begin{tabular}{c | c | c | c }
-    Library      & $ Arguments $     & $ Functions $ & Scientific \\
-\hline
-    tensorflow   & $ 17002 $     & $ 4340 $ & True \\
-    google   & $ 2829 $      & $ 1098 $ & False \\
-    scipy    & $ 2030 $      & $ 549 $ & True \\
-    networkx     & $ 1869 $      & $ 669 $ & True \\
-    matplotlib   & $ 1457 $      & $ 366 $ & True \\
-    sklearn      & $ 1403 $      & $ 368 $ & True \\
-    pandas   & $ 1317 $      & $ 419 $ & True \\
-    magenta      & $ 1045 $      & $ 357 $ & False \\
-    100 $<$ arguments $<$ 1000   & $ 10172 $     & $ 3137 $ & True:6, False: 26 \\
-    0 $<$ arguments $<$ 100      & $ 2300 $      & $ 1036 $ & True:9, False: 84 \\
-\hline
-\hline
-    TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
-\end{tabular}
-\caption {Break down of the libraries}
-\label{table:split_datasets_embed}
-\end{center}
+    \begin{center}
+    \begin{tabular}{c | c | c | c}
+        Library      & $ Arguments $     & $ Functions $ & Scientific \\
+    \hline
+        tensorflow   & $ 17002 $     & $ 4340 $ & True \\
+        google   & $ 2829 $      & $ 1098 $ & False \\
+        scipy    & $ 2030 $      & $ 549 $ & True \\
+        networkx     & $ 1869 $      & $ 669 $ & True \\
+        matplotlib   & $ 1457 $      & $ 366 $ & True \\
+        sklearn      & $ 1403 $      & $ 368 $ & True \\
+        pandas   & $ 1317 $      & $ 419 $ & True \\
+        magenta      & $ 1045 $      & $ 357 $ & False \\
+        100 $<$ arguments $<$ 1000   & $ 10172 $     & $ 3137 $ & True: 6, False: 26 \\
+        0 $<$ arguments $<$ 100      & $ 2300 $      & $ 1036 $ & True: 9, False: 84 \\
+    \hline
+    \hline
+        TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
+    \end{tabular}
+    \caption {Break down of the libraries}
+    \label{table:breakdown_by_library}
+    \end{center}
 \end{table}
 \section{Analysis of Data} % (fold)
 \label{sec:analysis_of_data}
@@ -116,6 +117,8 @@ tfidf
 
 \section{Our Final Datasets} % (fold)
 \label{sec:our_final_datasets}
+
+A table of the final datasets used in the experiment (duplicates filtered or not, split vs unsplit)
 
 
 % subsection comparison_to_other_datasets (end)
