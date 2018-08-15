@@ -79,12 +79,24 @@ A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{ls
 \section{Composition of the Dataset} % (fold)
 \label{sec:composition_of_the_dataset}
 
-The total list of libraries scraped is available as an appendix, with a full break down of composition. Below are the libraries largely taken from. 
+Although the criteria for choice of library was based solely on frequency of downloads from the Python Package Index, an analysis of the composition of the dataset reveals some biases.
+In particular it is clear that scientific libraries are heavily dominate the composition of the data.
+
+Of the 112 libraries that eventually contributed data to the dataset, only 21 are labelled with the `Scientific/Engineering' tag on PYPI, yet these libraries contribute 68.3\% of arguments to the overall dataset, and 61.6\% of the functions. 
+Even more surprisingly one library, \mintinline{python}{tensorflow}, contributes 41\% of the arguments to the data - vastly more than any other library.
+In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contributes almost six times as many arguments as the second placed library - coincidentally also developed by Google. 
+
+This outsize contribution from relatively few libraries is largely the result of the design of these libraries and their use cases. 
+Scientific libraries have vast APIs, and users of the libraries often require different interfaces for potentially similar functions. 
+As an example, two library methods such as \mintinline{python}{conv2D} and \mintinline{python}{conv3D} may in an abstract sense perform very similar functions - a mathematical convolution - yet are critically distinct in a scientific setting.
+The necessity of these kinds of distinctions, and the precision of their use case, leads these libraries to have large numbers of exposed functions, requiring clear documentation.
+
+The full breakdown of the dataset by library is available on GitHub, alongside the data.
 
 \begin{table}[h!]
     \begin{center}
     \begin{tabular}{c | c | c | c}
-        Library      & $ Arguments $     & $ Functions $ & Scientific \\
+        Library      & Arguments     & Functions  & Scientific \\
     \hline
         tensorflow   & $ 17002 $     & $ 4340 $ & True \\
         google   & $ 2829 $      & $ 1098 $ & False \\
@@ -98,12 +110,13 @@ The total list of libraries scraped is available as an appendix, with a full bre
         (\textit{0 $<$ arguments $<$ 100})      & $ 2300 $      & $ 1036 $ & True: 9, False: 84 \\
     \hline
     \hline
-        TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
+        TOTAL    & $ 41424 $     & $ 12339 $ & True: 21, False: 112 \\
     \end{tabular}
-    \caption {Break down of the largest libraries}
+    \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments and functions}
     \label{table:breakdown_by_library}
     \end{center}
 \end{table}
+
 \section{Analysis of Data} % (fold)
 \label{sec:analysis_of_data}
 
@@ -111,16 +124,91 @@ The total list of libraries scraped is available as an appendix, with a full bre
 \subsection{Statistical Analysis of Natural Language} % (fold)
 \label{sub:statistical_analysis_of_natural_language}
 
-\begin{enumerate}
-    \item variable name frequencies
-    \item function name frequencies
-    \item description lengths
-    \item duplicates 
-    \item tf-idf
-    \item descpriptions per arg
-\end{enumerate}
 
-% subsection statistical_analysis_of_natura_language (end)
+\begin{itemize}
+    \item Very science heavy (see the variable names \& function names)
+    \item And a lot of repetition of the same variable (histogram
+    \item ... and function
+    \item However, these duplicates often have different descriptions, see table, of tuples
+    \item ... and also come from different packages.
+    \item In fact the things to worry about are whether enough diversity of package and what is overwhelming the data
+    \item in particular look at tensorflow name.
+    \item There is evidence to suggest some trimming of data and we do that.
+\end{itemize}
+
+
+% \begin{enumerate}
+%     \item variable name frequencies. TICK
+%     \item function name frequencies. TICK
+%     \item description lengths                !!
+%     \item duplicates 
+%     \item tf-idf
+%     \item descpriptions per arg
+% \end{enumerate}
+
+\begin{table}[h!]
+    \begin{center}
+    \begin{tabular}{c | c | c | c | c}
+    & Top Argument Names & Count  &   Top Function Names & Count \\  
+    \hline               
+    1.   &  name     &     1917    &   fit       &    122 \\        
+    2.   &  x        &     439     &   transform &    102 \\         
+    3.   &  kwargs   &     303     &   train     &    77 \\         
+    4.   &  axis     &     263     &   evaluate  &    71 \\        
+    5.   &  dtype    &     260     &   get       &    61 \\         
+    6.   &  a        &     230     &   conv2d    &    59 \\        
+    7.   &  G        &     227     &   Client    &    52 \\        
+    8.   &  inputs   &     224     &   update    &    46 \\        
+    9.   &  input    &     223     &   add       &    45 \\         
+    10.  &  value    &     210     &   specgram  &    45 \\         
+    
+    \end{tabular}
+    \caption {The most popular variable names and function names in the dataset. As can be seen these are either dominated by scientific terms and single letter variable names, such as those in scientific libraries. }
+    \label{table:popular_variable_names}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+    \begin{tabular}{c | c | c | c  }       
+     Bin   & \multicolumn{3}{c}{Counts of Variable Name}   \\
+    \hline
+     &     raw &... as \% of unique names & ... as \% of all names   \\  
+    \hline     
+     1     &      3681 &   53.550 &   11.738  \\          
+     2 - 4 &      2141 &   31.146 &   17.302  \\          
+     5 - 9 &       539 &    7.841 &   10.989  \\          
+     10 - 19 &     272 &    3.957 &   11.464  \\          
+     20 - 99 &     212 &    3.084 &   26.122  \\          
+     100 - 499 &    28 &    0.407 &   16.272  \\          
+     500 - 1999 &    1 &    0.015 &    6.113  \\                
+
+    \end{tabular}
+        \caption { A table of the count and frequency of variable names as they feature in the dataset.}
+    \label{table:popular_variable_names}
+
+    \begin{tabular}{c | c | c | c  }       
+
+     Bin   & \multicolumn{3}{c}{Counts of Function Name}   \\
+    \hline
+     &     raw &... as \% of unique names & ... as \% of all names   \\  
+    \hline     
+    1   &      2453 &   28.774 &    7.822  \\          
+    2 - 4 &      3946 &   46.287 &   34.324  \\          
+    5 - 9 &      1649 &   19.343 &   32.930  \\          
+    10 - 19 &     384 &    4.504 &   15.523  \\          
+    20 - 99 &      91 &    1.067 &    8.686  \\          
+    100 - 499 &     2 &    0.023 &    0.714  \\          
+    500 - 1999 &    0 &    0.000 &    0.000  \\             
+
+    \end{tabular}
+        \caption { A table of the count and frequency of function names as they feature in the dataset.}
+    \label{table:popular_variable_names}
+
+    \end{center}
+\end{table}
+
+
 
 \subsection{Statistical Analysis of Code} % (fold)
 \label{sub:statistical_analysis_of_code}
@@ -134,8 +222,11 @@ The total list of libraries scraped is available as an appendix, with a full bre
 
 \subsection{Qualitative Analysis of Dataset} % (fold)
 \label{sub:qualitative_analysis_}
+So far looked at frequencies and seen that some argument sharing between similar libraries, but how different are diffrenet libraries on a description level?
 
-tfidf
+tfidf \& tsne
+
+
 % subsection qualitative_analysis_ (end)
 % section analysis_of_data (end)
 
