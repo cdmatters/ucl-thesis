@@ -1,21 +1,31 @@
 \chapter{The Dataset}
 \label{the_dataset}
 
-\begin{enumerate}
-    \item The dataset is original, and presents a new opportunity, not seen in the literature thus far.
-    \item In particular it offers a close alignment between features of code, and descriptive elements that aim to tell you what to do.
-    \item In this section we will present the means of collection, the structure of the dataset, and finally an analysis of its composition. 
-    \item This analysis aims to be informative by both being quantitative, highlight the statistical composition of the dataset, and qualitative.
-    \item Finally we  also compare it and contrast it to other datasets.
-\end{enumerate}
+% \begin{enumerate}
+%     \item The dataset used in this investigation is original, and presents a new opportunity, not seen in the literature thus far.
+%     \item In particular it offers a close alignment between features of code, and descriptive elements that aim to tell you the function of the specific code element - distinct from the whole function.
+%     \item In this section we will present the means of collection, the structure of the dataset, and finally an analysis of its composition. 
+%     \item This analysis aims to be informative by both being quantitative, highlight the statistical composition of the dataset, and qualitative.
+%     \item Finally we  also compare it and contrast it to other datasets.
+% \end{enumerate}
 
 
+The dataset used in the our investigation was entirely original, presenting a new opportunity to investigate the machine translation of code not seen in the literature thus far. \textbf{CITE}
+In particular it offers a close and granular alignment between elements of code (argument names) and their natural language descriptions, as extracted from the most popular open source Python libraries.
+In this section we present first an overview of the dataset, and elaborate on  the means of collection. 
+We then present an in-depth analysis of its structure and composition, which aims to be both quantitative, and qualitive, also compare the dataset to others in the field. 
+
+\section{Overview} % (fold)
+\label{sec:overview}
+
+The dataset is 
+% section overview (end)
 
 \section{Method of Collection} % (fold)
 \label{sec:method_of_collection}
 
 \begin{enumerate}
-    \item Python is a dynamically typed language, with emphasis on documentation, and naturalness .
+    \item Python is a dynamically typed language, with emphasis on documentation, and naturalness.
     \item Sphinx is the industry standard for automating documentation generation.
     \item It contains an open source plugin `napoleon' that generate html web API documentation for docstrings formatted ether according to the Google Standard or the Numpy Standard (show examples of both).
     \item This appears to be used extensively in industry by xyz
@@ -59,13 +69,13 @@ The total list of libraries scraped is available as an appendix, with a full bre
         sklearn      & $ 1403 $      & $ 368 $ & True \\
         pandas   & $ 1317 $      & $ 419 $ & True \\
         magenta      & $ 1045 $      & $ 357 $ & False \\
-        100 $<$ arguments $<$ 1000   & $ 10172 $     & $ 3137 $ & True: 6, False: 26 \\
-        0 $<$ arguments $<$ 100      & $ 2300 $      & $ 1036 $ & True: 9, False: 84 \\
+        (\textit{100 $<$ arguments $<$ 1000})   & $ 10172 $     & $ 3137 $ & True: 6, False: 26 \\
+        (\textit{0 $<$ arguments $<$ 100})      & $ 2300 $      & $ 1036 $ & True: 9, False: 84 \\
     \hline
     \hline
         TOTAL    & $ 41424 $     & $ 12339 $ & True:21, False: 112 \\
     \end{tabular}
-    \caption {Break down of the libraries}
+    \caption {Break down of the largest libraries}
     \label{table:breakdown_by_library}
     \end{center}
 \end{table}
