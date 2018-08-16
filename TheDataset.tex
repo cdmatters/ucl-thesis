@@ -129,21 +129,32 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
     \item Very science heavy (see the variable names \& function names): Table \ref{table:popular_variable_names}
     \item And a lot of repetition of the same variable : Table \ref{table:variable_histogram}
     \item ... and functions Table: \ref{table:function_histogram}
-    \item However, these duplicates often have different descriptions, see table, of tuples
-    \item ... and also come from different packages.
-    \item In fact the things to worry about are whether enough diversity of package and what is overwhelming the data
-    \item in particular look at tensorflow name.
+    \item However, these duplicates often have different descriptions, see Table \ref{table:name_desc_histogram}, with examples in Table \ref{table:descriptions_for_names}
+    \item ... and also come from different packages in Table \ref{table:packages_for_names}
+    \item So in fact the things to worry about are whether enough diversity of package and what is overwhelming the data
+    \item in particular look at tensorflow name. 
+    \item the average number of functions per argument ($3.836 \pm 2.96$) wo we want a histogram?
+    \item The counts of the descriiption lengths and what are the args per function are visible in Fig \ref{fig:seq_length} 
     \item There is evidence to suggest some trimming of data and we do that.
+
 \end{itemize}
 
 
+\begin{figure}
+    \begin{center}
+    \includegraphics[scale=.5]{SEC4_SequenceLength.png}    
+    \end{center}  
+        \caption{Histograms of the length of sequences for both argument names and argument descriptions}
+    \label{fig:seq_length}
+ 
+\end{figure}
 % \begin{enumerate}
 %     \item variable name frequencies. TICK
 %     \item function name frequencies. TICK
-%     \item description lengths                !!
-%     \item duplicates 
+%     \item description lengths  TICK   !!
+%     \item duplicates       TICK
 %     \item tf-idf
-%     \item descpriptions per arg
+%     \item arg per funcion CROSS
 % \end{enumerate}
 
 \begin{table}[h!]
@@ -231,9 +242,84 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 \label{sub:statistical_analysis_of_code}
 
 \begin{enumerate}
-    \item path frequencies
-    \item paths per point
+    \item Very few paths are unique, which is unsurprising given the abstractness and simplicity of the Python syntax tree
+    \item However, each point has many many paths.  about half are between 50 and 500 paths.
+    \item  Some functions have preposterous large numbers of paths due to the fact that the variable is is referred to multiple times in the code, and large class definitions. 
+    \item This is very much like a real word dataset, where syntax trees are significant and varried
 \end{enumerate}
+
+
+
+
+
+\begin{table}[p]
+
+    \begin{tabular}{c | c | c}       
+    
+    & Most Popular Paths  &  \% of Data \\  
+   \hline
+                
+1.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword &  0.679 \\ 
+2.  & Name $\leftarrow$ Call $\rightarrow$ Name &  0.672 \\ 
+3.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword $\rightarrow$ Name &  0.647 \\ 
+4.  & Name $\leftarrow$ Call $\rightarrow$ Attribute &  0.296 \\ 
+5.  & Name $\leftarrow$ Call $\rightarrow$ Attribute $\rightarrow$ Name &  0.241 \\ 
+6.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.229 \\ 
+7.  & Name $\leftarrow$ AugAssign $\leftarrow$ For $\leftarrow$ FunctionDef $\rightarrow$ Assign $\rightarrow$ List $\rightarrow$ List $\rightarrow$ Num &  0.210 \\ 
+8.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Try $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ Name &  0.192 \\ 
+9.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.189 \\ 
+10.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ keyword &  0.184 \\ 
+  
+  \end{tabular}
+      \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }
+    \label{table:function_histogram} 
+    \begin{center}
+    \begin{tabular}{c | c | c | c c }       
+        Occurences Bin   & \multicolumn{3}{c}{Counts of Code Paths}   \\
+        \hline
+         &     raw &... as \% of unique paths & ... as \% of all paths   \\  
+        \hline     
+        1 &     229107 &   33.753 &    2.195  \\                                       
+        2 - 9 &     346845 &   51.099 &   12.056  \\                                       
+        10 - 99 &   91261 &   13.445 &   22.349  \\                                        
+        100 - 999 & 10247 &    1.510 &   26.367    \\                                      
+        1000 - 9999 & 1280 &    0.189 &   30.418  \\                                       
+        10000 - 99999 &   37 &    0.005 &    6.615   \\                                 
+                                                                     
+    \end{tabular}
+        \caption { A table of the count and codepaths as they feature in the raw dataset. A larfe fraction of the datasets are repeated }
+    \label{table:function_histogram} 
+    \begin{tabular}{c | c | c  }       
+    
+   Paths Per DataPoint & Count  &  \%-ile of data points \\  
+   \hline
+    0 &               24  &     0.07865 \\
+    1 &               138  &    0.53090 \\
+    2 - 9 &           2451  &   8.56328 \\
+    10 - 49 &         8717  &   37.13050 \\
+    50 - 99 &         4517  &   51.93354 \\
+    100 - 499 &       10023  &  84.78076 \\
+    500 - 999 &       2449  &   92.80658 \\
+    1000 - 9999 &     2160  &   99.88530 \\
+    10000 - 99999 &   32  &     99.99017 \\
+    100000 - 999999 & 3  &      100.00000 \\
+
+  \end{tabular}
+    \caption { A table of the count and frequency of distinct code paths as they feature in the raw dataset. 
+        These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
+    \label{table:function_histogram} 
+
+    \end{center}
+\end{table}
+
+
+
+
+
+
+
+
+
 
 % subsection statistical_analysis_of_code (end)
 
@@ -241,7 +327,14 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 \label{sub:qualitative_analysis_}
 So far looked at frequencies and seen that some argument sharing between similar libraries, but how different are diffrenet libraries on a description level?
 
+
 tfidf \& tsne
+
+
+\section{Final Preparations} % (fold)
+\label{sec:final_preparations}
+
+A table of the final datasets used in the experiment (duplicates filtered or not, split vs unsplit)
 
 
 % subsection qualitative_analysis_ (end)
@@ -258,10 +351,6 @@ tfidf \& tsne
     \end{itemize}
 
 
-\section{Our Final Datasets} % (fold)
-\label{sec:our_final_datasets}
-
-A table of the final datasets used in the experiment (duplicates filtered or not, split vs unsplit)
 
 
 % subsection comparison_to_other_datasets (end)
