@@ -1,5 +1,5 @@
 
-\chapter{Example Datapoint}
+\chapter{Dataset Examples}
 \label{example_datapoint}
 % Figure \ref{lst:single_point} shows a real example of a datapoint in YAML markup. 
 % Different parts of the data were used in the investigation.
@@ -45,3 +45,110 @@
      \caption{Real example of a single data point, with all metadata. The docstring in the source has been elided for brevity}
      \label{lst:single_point}
 \end{listing}
+
+\begin{table}[h]
+    \begin{center}
+    \begin{tabular}{c | c | c }       
+ & Top Description & Count\\
+1. name   1917 \\
+\hline
+&  a name for the operation (optional).                                & 1057 \\
+&  optional op name.                                                   & 69 \\
+&  an optional variable\_scope name.                                    & 41 \\
+&  a name for this operation (optional).                               & 37 \\
+&  a string, the name of the layer.                                    & 31 \\
+
+2. x       439 \\
+\hline
+&  tensor or variable.                                                 & 32 \\
+&  a tensor or variable.                                               & 17 \\
+&  `bfloat16`, `half`, `float32`, `float64`, `complex64`, `com [...]   & 14 \\
+&  numeric `tensor`.                                                   & 12 \\
+&  array or sequence containing the data                               & 10 \\
+
+3. kwargs  303 \\
+\hline
+&  additional keyword arguments which will be passed to the ap [...]   & 12 \\
+&  optional arguments that ``request`` takes.                          & 11 \\
+&  standard layer keyword arguments.                                   & 8 \\
+&  additional properties to be set on the :class:`~.google.clo [...]   & 7 \\
+&  keyword arguments to pass to base method.                           & 5 \\
+
+4. axis    263 \\
+\hline
+&  axis to broadcast over                                              & 14 \\
+&  the dimensions to reduce. if `none` (the default), reduces  [...]   & 7 \\
+&  the index or the name of the axis. 0 is equivalent to none  [...]   & 4 \\
+&  a `tensor` of type `int64`.                                         & 4 \\
+&  the axis or axes that were summed.                                  & 4 \\
+
+5. dtype   260 \\
+\hline
+&  a `tf.dtype`.                                                       & 11 \\
+&  the data type. only floating point types are supported.             & 8 \\
+&  default data type for internal matrices. set to np.float32  [...]   & 7 \\
+&  the type of the output.                                             & 6 \\
+&  overrides the data type of the result.                              & 6 \\
+
+
+    \end{tabular}
+        \caption { A table of the count and frequency of function names of the variables as they feature in the raw dataset. 
+        These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
+    \label{table:function_histogram} 
+    \end{center}
+\end{table}
+
+\begin{table}[h]
+    \begin{center}
+    \begin{tabular}{c | c | c  }       
+ & Top Description & Count\\
+
+1. name   1917     \\
+\hline
+ & tensorflow    & 1654       \\
+ & google        & 51         \\
+ & tflearn       & 50         \\
+ & external      & 14         \\
+ & absl          & 13         \\
+
+2. x       439     \\
+\hline
+  & tensorflow    & 85         \\
+ & matplotlib    & 43         \\
+ & scipy         & 35         \\
+ & tflearn       & 12         \\
+ & dask          & 9          \\
+
+3. kwargs  303     \\
+\hline
+ & tensorflow    & 62         \\
+ & google        & 47         \\
+ & dask          & 23         \\
+ & mir\_eval      & 21         \\
+ & librosa       & 18         \\
+
+4. axis    263     \\
+\hline
+ & tensorflow    & 85         \\
+ & pandas        & 61         \\
+ & scipy         & 54         \\
+ & dask          & 20         \\
+ & librosa       & 17         \\
+
+5. dtype   260     \\
+\hline
+ & tensorflow    & 161        \\
+ & scipy         & 39         \\
+ & networkx      & 11         \\
+ & pandas        & 9          \\
+ & dask          & 8          \\
+
+
+
+
+    \end{tabular}
+        \caption { A table of the count and frequency of function names of the variables as they feature in the raw dataset. 
+        These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
+    \label{table:function_histogram} 
+    \end{center}
+\end{table}
