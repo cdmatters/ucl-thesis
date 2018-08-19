@@ -13,7 +13,7 @@
 The dataset used in the our investigation was entirely original, presenting a new opportunity to investigate the machine translation of code not seen in the literature thus far. \textbf{CITE}
 In particular it offers a close and granular alignment between elements of code (argument names) and their natural language descriptions, as extracted from the most popular open source Python libraries.
 In this section we present first an overview of the dataset, and elaborate on  the means of collection. 
-We then present an in-depth analysis of its structure and composition, which aims to be both quantitative, and qualitive, comparing the dataset to others in the field. 
+We then present an in-depth analysis of its structure and composition, which aims to be both quantitative, and qualitive, comparing the dataset to others in the field and assessing its suitability for the task. 
 
 \section{Overview} % (fold)
 \label{sec:overview}
@@ -31,9 +31,9 @@ A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{ls
 \begin{table}[h!]
     \begin{center}
     \begin{tabular}{| c | c | c | c |}
-    \hline
+        \hline
         Name &  Description     &    Field    & Type  \\
-    \hline
+        \hline
         Argument Name & the name of the argument  & arg\_name & string \\
         Argument Description & the description of the argument & arg\_desc & string \\
         Argument Type & the annotated type for the argument & arg\_type & string or null \\
@@ -46,7 +46,7 @@ A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{ls
         Source & the source code of the function & src & string\\
         Docstring & the sphinx annotated docstring & docstring & string\\
 
-    \hline
+        \hline
 
 
     \end{tabular}
@@ -79,7 +79,7 @@ A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{ls
     \begin{center}
     \begin{tabular}{c | c | c | c}
         Library      & Arguments     & Functions  & Scientific \\
-    \hline
+        \hline
         tensorflow   & $ 17002 $     & $ 4340 $ & True \\
         google   & $ 2829 $      & $ 1098 $ & False \\
         scipy    & $ 2030 $      & $ 549 $ & True \\
@@ -90,8 +90,8 @@ A real example is presented in Appendix \ref{example_datapoint}, Listing \ref{ls
         magenta      & $ 1045 $      & $ 357 $ & False \\
         (\textit{100 $<$ arguments $<$ 1000})   & $ 10172 $     & $ 3137 $ & True: 6, False: 26 \\
         (\textit{0 $<$ arguments $<$ 100})      & $ 2300 $      & $ 1036 $ & True: 9, False: 84 \\
-    \hline
-    \hline
+        \hline
+        \hline
         TOTAL    & $ 41424 $     & $ 12339 $ & True: 21, False: 112 \\
     \end{tabular}
     \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments and functions}
@@ -154,24 +154,24 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 %     \item description lengths  TICK   !!
 %     \item duplicates       TICK
 %     \item tf-idf
-%     \item arg per funcion CROSS
+%     \item arg per funcion TICK
 % \end{enumerate}
 
 \begin{table}[h!]
     \begin{center}
     \begin{tabular}{c | c | c | c | c}
-    & Top Argument Names & Count  &   Top Function Names & Count \\  
-    \hline               
-    1.   &  name     &     1917    &   fit       &    122 \\        
-    2.   &  x        &     439     &   transform &    102 \\         
-    3.   &  kwargs   &     303     &   train     &    77 \\         
-    4.   &  axis     &     263     &   evaluate  &    71 \\        
-    5.   &  dtype    &     260     &   get       &    61 \\         
-    6.   &  a        &     230     &   conv2d    &    59 \\        
-    7.   &  G        &     227     &   Client    &    52 \\        
-    8.   &  inputs   &     224     &   update    &    46 \\        
-    9.   &  input    &     223     &   add       &    45 \\         
-    10.  &  value    &     210     &   specgram  &    45 \\         
+        & Top Argument Names & Count  &   Top Function Names & Count \\  
+        \hline               
+        1.   &  name     &     1917    &   fit       &    122 \\        
+        2.   &  x        &     439     &   transform &    102 \\         
+        3.   &  kwargs   &     303     &   train     &    77 \\         
+        4.   &  axis     &     263     &   evaluate  &    71 \\        
+        5.   &  dtype    &     260     &   get       &    61 \\         
+        6.   &  a        &     230     &   conv2d    &    59 \\        
+        7.   &  G        &     227     &   Client    &    52 \\        
+        8.   &  inputs   &     224     &   update    &    46 \\        
+        9.   &  input    &     223     &   add       &    45 \\         
+        10.  &  value    &     210     &   specgram  &    45 \\         
     
     \end{tabular}
     \caption {The most popular variable names and function names in the raw dataset. As can be seen these are either dominated by scientific terms and single letter variable names, such as those in scientific libraries. Scientific functions which take large numbers of arguments contribute heavily to the dataset}
@@ -182,34 +182,34 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 \begin{table}[p]
     \begin{center}
     \begin{tabular}{c | c | c | c  }       
-     Bin   & \multicolumn{3}{c}{Counts of Variable Name}   \\
-    \hline
-     &     raw &... as \% of unique names & ... as \% of all names   \\  
-    \hline     
-     1     &      3681 &   53.550 &   11.738  \\          
-     2 - 4 &      2141 &   31.146 &   17.302  \\          
-     5 - 9 &       539 &    7.841 &   10.989  \\          
-     10 - 19 &     272 &    3.957 &   11.464  \\          
-     20 - 99 &     212 &    3.084 &   26.122  \\          
-     100 - 499 &    28 &    0.407 &   16.272  \\          
-     500 - 1999 &    1 &    0.015 &    6.113  \\                
+        Bin   & \multicolumn{3}{c}{Counts of Variable Name}   \\
+        \hline
+        &     raw &... as \% of unique names & ... as \% of all names   \\  
+        \hline     
+        1     &      3681 &   53.550 &   11.738  \\          
+        2 - 4 &      2141 &   31.146 &   17.302  \\          
+        5 - 9 &       539 &    7.841 &   10.989  \\          
+        10 - 19 &     272 &    3.957 &   11.464  \\          
+        20 - 99 &     212 &    3.084 &   26.122  \\          
+        100 - 499 &    28 &    0.407 &   16.272  \\          
+        500 - 1999 &    1 &    0.015 &    6.113  \\                
 
     \end{tabular}
         \caption { A table of the count and frequency of variable names as they feature in the raw dataset. Approximately half of all variables names occur over 10 times in the data. In particular a single outlier - the variable name \mintinline{python}{name} from \mintinline{python}{tensorflow}, accounts for 6.1\% of the collected data}
     \label{table:variable_histogram}
 
-    \begin{tabular}{c | c | c | c  }       
+    \begin{tabular}{c | c | c | c  }          
 
-     Bin   & \multicolumn{3}{c}{Counts of Variable (Name, Description) Pairs}  \\
-    \hline
-     &     raw &... as \% of unique pairs & ... as \% of all pairs  \\  
-    \hline     
-    1 &     14956 &   77.009 &   47.691  \\
-    2 - 4 &      3799 &   19.561 &   28.881 \\
-    5 - 9 &       480 &    2.472 &    9.483 \\
-    10 - 99 &     185 &    0.953 &   10.574 \\
-    100 - 499 &     0 &    0.000 &    0.000 \\
-    500 - 1999 &    1 &    0.005 &    3.371 \\           
+        Bin   & \multicolumn{3}{c}{Counts of Variable (Name, Description) Pairs}  \\
+        \hline
+        &     raw &... as \% of unique pairs & ... as \% of all pairs  \\  
+        \hline     
+        1 &     14956 &   77.009 &   47.691  \\
+        2 - 4 &      3799 &   19.561 &   28.881 \\
+        5 - 9 &       480 &    2.472 &    9.483 \\
+        10 - 99 &     185 &    0.953 &   10.574 \\
+        100 - 499 &     0 &    0.000 &    0.000 \\
+        500 - 1999 &    1 &    0.005 &    3.371 \\           
 
     \end{tabular}
         \caption { A table of the count and frequency of function names as they feature in the dataset. Although names are often repeated, a much greater fraction of data points have unique (name, description) pairs.}
@@ -217,17 +217,17 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 
     %% TO DO: Function names & argument sizes, not just "name" 
     \begin{tabular}{c | c | c | c  }       
-     Bin   & \multicolumn{3}{c}{Counts of Variable Function Name}   \\
-    \hline
-     &     raw &... as \% of unique names & ... as \% of all names   \\  
-    \hline     
-    1   &      2453 &   28.774 &    7.822  \\          
-    2 - 4 &      3946 &   46.287 &   34.324  \\          
-    5 - 9 &      1649 &   19.343 &   32.930  \\          
-    10 - 19 &     384 &    4.504 &   15.523  \\          
-    20 - 99 &      91 &    1.067 &    8.686  \\          
-    100 - 499 &     2 &    0.023 &    0.714  \\          
-    500 - 1999 &    0 &    0.000 &    0.000  \\             
+        Bin   & \multicolumn{3}{c}{Counts of Variable Function Name}   \\
+        \hline
+        &     raw &... as \% of unique names & ... as \% of all names   \\  
+        \hline     
+        1   &      2453 &   28.774 &    7.822  \\          
+        2 - 4 &      3946 &   46.287 &   34.324  \\          
+        5 - 9 &      1649 &   19.343 &   32.930  \\          
+        10 - 19 &     384 &    4.504 &   15.523  \\          
+        20 - 99 &      91 &    1.067 &    8.686  \\          
+        100 - 499 &     2 &    0.023 &    0.714  \\          
+        500 - 1999 &    0 &    0.000 &    0.000  \\             
 
     \end{tabular}
         \caption { A table of the count and frequency of function names of the variables as they feature in the raw dataset. 
@@ -242,9 +242,11 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 \label{sub:statistical_analysis_of_code}
 
 \begin{enumerate}
+    \item The source code covers a broad range of functions. Lines of code (generated histogram), are a (30.27 +/- 99) lines. 
+    \item Although technically not in part of the dataset, by comparing code paths, we also see good diversity. 
     \item Very few paths are unique, which is unsurprising given the abstractness and simplicity of the Python syntax tree
     \item However, each point has many many paths.  about half are between 50 and 500 paths.
-    \item  Some functions have preposterous large numbers of paths due to the fact that the variable is is referred to multiple times in the code, and large class definitions. 
+    \item  Some functions have preposterous large numbers of paths due to the fact that the variable is is referred to multiple times in the code, and large class definitions. This indicates real bit of code like class definitions.
     \item This is very much like a real word dataset, where syntax trees are significant and varried
 \end{enumerate}
 
@@ -256,22 +258,22 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
 
     \begin{tabular}{c | c | c}       
     
-    & Most Popular Paths  &  \% of Data \\  
-   \hline
+           & Most Popular Paths  &  \% of Data \\  
+        \hline
                 
-1.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword &  0.679 \\ 
-2.  & Name $\leftarrow$ Call $\rightarrow$ Name &  0.672 \\ 
-3.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword $\rightarrow$ Name &  0.647 \\ 
-4.  & Name $\leftarrow$ Call $\rightarrow$ Attribute &  0.296 \\ 
-5.  & Name $\leftarrow$ Call $\rightarrow$ Attribute $\rightarrow$ Name &  0.241 \\ 
-6.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.229 \\ 
-7.  & Name $\leftarrow$ AugAssign $\leftarrow$ For $\leftarrow$ FunctionDef $\rightarrow$ Assign $\rightarrow$ List $\rightarrow$ List $\rightarrow$ Num &  0.210 \\ 
-8.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Try $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ Name &  0.192 \\ 
-9.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.189 \\ 
-10.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ keyword &  0.184 \\ 
+        1.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword &  0.679 \\ 
+        2.  & Name $\leftarrow$ Call $\rightarrow$ Name &  0.672 \\ 
+        3.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword $\rightarrow$ Name &  0.647 \\ 
+        4.  & Name $\leftarrow$ Call $\rightarrow$ Attribute &  0.296 \\ 
+        5.  & Name $\leftarrow$ Call $\rightarrow$ Attribute $\rightarrow$ Name &  0.241 \\ 
+        6.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.229 \\ 
+        7.  & Name $\leftarrow$ AugAssign $\leftarrow$ For $\leftarrow$ FunctionDef $\rightarrow$ Assign $\rightarrow$ List $\rightarrow$ List $\rightarrow$ Num &  0.210 \\ 
+        8.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Try $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ Name &  0.192 \\ 
+        9.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.189 \\ 
+        10.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ keyword &  0.184 \\ 
   
-  \end{tabular}
-      \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }
+    \end{tabular}
+    \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }
     \label{table:function_histogram} 
     \begin{center}
     \begin{tabular}{c | c | c | c c }       
@@ -279,46 +281,38 @@ The full breakdown of the dataset by library is available on GitHub, alongside t
         \hline
          &     raw &... as \% of unique paths & ... as \% of all paths   \\  
         \hline     
-        1 &     229107 &   33.753 &    2.195  \\                                       
-        2 - 9 &     346845 &   51.099 &   12.056  \\                                       
-        10 - 99 &   91261 &   13.445 &   22.349  \\                                        
-        100 - 999 & 10247 &    1.510 &   26.367    \\                                      
-        1000 - 9999 & 1280 &    0.189 &   30.418  \\                                       
-        10000 - 99999 &   37 &    0.005 &    6.615   \\                                 
+        1 &     229107 &   33.753 &    2.195  \\     
+        2 - 9 &     346845 &   51.099 &   12.056  \\     
+        10 - 99 &   91261 &   13.445 &   22.349  \\      
+        100 - 999 & 10247 &    1.510 &   26.367    \\    
+        1000 - 9999 & 1280 &    0.189 &   30.418  \\     
+        10000 - 99999 &   37 &    0.005 &    6.615   \\   
                                                                      
     \end{tabular}
         \caption { A table of the count and codepaths as they feature in the raw dataset. A larfe fraction of the datasets are repeated }
     \label{table:function_histogram} 
     \begin{tabular}{c | c | c  }       
     
-   Paths Per DataPoint & Count  &  \%-ile of data points \\  
-   \hline
-    0 &               24  &     0.07865 \\
-    1 &               138  &    0.53090 \\
-    2 - 9 &           2451  &   8.56328 \\
-    10 - 49 &         8717  &   37.13050 \\
-    50 - 99 &         4517  &   51.93354 \\
-    100 - 499 &       10023  &  84.78076 \\
-    500 - 999 &       2449  &   92.80658 \\
-    1000 - 9999 &     2160  &   99.88530 \\
-    10000 - 99999 &   32  &     99.99017 \\
-    100000 - 999999 & 3  &      100.00000 \\
+        Paths Per DataPoint & Count  &  \%-ile of data points \\  
+        \hline
+        0 &               24  &     0.07865 \\
+        1 &               138  &    0.53090 \\
+        2 - 9 &           2451  &   8.56328 \\
+        10 - 49 &         8717  &   37.13050 \\
+        50 - 99 &         4517  &   51.93354 \\
+        100 - 499 &       10023  &  84.78076 \\
+        500 - 999 &       2449  &   92.80658 \\
+        1000 - 9999 &     2160  &   99.88530 \\
+        10000 - 99999 &   32  &     99.99017 \\
+        100000 - 999999 & 3  &      100.00000 \\
 
-  \end{tabular}
+    \end{tabular}
     \caption { A table of the count and frequency of distinct code paths as they feature in the raw dataset. 
         These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
     \label{table:function_histogram} 
 
     \end{center}
 \end{table}
-
-
-
-
-
-
-
-
 
 
 % subsection statistical_analysis_of_code (end)
@@ -334,14 +328,45 @@ tfidf \& tsne
 \section{Final Preparations} % (fold)
 \label{sec:final_preparations}
 
-A table of the final datasets used in the experiment (duplicates filtered or not, split vs unsplit)
+Given the above analysis it was decided that the raw dataset should be filtered to prevent extensive duplicates of (name, description) pairs overwhelming the dataset.
+However, given each of these pairs would likely have different source code, the number of duplicates should not necessarily be zero for tasks involving source code. 
+It was decided that two datasets could be partitioned, one of unique name-description tuples and one limiting these number of occurences to 10. 
+This would allow any learner to learn how differnet code can still lead to similar descriptions, without being overwhelmed by overrepresented descriptions.
 
+Furthermore, there was naturally a question of how to partition training and test/validation sets - should arguments from the same libraries be allowed in both? 
+Given this would allow us to the possibility to investigate performance within and between libraries, once again we decided to create two sets of partitions, for each dataset. 
+
+This led us to the four datasets we eventually experimented on, presented in Table \ref{table:thefinaldataset}. These allowed us the flexibility to examine the different modalities of the code independently, before combining them.
+
+\begin{table}
+    \begin{center}    
+    \begin{tabular}{c | c | c|}
+     Dataset Name & Allow (name, description) duplicates? & Partition train and test by library? \\
+    \hline
+    Unsplit\_1    & No                        & No   \\
+    Unsplit\_X    & Yes                       & No   \\
+    Split\_1      & No                       & Yes  \\
+    Split\_X      & Yes                       & Yes  \\
+    \end{tabular}
+    \end{center}
+    \caption { The datasets used in the experiment from the review }
+    \label{table:thefinaldataset} 
+
+\end{table}
 
 % subsection qualitative_analysis_ (end)
-% section analysis_of_data (end)
+% section analysis_o{}f_data (end)
 
 \subsection{Comparison To Other Datasets} % (fold)
 \label{sub:comparison_to_other_datasets}
+
+    % COMPARISON THE SQUAD PAPER
+    % What are the problems with other dataset?
+    % What is the goal of the dataset?
+    % How does this achieve it?
+    % Method
+    % Analysis of Data - what is the diversity? what types of examples?
+    % Human Performance/.
 
     This should be contrasted with comments, and overall docstrings, and full annotations.
     \begin{itemize}
@@ -352,5 +377,3 @@ A table of the final datasets used in the experiment (duplicates filtered or not
 
 
 
-
-% subsection comparison_to_other_datasets (end)
