@@ -217,11 +217,10 @@ The results of our evaluation are presented in Table \ref{table:tokenization}, w
     \hline
     \hline
     Seq to Seq                          &                  & \\
-    - \textit{name only}                & $ 12.54776 $ & $ 12.66232 $  \\
-    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $  \\
+    - \textit{name only}    !!            & $ 12.46441 $ & $ 12.72522 $  \\
+    - \textit{name + function name} !!    & $ 10.77699 $ & $ 11.24894 $ \\
     - \textit{name + other args}  !!    & $ 13.69964 $ & $ 13.73890 $  \\
-    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $  \\
-
+    - \textit{name + function name + other args}   !! & $ 14.13267 $ & $ 13.63351 $ \\
     % \hdashline
     % Seq to Seq                          &                  & \\
     % - \textit{name only}                & $ 5.54103 $ & $ 5.43827 $  \\
@@ -357,8 +356,8 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
     Rote Learner (best performer)          & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
     \hline
     Code2Vec                !!              & $ 18.93630 $ & $ 18.12909 $ & \\
-    Code2Vec (masked args)  !!              & $ 17.01868 $ & $ 16.93701 $ & \\
-    Code2Vec (masked all)                 & $ 12.13857 $ & $ 12.08905 $ & \\
+    Code2Vec (masked args)  !!              & $ 17.01868 $ & $ 16.93701 $ & \\                  
+    Code2Vec (masked all)   !!              & $ 28.76581 $ & $ 27.68100 $ & \\
     % \hdashline
 
     % Code2Vec                              & $ 12.64199 $ & $ 12.80257 $ & \\
@@ -387,13 +386,13 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
     Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ & \\
-    Code2Vec  (code only)             & $ 17.78034 $ & $ 17.84772 $ & \\
+    Code2Vec  (code only)         !!    & $ 18.93630 $ & $ 18.12909 $ & \\
     % \hdashline
     % Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
     \hline
     Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ & \\
-    Seq2Seq  (name only)              & $ 25.13928 $ & $ 24.16031 $ & \\
+    Seq2Seq  (name only)      !!         & $ 26.39189 $ & $ 25.39841 $ & \\
     % \hdashline
     % Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
     \hline
