@@ -119,3 +119,54 @@
 \end{center}
 \end{table}
 
+\begin{enumerate}
+    \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
+    \item However, the attention is being pathological. It's such a good trategy, that it stays there, and stops looking elsewhere, the weight decays to zero
+    \item then when you get to genuinely hard points - where attention is useful, it cant learn and it panics (see bluring at end - can only explore nearest by states)/
+    \item this pattern is noticeable in other locations, moving the lstm to more data (with duplicates), we learn that the lstm learns
+\end{enumerate}
+
+
+\begingroup
+\begin{table}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/attention_xkcd.png}
+    \fontsize{10pt}{12pt}\selectfont
+        % how to set font size here to 10 px ?  
+\begin{tabular}{c l}
+    & \textbf{Paths} \\
+    \\
+    \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
+    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\leftarrow$ FunctionDef[...] \\
+        & [...]$\rightarrow$ Assign $\rightarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+    \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
+    \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
+    \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+    \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+    \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
+    \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
+    \textbf{Path I} & $<$UNK$>$ : \mintinline[]{yaml}{<UNK>} \\
+\end{tabular}
+\end{center}
+
+\caption{Example Attention Scores}
+\end{table}
+\endgroup
+
+\begin{listing}[h!] 
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
+\begin{minted}[]{python}
+def xkcd_palette(colors):
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+\end{minted}
+\begin{tabular}{l}
+\textbf{I}: \mintinline[]{python}{colors}\\
+\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
+\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
+\end{tabular}
+
+\caption{Code \& List}
+\end{listing}
+

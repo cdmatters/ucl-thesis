@@ -128,7 +128,8 @@ As a baseline, we first wanted to investigate the informative power of simply th
 Understandably we expected a reasonable signal to come from just the variable name which should be learnable by both our seq-to-seq model and rote learner. 
 
 \subsubsection{Method \& Results} % (fold)
-Given this experiment used only a limited amount of the available metadata for each argumet, we decided that the set of (name, description) pairs should be unique, but we would start by investigating the combined dataset mentioned in sectionX.
+Given this experiment used only a limited amount of the available metadata for each argument, we decided that the set of (name, description) pairs should be unique. 
+For this reason we used, the NonDuplicated dataset X presented in section Y.
 Although filtering this data would reduce our available data significantly, it was important to ensure a robust assessment of the models.
 
 We ran the standard tokenizations of the input name, and ran our Rote Learner baseline 50 times on this data, to calculate the average and standard deviations of the BLEU score. We then ran series of basic Seq-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder, and dropout. 
@@ -137,6 +138,8 @@ The hyperparameters for this models found in Table \ref{table:hyperparams_name_b
 
 
 \subsubsection{Analysis} % (fold)
+
+The strength of the Rote Learner was particularly surprising on this dataset. In particular the ROte learner was able to capture 
 
 \begin{itemize*}
     \item surprising strength from rote learner! why? it generates full sentences? what is the bleu score for a full match vs a miss? also, whole subnames?
