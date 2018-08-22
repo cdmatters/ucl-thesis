@@ -129,7 +129,7 @@ We expected a reasonable signal to come from just the variable name which should
 
 \subsubsection{Method \& Results} % (fold)
 
-Since this experiment would only use the variable name to predict the descrption, we used the Filtered Random-Split Dataset listed in section.
+Since this experiment would only use the variable name to predict the descrption, we used the Reduced Random-Split Dataset listed in section.
 This prevented inflation of BLEU scores due to exact matches being both in the train and validation set.
 
 We then ran the standard tokenizations of input name on the Rote Learner, which only used the N-character-gram overlap criterion.
@@ -143,7 +143,7 @@ The Seq-to-Seq architectures initially underperformed the Rote Learner, scoring 
 The final model, with all addition beat the Rote Learner reasonably with a BLEU score of $12.46 $ and $12.72$ on validation and test set respectively.
 
 The hyperparameters for these models are found in the Appendix, Table \ref{table:hyperparams_name_baseline}.
-
+% ALL STOPPED at 150 EPOCHS. No improvement on best for 20 epochs, except original 146
 
 
 \begin{table}[!ht]
@@ -153,10 +153,10 @@ The hyperparameters for these models are found in the Appendix, Table \ref{table
     \hline
     Rote Learner (x50)                & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
     \hline
-    Seq to Seq                        & $ 7.65221 $  & $ 7.63131  $ \\
-    + \textit{attention}              & $ 9.77734 $  & $ 9.42463  $ \\
-    + \textit{bidirectional encoder}  & $ 10.94970 $ & $ 10.83105 $ \\
-    + \textit{dropout}                & $ 12.46441 $ & $ 12.72522 $  \\
+    Seq to Seq                        & $ 8.98624 $ & $ 8.17635 $ \\
+    + \textit{attention}              & $ 10.05134 $ & $ 9.88608 $  \\
+    + \textit{bidirectional encoder}  & $ 11.75615 $ & $ 12.34480 $  \\
+    + \textit{dropout}                & $ 12.67504 $ & $ 12.72236 $  \\
     \hline
     % Seq to Seq                        & $ 4.60169 $ & $ 4.97880 $  \\
     % + \textit{attention}              & $ 4.81255 $ & $ 5.42022 $  \\
@@ -252,36 +252,25 @@ We hypothesised that the names in the function signature could play an important
 
 \subsubsection{Method \& Results} % (fold)
 
-We decided to investigate how four different arrangements of input data would affect translation behaviour. 
+We investigated how four different arrangements of input data would affect translation behaviour. 
 These were:
 just the argument name; the argument name with the function name; the argument name with other arguments; and the argument name with both function name and argument name.
 
-Once again we used the Filtered Random-Split Dataset, to prevent advantages due to duplicates, and ran the standard tokenization procedures outline in Sections X. 
+Once again we used the Reduced Random-Split Dataset, to prevent advantages due to duplicates, and ran the standard tokenization procedures outline in Sections X. 
 
-As in section \label{sub:comparing_baseline_models}, we ran 50 repetitions of the Rote Learner on these new tokenizations, to overcome the stochasiticity in their evaluations, once again using N-character-gram overlap as the matching criterion.
+As in section \ref{sub:comparing_baseline_models}, we ran 50 repetitions of the Rote Learner on these new tokenizations, to overcome the stochasiticity in their evaluations, once again using N-character-gram overlap as the matching criterion.
 
 Then we ran four models of the Seq-to-Seq architectures, with attention, dropout and bidirectional encoders - just as the final model of section \label{sub:comparing_baseline_models}. These ran for a maximum of 150 epochs, and the model with best BLEU score was selected. 
 
-We report the results in Table \ref{table:tokenization}, noting that the extra information most cases improves BLEU scoring.
+We report the results in Table \ref{table:tokenization}. 
+In particular we note that in all cases the Rote Learner's performance improved with added information, in the best case, over three points to $12.22 \pm 0.23$ on validation and $14.34 \pm 0.21$ on test, thanks to the addition of the function name. 
+
+The Seq-to-Seq model on the other hand benefitted less than the Rote Learner, if at all. In both tokenizations using other arguments, the model improved by approximately one point. However the tokenization involving the addition of just function name, saw a performance reduction of about 1.5 points, across both validation and test.
+
+Although this agreed with out hypothesis that there is value in extra naming of variables, the under performance of the Seq-to-Seq model was surprising and is examined more fully in the analysis section.
 
 
-
-
-
-The hyperparameters of these models are presented in appendix table. 
-
-
-\subsubsection{Analysis} % (fold)
-\label{ssub:analysis}
-
-
-\begin{enumerate*}
-
- \item expect the rote learner to perform worse, sub strings causing problems. other args matching should be a problem! the longest argument gets matched! But the overlap in BLEU score is strong.
- \item why a lack of performance in te other areas?
-  \item chekc the attention on the name only and others. can it tell separartors are helpful?
-\end{enumerate*}
-
+The hyperparameters of these models are presented in appendix table X
 
 
 \begin{table}[!ht]
@@ -317,7 +306,21 @@ The hyperparameters of these models are presented in appendix table.
 \end{table}
 
 
+\subsubsection{Analysis} % (fold)
+\label{ssub:analysis}
 
+\begin{enumerate}
+    \item we expected words to help choose bits in overdetermined cases. attention distributed across multiple words
+    \item however we get attention focused on last word.
+    \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
+    \item The sort bonus is explained, but no change with longer.
+    \item It is possible the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
+    \item To investigate we ran with low lstm, -> no change in behaviour (LSTM 75), still tries to encode
+    \item We then tried to investigate if the rest of the data is being used (use the full dataset, and found that)
+    \item in cases with still degeneracy, attention is confused it panics (see bluring at end - can only explore nearest by states)
+    \item Check out Rote learner vs LSTM for "name" again. is it interpolating, or being a bad lstm (fitting bits of it, that dont transfer.)
+    \item We also take a closer look at the failures and notice a specific pattern. note tha in some cases the model works well, and. Basically hypothesise the size of the data with lack of indentifyin ginformation leads to overfitting, rather than just variable name which works.
+\end{enumerate}
 
 
 % \subsection{Investigating Addition of Source Code} % (fold)

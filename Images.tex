@@ -113,13 +113,6 @@
 \end{center}
 \end{table}
 
-\begin{enumerate}
-    \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
-    \item However, the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
-    \item then when you get to genuinely hard points - where attention is useful, it cant learn and it panics (see bluring at end - can only explore nearest by states)/
-    \item this pattern is noticeable in other locations, moving the lstm to more data (with duplicates), we learn that the lstm learns
-    \item this happens even early in training and even with smaller lstm size, and larger datasets too
-\end{enumerate}
 
 
 \begingroup
