@@ -115,9 +115,10 @@
 
 \begin{enumerate}
     \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
-    \item However, the attention is being pathological. It's such a good trategy, that it stays there, and stops looking elsewhere, the weight decays to zero
+    \item However, the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
     \item then when you get to genuinely hard points - where attention is useful, it cant learn and it panics (see bluring at end - can only explore nearest by states)/
     \item this pattern is noticeable in other locations, moving the lstm to more data (with duplicates), we learn that the lstm learns
+    \item this happens even early in training and even with smaller lstm size, and larger datasets too
 \end{enumerate}
 
 
@@ -172,3 +173,18 @@ def xkcd_palette(colors):
 \includegraphics[width=.8\linewidth]{ImagesCodeRelated/save_c2e_encoder.png}
 \end{center}
 \end{figure}
+
+
+\begin{enumerate}
+    \item With the code lstm we see some of the behaviour we like, but also, only overfitting. There is no sequence so in some cases, a path or a single variable can be informative, but it performs well.
+    \item See a single example and distribution of attention.
+    \item CLearly there are a lot of spikes compared to uniform. More masking the more spiking, though this is partly due to best bleu. Compare at cross entropy time?
+    \item Then look at, bleu per sentence, maybe av bleu per sentence per attn entropy.
+    \item Big COMPARE vs ROTE LEARNER - can we conclude this is worth more researcg?
+    \item Cna show how choices change w model for given example??
+
+    \item C2VEnc: does combining add anythin? More capacity, check weights.
+\end{enumerate}
+
+
+
