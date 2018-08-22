@@ -128,20 +128,22 @@ As a baseline, we first wanted to investigate the informative power of simply th
 We expected a reasonable signal to come from just the variable name which should be learnable by both our seq-to-seq model and rote learner. 
 
 \subsubsection{Method \& Results} % (fold)
-Given this experiment used only a limited amount of the available metadata for each argument, we decided that the set of (name, description) pairs should be unique. 
-For this reason we used the NonDuplicated dataset X presented in section Y.
-Although filtering this data would reduce our available data significantly, it was important to ensure a robust assessment of the models.
 
-We ran the standard tokenizations of the input name, and ran our Rote Learner baseline 50 times on this data, to calculate the average and standard deviations of the BLEU score. 
-We then ran series of basic Seq-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder, and dropout. 
-Below we report the BLEU scores in Table \ref{table:name_baseline}, for each of the results below, noting a clear improvement in the translation score, to the point where the neural model outperforms the Rote Learner on simply the name.
-The hyperparameters for this models found in Table \ref{table:hyperparams_name_baseline}
+Since this experiment would only use the variable name to predict the descrption, we used the Filtered Random-Split Dataset listed in section.
+This prevented inflation of BLEU scores due to exact matches being both in the train and validation set.
 
-\begin{itemize*}
-    \item surprising strength from rote learner! why? it generates full sentences? what is the bleu score for a full match vs a miss? also, whole subnames?
-    \item attention caused an improvement - is there an example why?
-    \item adding capacity and dropout helped, but interesting that all needed to help. only a modest improvement which we expect sincethe LSTM has more copacity, less variance.
-\end{itemize*}
+We then ran the standard tokenizations of input name on the Rote Learner, which only used the N-character-gram overlap criterion.
+This was repeated 50 times, to provide an robust estimate of the standard deviation and mean BLEU scores, due to the inherent stocasticity to the model.
+
+Then we ran a series of experiments on the basic Char-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
+These best models were taken on the best BLEU scores up to 150 epochs, of training, and evaluated on the test and development set. % WHY 150
+
+We report the BLEU scores in Table \ref{table:name_baseline} showing a strong performance from the Rote Learner of corpus level BLEU $9.03 \pm 0.32$ on validation and $10.60 \pm  0.30$. 
+The Seq-to-Seq architectures initially underperformed the Rote Learner, scoring $7.76 $ and $  7.63$ on the validation and test set. However a marked improvement was seen by adding attention, as was adding the bidirectional encoder and dropout. 
+The final model, with all addition beat the Rote Learner reasonably with a BLEU score of $12.46 $ and $12.72$ on validation and test set respectively.
+
+The hyperparameters for these models are found in the Appendix, Table \ref{table:hyperparams_name_baseline}.
+
 
 
 \begin{table}[!ht]
@@ -168,14 +170,85 @@ The hyperparameters for this models found in Table \ref{table:hyperparams_name_b
 \end{table}
 
 
+
+\subsubsection{Analysis} % (fold)
+
+Most surprising of this result is the strength of the Rote Learner, despite there being no `exact matches' in the training and development sets. 
+This is largely the result of there are arguments in the corpus with very similar descriptions, which may vary by only a few words. 
+
+To investigate this we examined the predictions from the Rote Learner on the validation set. 
+We evaluated the sentence level BLEU score on these, and found that although the vast majority evaluate to zero, a number of examples have a coincidental overlap in descriptions, resulting in a non negligible BLEU score. 
+A random sample of these non-zero scored translations are presented in Figure \ref{tab:rotelearner_nameonly}.
+
+With regard to the Seq-to-Seq, it is not surprising these standard additions to the seq-to-seq architecture improve the model. 
+The addition of a bidirectional model adds capacity to the model by increasing the size of the hidden vector, and attention allows the model to condition sentence generation on the input, further adding complexity to the model.
+The dropout also adds a regularizing effect.
+
+It is perhaps surprising that the vanilla Seq-to-Seq struggles to outperform the Rote Learner. 
+It is possible that the lack of contextualising information from attention results in an inability to learn from long description sequences that the Rote Learner can regurgitate immediately. 
+
+However, once the attention and capacity are increased the results are explanatory.
+The model synthesises similar (or even the same!) sequences of characters with their different descriptions, into a single description, which may fit better than randomly guessing from a bag of seen sequences. 
+
+For instance, the most frequent argument, \mintinline[]{yaml}{name}, occurs in the train set 318 times with different descriptions. 
+It also occurs 52 times in the validation set, again, with different descriptions. 
+For each of these point the Rote Learner predicts a different description from the train set, on average scoring $0.00646 \pm 0.006$, whereas the Seq-to-Seq makes the same prediction each time, and scores $0.4029$, almost two orders of magnitude better, with the sensible average: ``name of the variable to return." 
+
+In these cases the Seq-to-Seq model is interpolating in an overdetermined problem, and this highlights one of the advantages of neural networks in machine translation problems. 
+
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l}
+\hline\\
+
+\textbf{A Random Sample of Bleu Scores $>0$ from Rote Learner on Random Split }\\\\ 
+
+
+\textbf{Bleu Score}: 0.364
+\textbf{Confidence}: 100.0\%  \\
+\textbf{Argument}: \mintinline[]{python}{e d g e _ m a t c h}\\
+\textbf{Description}: a function that returns true if the edge attribute dictionary for \\
+the pair of nodes ( u1 , v1 ) in g1 and ( u2 , v2 ) in g2 should be considered equal during\\
+the isomorphism test . if edge\_match is not specified then edge attributes are not considered .\\
+\textbf{Prediction}: a function that returns true if the edge attribute dictionaries for\\
+the pair of nodes ( $<$UNK$>$ , $<$UNK$>$ ) in $<$UNK$>$ and ( u2 , $<$UNK$>$ ) in $<$UNK$>$\\
+should be considered equal during matching .\\
+
+\\
+\textbf{B}: 0.075
+\textbf{C}: 11.1\%  \\
+\textbf{A}: \mintinline[]{python}{u s e _ l o c k i n g}\\
+\textbf{D}: ` bool ` . if true use locks for update operation .\\
+\textbf{P}: an optional ` bool ` . defaults to ` true ` . an optional bool . defaults to\\
+true . if true , the assignment will be protected by a lock ; otherwise the behavior is\\
+undefined , but may exhibit less contention .\\
+\\
+\textbf{B}: 0.558
+\textbf{C}: 12.5\%  \\
+\textbf{A}: \mintinline[]{python}{y _ t r u e}\\
+\textbf{D}: ground truth ( correct ) target values .\\
+\textbf{P}: ground truth ( correct ) labels .\\
+\\
+\hline
+\\
+\end{tabular}
+\end{center}
+\caption{This is a random sample of sentence level BLEU scores that are non-zero fon the validation set for a Rote Learner}
+\label{tab:rotelearner_nameonly}
+\end{table}
+
+
 % INVESTIGATION DIFFERENT TOKENIZATIONS
 \subsection{Investigating Different Tokenizations} % (fold)
 \label{sub:investigating_different_tokenizations}
 
 \subsubsection{Experiment Objective} % (fold)
 
-Having established a naive baseline, we decided to investigate the limits of how other named variables and function names could help our translation.
-We hypothesised that variable and function and other argument naming should play an important role in contextualising the role of abstractly named variable, further improving the performance of the LSTM relative to the Rote Learner.
+Having established a naive baseline and the validity of our neural approaches, we decided to investigate how other human names could help our translation problem.
+We hypothesised that the names in the function signature could play an important role in contextualising an overdetermined or underdetermined variable name, further improving the performance of the LSTM relative to the Rote Learner.
 
 \subsubsection{Method \& Results} % (fold)
 
@@ -183,10 +256,19 @@ We decided to investigate how four different arrangements of input data would af
 These were:
 just the argument name; the argument name with the function name; the argument name with other arguments; and the argument name with both function name and argument name.
 
-Since we now had discriminating information such as function name, and other argument names in our input, we used the Unsplit 1 Combined Dataset, as referred to in section A, and we tokenized as accord to section X.
-Once again these were run both on our Rote Learner model, using the standard n-gram overlap matching criterion, and on our Seq-to-Seq model.
+Once again we used the Filtered Random-Split Dataset, to prevent advantages due to duplicates, and ran the standard tokenization procedures outline in Sections X. 
 
-The results of our evaluation are presented in Table \ref{table:tokenization}, with the hyperparameters of these models presented in appendix table REF
+As in section \label{sub:comparing_baseline_models}, we ran 50 repetitions of the Rote Learner on these new tokenizations, to overcome the stochasiticity in their evaluations, once again using N-character-gram overlap as the matching criterion.
+
+Then we ran four models of the Seq-to-Seq architectures, with attention, dropout and bidirectional encoders - just as the final model of section \label{sub:comparing_baseline_models}. These ran for a maximum of 150 epochs, and the model with best BLEU score was selected. 
+
+We report the results in Table \ref{table:tokenization}, noting that the extra information most cases improves BLEU scoring.
+
+
+
+
+
+The hyperparameters of these models are presented in appendix table. 
 
 
 \subsubsection{Analysis} % (fold)
