@@ -125,21 +125,17 @@ Models were all evaluated by the same procedure as detailsed in section blah.
 \subsubsection{Experiment Objective} % (fold)
 
 As a baseline, we first wanted to investigate the informative power of simply the names of variables, with regards to different architectures of our baseline model.
-Understandably we expected a reasonable signal to come from just the variable name which should be learnable by both our seq-to-seq model and rote learner. 
+We expected a reasonable signal to come from just the variable name which should be learnable by both our seq-to-seq model and rote learner. 
 
 \subsubsection{Method \& Results} % (fold)
 Given this experiment used only a limited amount of the available metadata for each argument, we decided that the set of (name, description) pairs should be unique. 
-For this reason we used, the NonDuplicated dataset X presented in section Y.
+For this reason we used the NonDuplicated dataset X presented in section Y.
 Although filtering this data would reduce our available data significantly, it was important to ensure a robust assessment of the models.
 
-We ran the standard tokenizations of the input name, and ran our Rote Learner baseline 50 times on this data, to calculate the average and standard deviations of the BLEU score. We then ran series of basic Seq-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder, and dropout. 
+We ran the standard tokenizations of the input name, and ran our Rote Learner baseline 50 times on this data, to calculate the average and standard deviations of the BLEU score. 
+We then ran series of basic Seq-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder, and dropout. 
 Below we report the BLEU scores in Table \ref{table:name_baseline}, for each of the results below, noting a clear improvement in the translation score, to the point where the neural model outperforms the Rote Learner on simply the name.
 The hyperparameters for this models found in Table \ref{table:hyperparams_name_baseline}
-
-
-\subsubsection{Analysis} % (fold)
-
-The strength of the Rote Learner was particularly surprising on this dataset. In particular the ROte learner was able to capture 
 
 \begin{itemize*}
     \item surprising strength from rote learner! why? it generates full sentences? what is the bleu score for a full match vs a miss? also, whole subnames?
@@ -158,7 +154,7 @@ The strength of the Rote Learner was particularly surprising on this dataset. In
     Seq to Seq                        & $ 7.65221 $  & $ 7.63131  $ \\
     + \textit{attention}              & $ 9.77734 $  & $ 9.42463  $ \\
     + \textit{bidirectional encoder}  & $ 10.94970 $ & $ 10.83105 $ \\
-    + \textit{dropout}                & $ 11.23303 $ & $ 11.30118 $ \\
+    + \textit{dropout}                & $ 12.46441 $ & $ 12.72522 $  \\
     \hline
     % Seq to Seq                        & $ 4.60169 $ & $ 4.97880 $  \\
     % + \textit{attention}              & $ 4.81255 $ & $ 5.42022 $  \\
@@ -187,7 +183,7 @@ We decided to investigate how four different arrangements of input data would af
 These were:
 just the argument name; the argument name with the function name; the argument name with other arguments; and the argument name with both function name and argument name.
 
-Since we now had discriminating information such as function name, and other argument names in our input, we used the Unsplit X Combined Dataset, as referred to in section A, and we tokenized as accord to section X.
+Since we now had discriminating information such as function name, and other argument names in our input, we used the Unsplit 1 Combined Dataset, as referred to in section A, and we tokenized as accord to section X.
 Once again these were run both on our Rote Learner model, using the standard n-gram overlap matching criterion, and on our Seq-to-Seq model.
 
 The results of our evaluation are presented in Table \ref{table:tokenization}, with the hyperparameters of these models presented in appendix table REF
@@ -450,7 +446,7 @@ We take the best models and repeat them on th esplit dataset.
     Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
     \hline
     Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ & \\
-    Code2Vec                          & $ 0.88570 $ & $ 0.66974 $ & \\
+    Code2Vec                     !!   & $ 0.88741 $ & $ 0.89466 $ & \\
     Code2Vec  (mask args)             & $ 0.66894 $ & $ 0.67366 $ & \\
     Code2Vec  (mask alls)             & $ 0.69457 $ & $ 0.71360 $ & \\
     \hline
@@ -465,7 +461,7 @@ We take the best models and repeat them on th esplit dataset.
     \hline
     \hline
     Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ & \\
-    Code2Vec  + Char to Seq            & $ 1.40076 $ & $ 1.39367 $ & \\
+    Code2Vec  + Char to Seq        !!      & $ 1.84887 $ & $ 1.58697 $ & \\\\
     \hline
 \end{tabular}
 \caption {Investigate split datasets}
