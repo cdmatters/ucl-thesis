@@ -151,13 +151,23 @@ The hyperparameters for these models are found in the Appendix, Table \ref{table
 \begin{tabular}{ c | c | c }
     Model                             & BLEU (Validation)  & BLEU (Test)    \\
     \hline
-    Rote Learner (x50)                & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
+    Rote Learner (x50)                & $ 9.03 \pm  0.32 $ & $ 10.60 \pm 0.27 $   \\
     \hline
-    Seq to Seq                        & $ 8.98624 $ & $ 8.17635 $ \\
-    + \textit{attention}              & $ 10.05134 $ & $ 9.88608 $  \\
-    + \textit{bidirectional encoder}  & $ 11.75615 $ & $ 12.34480 $  \\
-    + \textit{dropout}                & $ 12.67504 $ & $ 12.72236 $  \\
+    Seq to Seq                        & $ 8.97 $ & $ 8.18 $ \\
+    + \textit{attention}              & $ 10.05 $ & $ 9.89 $  \\
+    + \textit{bidirectional encoder}  & $ 11.76 $ & $ 12.34 $  \\
+    + \textit{dropout}                & $ 12.68 $ & $ 12.72 $  \\
     \hline
+
+    % Model                             & BLEU (Validation)  & BLEU (Test)    \\
+    % \hline
+    % Rote Learner (x50)                & $ 9.03242 \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $   \\
+    % \hline
+    % Seq to Seq                        & $ 8.98624 $ & $ 8.17635 $ \\
+    % + \textit{attention}              & $ 10.05134 $ & $ 9.88608 $  \\
+    % + \textit{bidirectional encoder}  & $ 11.75615 $ & $ 12.34480 $  \\
+    % + \textit{dropout}                & $ 12.67504 $ & $ 12.72236 $  \\
+    % \hline
     % Seq to Seq                        & $ 4.60169 $ & $ 4.97880 $  \\
     % + \textit{attention}              & $ 4.81255 $ & $ 5.42022 $  \\
     % + \textit{bidirectional encoder}  & $ 3.00068 $ & $ 3.05952 $  \\
@@ -254,13 +264,13 @@ We hypothesised that the names in the function signature could play an important
 
 We investigated how four different arrangements of input data would affect translation behaviour. 
 These were:
-just the argument name; the argument name with the function name; the argument name with other arguments; and the argument name with both function name and argument name.
+just the argument name; the argument name with the function name; the argument name with co-argument names; and the argument name with both function name and co-argument names.
 
 Once again we used the Reduced Random-Split Dataset, to prevent advantages due to duplicates, and ran the standard tokenization procedures outline in Sections X. 
 
 As in section \ref{sub:comparing_baseline_models}, we ran 50 repetitions of the Rote Learner on these new tokenizations, to overcome the stochasiticity in their evaluations, once again using N-character-gram overlap as the matching criterion.
 
-Then we ran four models of the Seq-to-Seq architectures, with attention, dropout and bidirectional encoders - just as the final model of section \label{sub:comparing_baseline_models}. These ran for a maximum of 150 epochs, and the model with best BLEU score was selected. 
+Then we ran four models of the Seq-to-Seq architectures, with attention, dropout and bidirectional encoders - just as the final model of section \ref{sub:comparing_baseline_models}. These ran for a maximum of 150 epochs, and the model with best BLEU score was selected. 
 
 We report the results in Table \ref{table:tokenization}. 
 In particular we note that in all cases the Rote Learner's performance improved with added information, in the best case, over three points to $12.22 \pm 0.23$ on validation and $14.34 \pm 0.21$ on test, thanks to the addition of the function name. 
@@ -270,7 +280,7 @@ The Seq-to-Seq model on the other hand benefitted less than the Rote Learner, if
 Although this agreed with out hypothesis that there is value in extra naming of variables, the under performance of the Seq-to-Seq model was surprising and is examined more fully in the analysis section.
 
 
-The hyperparameters of these models are presented in appendix table X
+The hyperparameters of these models are presented in Appendix Table \ref{table:hyperparams_different_tokenizations}
 
 
 \begin{table}[!ht]
@@ -280,17 +290,32 @@ The hyperparameters of these models are presented in appendix table X
     \hline
     \hline
     Rote Learner                        &                  & \\    
-    - \textit{name only}                & $ 9.03242  \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $  \\
-    - \textit{name + function name}     & $ 12.22728 \pm  0.23408 $ & $ 14.33850 \pm 0.21622 $  \\
-    - \textit{name + other args}        & $ 12.06262 \pm  0.16356 $ & $ 14.21676 \pm 0.16067 $  \\
-    - \textit{name + function name + other args}  & $ 11.35728 \pm  0.13663 $ & $ 13.50626 \pm 0.13192 $ \\
+    - \textit{name only}                & $ 9.03  \pm  0.32 $ & $ 10.60 \pm 0.27 $  \\
+    - \textit{name + function name}     & $ 12.23 \pm  0.23 $ & $ 14.34 \pm 0.22 $  \\
+    - \textit{name + co-argument names}        & $ 12.06 \pm  0.16 $ & $ 14.22 \pm 0.16 $  \\
+    - \textit{name + function name + co-argument names}  & $ 11.36 \pm  0.14 $ & $ 13.51 \pm 0.13 $ \\
     \hline
     \hline
     Seq to Seq                          &                  & \\
-    - \textit{name only}    !!            & $ 12.46441 $ & $ 12.72522 $  \\
-    - \textit{name + function name} !!    & $ 10.77699 $ & $ 11.24894 $ \\
-    - \textit{name + other args}  !!    & $ 13.69964 $ & $ 13.73890 $  \\
-    - \textit{name + function name + other args}   !! & $ 14.13267 $ & $ 13.63351 $ \\
+    - \textit{name only}                & $ 12.46441 $ & $ 12.72522 $  \\
+    - \textit{name + function name}     & $ 10.77699 $ & $ 11.24894 $ \\
+    - \textit{name + co-argument names}      & $ 13.69964 $ & $ 13.73890 $  \\
+    - \textit{name + function name + co-argument names} & $ 14.13267 $ & $ 13.63351 $ \\
+    % Model                               & BLEU Validation            & BLEU Test  \\
+    % \hline
+    % \hline
+    % Rote Learner                        &                  & \\    
+    % - \textit{name only}                & $ 9.03242  \pm  0.31980 $ & $ 10.59658 \pm 0.26939 $  \\
+    % - \textit{name + function name}     & $ 12.22728 \pm  0.23408 $ & $ 14.33850 \pm 0.21622 $  \\
+    % - \textit{name + co-argument names}        & $ 12.06262 \pm  0.16356 $ & $ 14.21676 \pm 0.16067 $  \\
+    % - \textit{name + function name + co-argument names}  & $ 11.35728 \pm  0.13663 $ & $ 13.50626 \pm 0.13192 $ \\
+    % \hline
+    % \hline
+    % Seq to Seq                          &                  & \\
+    % - \textit{name only}    !!            & $ 12.46441 $ & $ 12.72522 $  \\
+    % - \textit{name + function name} !!    & $ 10.77699 $ & $ 11.24894 $ \\
+    % - \textit{name + co-argument names}  !!    & $ 13.69964 $ & $ 13.73890 $  \\
+    % - \textit{name + function name + co-argument names}   !! & $ 14.13267 $ & $ 13.63351 $ \\
     % \hdashline
     % Seq to Seq                          &                  & \\
     % - \textit{name only}                & $ 5.54103 $ & $ 5.43827 $  \\
@@ -309,13 +334,158 @@ The hyperparameters of these models are presented in appendix table X
 \subsubsection{Analysis} % (fold)
 \label{ssub:analysis}
 
+In order to probe the Seq-to-Seq model, we first investigated some of the typical setences generated by the model on the validation set.
+We found that in general a number of different failings fell into either categories of overfitting or nonsense. 
+Some typical examples of the model on the \textit{name + co-argument name} model are presented in Table \ref{table:typicalvarotherargs}, along with an example of a `plausible' translation. 
+
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{ l  }
+
+
+\textbf{Overfitting}\\
+
+\textbf{I}: \mintinline[]{python}{e n c o d i n g _ t y p e <SEP-1> s e l f <SEP-2> d o c u m e}...\\
+...\mintinline[]{python}{n t <SEP-2> r e t r y <SEP-2> t i m e o u t <SEP-2> <END>}\\
+\textbf{D}: the encoding type used by the api to calculate offsets .\\
+\textbf{P}: the encoding type used by the api to calculate sentence offsets . \\
+\\\hline\\
+
+\textbf{Nonsense}\\
+
+\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> n a m e <SEP-2> <END>}\\
+\textbf{D}: a ` tensor ` of type ` complex64 ` . a complex64 tensor .\\
+\textbf{P}: ` $<$UNK$>$ ` , ` $<$UNK$>$ ` . shape is ` [ ... , m , m ] ` . \\
+\\\hline\\
+
+\textbf{Plausible}\\
+
+\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
+...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{D}: binary image to be propagated inside ` mask ` .\\
+\textbf{P}: binary image where a element is provided and a structuring element .\\
+\\\hline\\
+
+\\
+
+\end{tabular}
+\caption{Three examples of typical errors in the character Seq-to-Seq model.  In this case, the first example shows good use of data in the sequence but is nonsensical. The second is an example of overfitting where the predicted sentence is found in the dataset. The final case, multiple sequences such as these are found in the dataset, each with a different discription. Without looking at code, or function name (in this case) it is impossible to disambiguate and the model fails to make sense }
+\label{table:typicalvarotherargs}
+\end{center}
+\end{table}
+
+We then  visualized a number of attentions of the translations on the validation set, to investigate what the model was focusing on in these cases.
+We found that, rather than being dispersed across multiple character tokens that might indicate useful phrases in the model, the attention focused overwhelmingly on the final tokens in the RNN in the vast majority of cases.
+The attentions of the `plausible' and `nonsense' examples from  Table \ref{table:typicalvarotherargs} are visible in Figure ~\ref{fig:otherarg_attn}, demonstrating this.
+
+\begin{figure}[ht!]
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/otherargs_example.png}
+    \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. Fig A) is a picture of a typical example, Fig B) bottom is an example that is very overdetermined.}
+    \label{fig:otherarg_attn}
+\end{center}
+\end{figure}
+
+This implies the model is using all the extra information to encode a single vector to contextualise on, rather than learning to apply parts of the sequence to parts of translation, in an alignment fashion.
+This single contextual vector can contain all the sequence information because the encoded RNN outputs at N can contain information from the previous N-1 tokens, and this in principle allows the model the condition word generation on the all the information up to the `attended' input token. 
+
+Although this behaviour was expected for short sequences like variable names, we expected longer sequences (of up to 120 tokens) to be harder to compress, and suspected overcapacity of the LSTM might allow this learning strategy to take place. 
+With less capacity, perhaps the final output of the RNN would not be as informative, instead relying on outputs at different points of the sequence
+However, repeating the experiment with an LSTM encoder size of 75 resulted in the same pattern of attention, though with a much reduced BLEU score.
+
+We also repeated the experiment on the much larger Full Random-Split dataset, where now just the input argument name would be certainly be the most important feature, due to repetitions points with the same name with the same description, but different co-arguments and function names. 
+In this case we saw the final heavy attention shift to the separator just after the variable name - indicating that the model was learning where the most informative section of the data was, but was still choosing the encoded vector at that point. 
+Interestingly we found that model did still take into account the rest of the sequence after this point (generating different translations), but that these all varied along a the same theme of the variable name. 
+The attentions for a single example are given in Figure ~\ref{fig:otherarg_attn_full_dataset}
+
+\begin{figure}
+
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/different_translations_dupsXotherargs_3230minib.png}
+    \caption{Three translations and attentions for an example of some the attentions of from the Name + Other Arguments on the tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input }
+    \label{fig:otherarg_attn_full_dataset}
+\end{center}
+\end{figure}
+
+The conclusion to be drawn from this investigation is that the attention does not distribute well over characters, and these tokenizations actually behave much like longer single names, rather than features that can be distiguished separately. 
+This leads to overfitting in many cases, as the some names are closer to unique, and you get a model that fits more like a Rote Learner. 
+The model seems to work at its best when synthesising information as much as possible, but this seems more difficult to do when so much identifying information is given without information on redundancy. 
+To give an example, Table \ref{table:example_plausible_training} shows the `plausible' example given above, with all training instances that start \mintinline[]{yaml}{input<SEP-1>structure}, highlighting that certain features of the final description are in the training ("binary image"), yet the potentially helpful sequence \mintinline[]{yaml}{<SEP-1>mask<SEP-1>} is ignored.
+
+To counter this beahaviour in future, more work could be done both by investigating tokenizations or attention mechanisms.
+In particular, the peaky nature of the softmax in attention could be replaced with a broader distribution, or the entropy of the softmax could be changed with a temperature parameter throughout training, to force the model to consider different sections of the data.
+Ideally, combined with this differnet annention arrangement, more data would be provided that could help present a nuance to the arguments, rather than them simply being specifying information. 
+Future work should at least investigate whether data augmentation by providing duplicates with arguments in different orders, perhaps also with synonyms of descriptions, could help models learn more generalisable descriptions.
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l}
+
+\hline
+\textbf{Validation Example}\\
+
+\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
+...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{D}: binary image to be propagated inside ` mask ` .\\
+\textbf{P}: binary image where a element is provided and a structuring element . $<$END$>$\\
+\\\hline\\
+
+\textbf{Training Examples} starting \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e 1 <SEP-2> s t r u c t u r}...\\
+...\mintinline[]{yaml}{e 2 <SEP-2> o u t p u t <SEP-2> o r i g i n 1 <SEP-2> o r i g i n 2 <SEP-2> <END>}\\
+\textbf{D}: binary image where a pattern is to be detected .\\
+\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> o u t }...\\
+...\mintinline[]{yaml}{p u t <SEP-2> o r i g i n <SEP-2> m a s k <SEP-2> b o r d e r _ v a l u e }\\
+...\mintinline[]{yaml}{<SEP-2> b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{D}: binary array\_like to be closed . non-zero ( true ) elements form the subset to be closed .\\
+\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> o r}...\\
+...\mintinline[]{yaml}{i g i n <SEP-2> <END>}\\
+\textbf{D}: n-dimensional binary array with holes to be filled\\
+\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> <END>}\\
+\textbf{D}: an array-like object to be labeled . any non-zero values in ` input ` are counted as features...\\
+...and zero values are considered the background .\\
+\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k }...\\
+...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{D}: binary image to be eroded . non-zero ( true ) elements form the subset to be eroded .\\
+\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k}...\\
+...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{D}: binary array\_like to be dilated . non-zero ( true ) elements form the subset to be dilated .\\
+\\
+
+
+
+\end{tabular}
+\caption{A validation example and the a selection of training points. Despite being a long sequence, }
+\label{table:example_plausible_training}
+\end{center}
+\end{table}
+
+
+
+% What is the problem? Attention softmax is narrow and doesnt distribute well over characters, since there isn't really a one to one alignment. Instead what we see is the same behaviour as a much longer function name, where it works best when interpolating data. then give the plausibility
+
+% Future work: Attention softmax is too narrow. Try a higher entropy distribution for character model
+% Try a learning schedule
+% Rotate the order of words, (done)
+% Also more data.
+
+
 \begin{enumerate}
-    \item we expected words to help choose bits in overdetermined cases. attention distributed across multiple words
-    \item however we get attention focused on last word.
-    \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
-    \item The sort bonus is explained, but no change with longer.
+    % \item we expected words to help choose bits in overdetermined cases. attention distributed across multiple words
+    % \item however we get attention focused on last word.
+    % \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
+    % \item The sort bonus is explained, but no change with longer.
     \item It is possible the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
-    \item To investigate we ran with low lstm, -> no change in behaviour (LSTM 75), still tries to encode
+    % \item To investigate we ran with low lstm, -> no change in behaviour (LSTM 75), still tries to encode
     \item We then tried to investigate if the rest of the data is being used (use the full dataset, and found that)
     \item in cases with still degeneracy, attention is confused it panics (see bluring at end - can only explore nearest by states)
     \item Check out Rote learner vs LSTM for "name" again. is it interpolating, or being a bad lstm (fitting bits of it, that dont transfer.)
@@ -539,10 +709,10 @@ We take the best models and repeat them on th esplit dataset.
     Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ & \\
     \hline
     Seq2Seq                             & &  & \\
-    - \textit{name only}               & $ 25.13928 $ & $ 24.16031 $ & \\
-    - \textit{name + function name}     & $ 10.74375 $ & $ 10.43967 $ & \\
-    - \textit{name + other args}        & $ 13.25115 $ & $ 13.64877 $ & \\
-    - \textit{name + function name + other args}    & $ 12.35964 $ & $ 13.07744 $ &  \\
+    - \textit{name only}              & $ 1.53474 $ & $ 1.58206 $ & \\
+    - \textit{name + function name}      & $ 1.54843 $ & $ 1.52191 $ & \\
+    - \textit{name + other args}         & $ 1.53296 $ & $ 1.45225 $ & \\   
+    - \textit{name + function name + other args}     & $ 1.50983 $ & $ 1.48267 $ & \\
     \hline
     \hline
     Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ & \\
