@@ -346,10 +346,10 @@ Some typical examples of the model on the \textit{name + co-argument name} model
 
 \textbf{Overfitting}\\
 
-\textbf{I}: \mintinline[]{python}{e n c o d i n g _ t y p e <SEP-1> s e l f <SEP-2> d o c u m e}...\\
+\textbf{Input}: \mintinline[]{python}{e n c o d i n g _ t y p e <SEP-1> s e l f <SEP-2> d o c u m e}...\\
 ...\mintinline[]{python}{n t <SEP-2> r e t r y <SEP-2> t i m e o u t <SEP-2> <END>}\\
-\textbf{D}: the encoding type used by the api to calculate offsets .\\
-\textbf{P}: the encoding type used by the api to calculate sentence offsets . \\
+\textbf{Description}: the encoding type used by the api to calculate offsets .\\
+\textbf{Prediction}: the encoding type used by the api to calculate sentence offsets . \\
 \\\hline\\
 
 \textbf{Nonsense}\\
@@ -493,41 +493,6 @@ Future work should at least investigate whether data augmentation by providing d
 \end{enumerate}
 
 
-% \subsection{Investigating Addition of Source Code} % (fold)
-% \label{subs:investigating_tokenizations_with_source_code}
-
-% Investigate the Best Tokenizations adding Source Code
-% \begin{table}[!ht]
-% \begin{center}
-% \begin{tabular}{ c | c | c }
-%     Model                               & BLEU             & Perpelexity \\
-%     \hline
-%     \hline
-%     Rote Learner                        &                  & \\    
-%     - \textit{name only}                & $1.0 \pm 1.0 $   & \\
-%     - \textit{name + source code}       & $1.0 \pm 1.0 $   & \\
-%     \hline
-%     \hline
-%     Seq to Seq                          &                  &  \\
-%     - \textit{name only}                & $1.0 \pm 1.0 $   & \\
-%     \hline
-%     \hline
-    % Double Encoder to Seq               &                  &  \\
-%     - \textit{name + sourcecode}        & $1.0 \pm 1.0 $   & \\
-%     \hline
-% \end{tabular}
-% \caption {Investigate the descriptions with source code}
-% \label{table:human_source_code}
-% \end{center}
-% \end{table}
-
-% subsection investigating_the_removal_of_duplicates (end)
-
-
-% subsection results (end)
-
-% section investigating_naturalness_hypothesis (end)
-
 \section{Investigating the Computer Readable Channel} % (fold)
 \label{sec:investigating_the_computer_channel}
 
@@ -554,19 +519,31 @@ The outputs of the result are presented in Table \ref{table:name_code2vec_solo}.
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+\begin{tabular}{ c | c | c  }
+    Model                             & BLEU Validaion  & BLEU (Test)      \\
     \hline
-    Rote Learner (codeonly)           &  & & \\
-    - \textit{softest}                     & $ 0.70702 \pm  0.13979 $ & $ 0.73623 \pm 0.07094 $ &  \\
-    - \textit{soft}                        & $ 6.93465 \pm  0.33987 $ & $ 7.09349 \pm 0.21836 $ & \\
-    - \textit{hard}                        & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $ & \\
-    - \textit{hardest}                     & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Rote Learner (codeonly)                  &  &  \\
+    - \textit{softest}                     & $ 0.71 \pm  0.13 $ & $ 0.74 \pm 0.07 $   \\
+    - \textit{soft}                        & $ 6.93 \pm  0.34 $ & $ 7.09 \pm 0.22 $  \\
+    - \textit{hard}                        & $ 4.94 \pm  0.28 $ & $ 5.11 \pm 0.18 $  \\
+    - \textit{hardest}                     & $ 11.82 \pm  0.16 $ & $ 12.61 \pm 0.12 $  \\
     \hline
-    Code2Vec   !!                            & $ 18.93630 $ & $ 18.12909 $ & \\
+    Code2Vec                               & $ 18.94 $ & $ 18.13 $  \\
     % \hdashline
-    % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
-    \hline
+    % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $  \\
+    \hline 
+    % Model                             & BLEU Validaion  & BLEU (Test)      \\
+    % \hline
+    % Rote Learner (codeonly)           &  & & \\
+    % - \textit{softest}                     & $ 0.70702 \pm  0.13979 $ & $ 0.73623 \pm 0.07094 $   \\
+    % - \textit{soft}                        & $ 6.93465 \pm  0.33987 $ & $ 7.09349 \pm 0.21836 $  \\
+    % - \textit{hard}                        & $ 4.94109 \pm  0.28153 $ & $ 5.11432 \pm 0.18345 $  \\
+    % - \textit{hardest}                     & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $  \\
+    % \hline
+    % Code2Vec   !!                            & $ 18.93630 $ & $ 18.12909 $  \\
+    % % \hdashline
+    % % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
+    % \hline
 \end{tabular}
 \caption {Investigate the limits of purely codepaths}
 \label{table:name_code2vec_solo}
