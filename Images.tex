@@ -115,57 +115,57 @@
 
 
 
-\begingroup
-\begin{table}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/attention_xkcd.png}
-    \fontsize{10pt}{12pt}\selectfont
-        % how to set font size here to 10 px ?  
-\begin{tabular}{c l}
-    & \textbf{Paths} \\
-    \\
-    \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
-    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\leftarrow$ FunctionDef[...] \\
-        & [...]$\rightarrow$ Assign $\rightarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
-    \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
-    \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
-    \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
-    \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
-    \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
-    \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
-    \textbf{Path I} & $<$UNK$>$ : \mintinline[]{yaml}{<UNK>} \\
-\end{tabular}
-\end{center}
+% \begingroup
+% \begin{table}
+% \begin{center}
+% \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/attention_xkcd.png}
+%     \fontsize{10pt}{12pt}\selectfont
+%         % how to set font size here to 10 px ?  
+% \begin{tabular}{c l}
+%     & \textbf{Paths} \\
+%     \\
+%     \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
+%     \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\leftarrow$ FunctionDef[...] \\
+%         & [...]$\rightarrow$ Assign $\rightarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+%     \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
+%     \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
+%     \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+%     \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+%     \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
+%     \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
+%     \textbf{Path I} & $<$UNK$>$ : \mintinline[]{yaml}{<UNK>} \\
+% \end{tabular}
+% \end{center}
 
-\caption{Example Attention Scores}
-\end{table}
-\endgroup
+% \caption{Example Attention Scores}
+% \end{table}
+% \endgroup
 
-\begin{listing}[h!] 
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
-\begin{minted}[]{python}
-def xkcd_palette(colors):
-    palette = [xkcd_rgb[name] for name in colors]
-    return color_palette(palette, len(palette))
+% \begin{listing}[h!] 
+% \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
+% \begin{minted}[]{python}
+% def xkcd_palette(colors):
+%     palette = [xkcd_rgb[name] for name in colors]
+%     return color_palette(palette, len(palette))
 
-\end{minted}
-\begin{tabular}{l}
-\textbf{I}: \mintinline[]{python}{colors}\\
-\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
-\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
-\end{tabular}
+% \end{minted}
+% \begin{tabular}{l}
+% \textbf{I}: \mintinline[]{python}{colors}\\
+% \textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
+% \textbf{P}: a list of data to read . if none , all other the first will be returned .\\
+% \end{tabular}
 
-\caption{Code \& List}
-\end{listing}
+% \caption{Code \& List}
+% \end{listing}
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_args.png} 
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/save_c2e_encoder.png}
-\end{center}
-\end{figure}
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
+% \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_args.png} 
+% \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
+% \includegraphics[width=.8\linewidth]{ImagesCodeRelated/save_c2e_encoder.png}
+% \end{center}
+% \end{figure}
 
 \begin{table}
 \begin{center}
@@ -246,13 +246,13 @@ adaptive moment estimation ) . \\
 
 
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/SentenceBleuCodeonly.png}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentenceBleuNameOnly.png}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentBleuCombined.png}
-\end{center}
-\end{figure}
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/SentenceBleuCodeonly.png}
+% \includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentenceBleuNameOnly.png}
+% \includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentBleuCombined.png}
+% \end{center}
+% \end{figure}
 
 
 

@@ -509,17 +509,17 @@ Future work should at least investigate whether data augmentation by providing d
 
 \subsubsection{Experiment Objective} % (fold)
 
-In our first examination of the computer readable channel we were keen to validate our initial hypothesis that simply the code could be informative when predicting argument descriptions.
+In our first examination of the computer readable channel we aimbed to validate our initial hypothesis that simply the code could be informative when predicting argument descriptions.
 In particular we wished to assess what possible tokenizations of code paths from the syntax tree could prove most informative, and set up as strong baseline as possible against which would compare our neural model.
 
 
 
 \subsubsection{Method \& Results} % (fold)
 
-Since this experiment would look exclusively at code paths, ignoring the variable name, we used the Full Random-Split Dataset in this investigation.
-We extracted the syntax trees from the training source code and extracted a vocabulary of paths and terminal nodes from the training set. 
-The vocabulary of the paths and terminal nodes was set to 15000 each and the limit of code paths per point limited to 5000, for all models. 
-The rest of the tokenization procedure is exactly as outlined in section X. 
+For this experiment we used the Full Random-Split Dataset, to make the most of the different code paths associated with each argument.
+We followed the vocabulary generation and source code tokenization procedures outlined in section X. 
+We used a vocabulary size of 15000 for both path strings and terminal nodes, and set the maximum number of paths per argument to  5000.
+These values were sought to be as large as possible for the size of the GPU. 
 
 We then ran our Rote Learner, using the four different matching code path only criteria, outlined in section X. 
 These chose a description from a set of training samples by:
@@ -529,19 +529,19 @@ These chose a description from a set of training samples by:
         \item combining samples full overlap for each path in test, and chosing from that list (Full Path Proportional)
         \item combining samples full overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Full Path Max)
     \end{itemize}
-Each of these was run 50 times to generate an estimate of the variance based on the stochasticity of the Rote Learner.
-We then ran the Code2Vec Decoder, following the usual training procedure, for a maximum of 100 epochs, and selecting the model with the best BLEU score.
+Each of these was run 50 timesto overcome the stochasticity of the Rote Learner.
+
+We then ran the Code2Vec Decoder, following the usual training procedure, for a maximum of 100 epochs.
+We selected the model with the best BLEU score in that time.
 The hyperparameters for this model are found in Table {X}.
 
-We report that the Rote Learner benefits most from taking the hardest attitude possible to matching full code paths, with  Full Path Max criterion performing best.
-This provided a strong baseline BLEU score of $ 11.82 \pm  0.16 $ and  $ 12.61 \pm 0.12 $  on validtion and test respectively. 
-The next strongest criterion was then the Sub Path Max criterion which achieved a BLEU score about 5 points worse, of   $ 6.93 \pm  0.34 $ and $ 7.09 \pm 0.22 $ on validation and test respectively.  
-The two remaining criteria which chose randomly from lists of training examples populated proportionally to the number of matches with the set of test paths, performed significantly worse again, losing between six and seven BLEU points compared to their counterparts. 
+We report our results in Table \ref{table:name_code2vec_solo}, noting that the Rote Learner performed best using the Full Path Max matching, with a BLEU score $ 11.82 \pm  0.16 $ and  $ 12.61 \pm 0.12 $ on validation and test, but that the Code2Vec Decoder significantly outperformed this, achieving a BLEU score of $ 18.94 $ and $ 18.13 $ on validation and test respectively.
 
-These results confirmed that looking at code paths would indeed be informative, and indicated that investigating full codepaths would indeed be the best way to start.
-The performance of the Code2Vec Decoder then reiterated this assumption by significantly outperforming the strongest Rote Learner, with a BLEU score of 
-$ 18.94 $ and $ 18.13 $ on validation and test. 
-From these results we concluded that both a neural approach could outperform Rote Learner and learn significant features from the code in the dataset.
+From the Rote Learning perspective, the next best criterion was the Sub Path Max, which achieved a corpus level BLEU score of $ 6.93 \pm  0.34 $ and $ 7.09 \pm 0.22 $ on validation and test respectively.  
+The two remaining Proportional criteria performed worst, each about 6 bleu points worse than their counterparts
+
+These results confirmed that looking at code paths would indeed be informative, and indicated that investigating full codepaths would indeed be the best way to start. 
+They also showed great promise for the Code2Vec Decoder as a model.
 
 % subsection comparing_code2vec_to_baselines (end)
 
@@ -556,7 +556,7 @@ From these results we concluded that both a neural approach could outperform Rot
     - \textit{Full Path Proportional}            & $ 4.94 \pm  0.28 $ & $ 5.11 \pm 0.18 $  \\
     - \textit{Full Path Max}                     & $ 11.82 \pm  0.16 $ & $ 12.61 \pm 0.12 $  \\
     \hline
-    Code2Vec                               & $ 18.94 $ & $ 18.13 $  \\
+    Code2Vec Decoder                             & $ 18.94 $ & $ 18.13 $  \\
     % \hdashline
     % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $  \\
     \hline 
@@ -573,7 +573,7 @@ From these results we concluded that both a neural approach could outperform Rot
     % % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
     % \hline
 \end{tabular}
-\caption {Investigate the limits of purely codepaths}
+\caption {BLEU Scores on the Full Random-Split Dataset, for Code2Vec Decoder and a series of code only Rote Learners}
 \label{table:name_code2vec_solo}
 \end{center}
 \end{table}
@@ -581,8 +581,25 @@ From these results we concluded that both a neural approach could outperform Rot
 \subsubsection{Analysis} % (fold)
 \label{ssub:analysis}
 
-Most interestign to look at the attentions and vectors for code to vec. Is there any patter there?
-What about the weight matrices: whats important, name or path?
+In order to investigate the behaviour of the Code2Vec model, we sampled points from the validation set, printed out the source code, paths and attentions as they passed through the model.
+We observed that sometimes the model overfit some particular paths, with very high attentions on a single point, but more often than not the model distributed its attention over 4 or 5 paths, even if there were thousands to choose from.
+
+A single example of such an analysis, where multiple paths are attended and the different paths are easy to see, is presented in Figure  \ref{fig:single_examples} .
+It shows the pretokenized syntax tree, the attented paths, the source and the translation.
+From this example it is interesting to note that the model has chosen two paths that indicate list comprehensions feature in the variable, and it has inferred that a list should feature in the description from the code alone.
+
+Noting that the model seemed to be performing as expected on a microscopic level, we continued to investigate the behaviour of the model across the entire validation set. 
+Figure \ref{fig:entropy_code2vec} shows a the distribution of the entropies of the attentions of the Code2Vec vectors, for each point in the validation set. 
+Presented along side, is the distribution of entropies that would have occured if every data point in the validation set had attained a uniform, categorical distribution as attention. 
+
+
+Although this metric is prone to low scores on individual sentences <CITE> over the whole corpus, we can use it to get a sense for where the performance improvements come from.
+These are presented in Figureand show both a significant increase in the models 1.0 scoring sentences, and also a modest increase in low scoring sentences. This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. 
+
+
+It is also interesting to note that the attention patterns observed in the example above also hold on a macroscopic scale. By taking the distribution of entropies of each of the attentions.
+
+
 
 
 \begin{enumerate}
@@ -596,9 +613,60 @@ What about the weight matrices: whats important, name or path?
     \item C2VEnc: does combining add anythin? More capacity, check weights.
 \end{enumerate}
 
+% \begin{table}
+\begin{listing}[h!] 
+\begin{center}
+
+\includegraphics[width=\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
+\begin{minted}[]{python}
+def xkcd_palette(colors):
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+\end{minted}
+\begin{tabular}{l}
+\textbf{I}: \mintinline[]{python}{colors}\\
+\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
+\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
+\end{tabular}
+
+
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/attention_xkcd.png}
+        % how to set font size here to 10 px ?  
+\begingroup
+    \fontsize{10pt}{12pt}\selectfont
+\begin{tabular}{c l}
+    & \textbf{Paths} \\
+    \\
+    \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
+    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\leftarrow$ FunctionDef[...] \\
+        & [...]$\rightarrow$ Assign $\rightarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+    \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
+    \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
+    \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+    \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+    \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
+    \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
+    \textbf{Path I} & $<$UNK$>$ : \mintinline[]{yaml}{<UNK>} \\
+\end{tabular}
+\endgroup
+
+% \caption{Example Attention Scores}
+% \end{table}
+
+\end{center}
+\caption{Code \& List}
+\label{fig:single_examples}
+\end{listing}
 
 
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
+\end{center}
+\label{fig:entropy_code2vec}
+\end{figure}
 
 
 % subsubsection analysis (end)
@@ -611,12 +679,10 @@ What about the weight matrices: whats important, name or path?
 \label{sub:comparing_code2vec_altered}
 
 \subsubsection{Experiment Objective} % (fold)
-Having established the original performance of the code2vec in principle, 
-\begin{itemize}
-    \item We masked the variable name - is it really code or lookign at variables?
-    \item We mask the all variable - should be able to dediuce patterns.
-\end{itemize}
 
+The Code2Vec Decoder model uses a vocabulary of terminal nodes to generate code paths. 
+Due to the python abstract syntax tree, these are almost always names, which could be either those of internal variables, built-in functions or even out of scope objects. 
+We investigated masking these terminal node names, to be conclude that that the structure of the code was providing a valuable signal to the Code2Vec Decoder, beyond the ideosyncracies of variable and method naming.
 
 \subsubsection{Method \& Results} % (fold)
 
@@ -649,6 +715,29 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
 \label{table:code_2_vec_masked}
 \end{center}
 \end{table}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_args.png} 
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_encoder.png}
+\end{center}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/SentenceBleuCodeonly.png}
+\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentenceBleuNameOnly.png}
+\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentBleuCombined.png}
+\end{center}
+\end{figure}
+
+
+
+
 
 
 \section{Investigating Combined Channels} % (fold)
