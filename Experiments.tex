@@ -211,6 +211,7 @@ In these cases the Seq-to-Seq model is interpolating in an overdetermined proble
 
 \begin{table}
 \begin{center}
+\makebox[\linewidth][c]{
 \begin{tabular}{l}
 \hline\\
 
@@ -245,6 +246,7 @@ undefined , but may exhibit less contention .\\
 \hline
 \\
 \end{tabular}
+}
 \end{center}
 \caption{This is a random sample of sentence level BLEU scores that are non-zero fon the validation set for a Rote Learner}
 \label{tab:rotelearner_nameonly}
@@ -421,6 +423,7 @@ Future work should at least investigate whether data augmentation by providing d
 
 \begin{table}
 \begin{center}
+\makebox[\linewidth][c]{
 \begin{tabular}{l}
 
 \hline
@@ -464,10 +467,14 @@ Future work should at least investigate whether data augmentation by providing d
 
 
 \end{tabular}
+}
 \caption{A validation example and the a selection of training points. Despite being a long sequence, }
 \label{table:example_plausible_training}
 \end{center}
 \end{table}
+
+%%% EXTRA PLOTS: Avergae attention over words
+%%%.             Attention/Results of words shuffled
 
 
 
@@ -479,18 +486,18 @@ Future work should at least investigate whether data augmentation by providing d
 % Also more data.
 
 
-\begin{enumerate}
-    % \item we expected words to help choose bits in overdetermined cases. attention distributed across multiple words
-    % \item however we get attention focused on last word.
-    % \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
-    % \item The sort bonus is explained, but no change with longer.
-    \item It is possible the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
-    % \item To investigate we ran with low lstm, -> no change in behaviour (LSTM 75), still tries to encode
-    \item We then tried to investigate if the rest of the data is being used (use the full dataset, and found that)
-    \item in cases with still degeneracy, attention is confused it panics (see bluring at end - can only explore nearest by states)
-    \item Check out Rote learner vs LSTM for "name" again. is it interpolating, or being a bad lstm (fitting bits of it, that dont transfer.)
-    \item We also take a closer look at the failures and notice a specific pattern. note tha in some cases the model works well, and. Basically hypothesise the size of the data with lack of indentifyin ginformation leads to overfitting, rather than just variable name which works.
-\end{enumerate}
+% \begin{enumerate}
+%     % \item we expected words to help choose bits in overdetermined cases. attention distributed across multiple words
+%     % \item however we get attention focused on last word.
+%     % \item The rnn final state acts as a good contextual vector for generation, we get good performance improvements on decoding
+%     % \item The sort bonus is explained, but no change with longer.
+%     \item It is possible the attention is being pathological. It's such a good strategy, that it stays there, and stops looking elsewhere, the weight decays to zero
+%     % \item To investigate we ran with low lstm, -> no change in behaviour (LSTM 75), still tries to encode
+%     \item We then tried to investigate if the rest of the data is being used (use the full dataset, and found that)
+%     \item in cases with still degeneracy, attention is confused it panics (see bluring at end - can only explore nearest by states)
+%     \item Check out Rote learner vs LSTM for "name" again. is it interpolating, or being a bad lstm (fitting bits of it, that dont transfer.)
+%     \item We also take a closer look at the failures and notice a specific pattern. note tha in some cases the model works well, and. Basically hypothesise the size of the data with lack of indentifyin ginformation leads to overfitting, rather than just variable name which works.
+% \end{enumerate}
 
 
 \section{Investigating the Computer Readable Channel} % (fold)
@@ -502,31 +509,52 @@ Future work should at least investigate whether data augmentation by providing d
 
 \subsubsection{Experiment Objective} % (fold)
 
-In our first examination of the computer readable channel we were keen to investigate which features of the code might be most important.
-That is, we wished to interrogate whether the full structure of differnet paths might be most important, or simply sub-sections of the path. 
-For this reason we devised the four different matching schemes for the Rote Learner, enumerated in section Models.
-We also simulataneously trained our modified Code2Vec model, to get an idea of whether neural models could outperform the rote learner.
+In our first examination of the computer readable channel we were keen to validate our initial hypothesis that simply the code could be informative when predicting argument descriptions.
+In particular we wished to assess what possible tokenizations of code paths from the syntax tree could prove most informative, and set up as strong baseline as possible against which would compare our neural model.
+
 
 
 \subsubsection{Method \& Results} % (fold)
 
-By using the code2vec tokenization of paths outlined in section X, we extracted all paths for each argument in question from the AST of the code. 
-The outputs of the result are presented in Table \ref{table:name_code2vec_solo}.
+Since this experiment would look exclusively at code paths, ignoring the variable name, we used the Full Random-Split Dataset in this investigation.
+We extracted the syntax trees from the training source code and extracted a vocabulary of paths and terminal nodes from the training set. 
+The vocabulary of the paths and terminal nodes was set to 15000 each and the limit of code paths per point limited to 5000, for all models. 
+The rest of the tokenization procedure is exactly as outlined in section X. 
 
+We then ran our Rote Learner, using the four different matching code path only criteria, outlined in section X. 
+These chose a description from a set of training samples by:
+    \begin{itemize}
+        \item combining samples with largest subpath overlap for each path in test, and chosing from that list. (Sub Path Proportional)
+        \item combining samples with largest subpath overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Sub Path Max)
+        \item combining samples full overlap for each path in test, and chosing from that list (Full Path Proportional)
+        \item combining samples full overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Full Path Max)
+    \end{itemize}
+Each of these was run 50 times to generate an estimate of the variance based on the stochasticity of the Rote Learner.
+We then ran the Code2Vec Decoder, following the usual training procedure, for a maximum of 100 epochs, and selecting the model with the best BLEU score.
+The hyperparameters for this model are found in Table {X}.
 
+We report that the Rote Learner benefits most from taking the hardest attitude possible to matching full code paths, with  Full Path Max criterion performing best.
+This provided a strong baseline BLEU score of $ 11.82 \pm  0.16 $ and  $ 12.61 \pm 0.12 $  on validtion and test respectively. 
+The next strongest criterion was then the Sub Path Max criterion which achieved a BLEU score about 5 points worse, of   $ 6.93 \pm  0.34 $ and $ 7.09 \pm 0.22 $ on validation and test respectively.  
+The two remaining criteria which chose randomly from lists of training examples populated proportionally to the number of matches with the set of test paths, performed significantly worse again, losing between six and seven BLEU points compared to their counterparts. 
+
+These results confirmed that looking at code paths would indeed be informative, and indicated that investigating full codepaths would indeed be the best way to start.
+The performance of the Code2Vec Decoder then reiterated this assumption by significantly outperforming the strongest Rote Learner, with a BLEU score of 
+$ 18.94 $ and $ 18.13 $ on validation and test. 
+From these results we concluded that both a neural approach could outperform Rote Learner and learn significant features from the code in the dataset.
 
 % subsection comparing_code2vec_to_baselines (end)
 
 \begin{table}[ht!]
 \begin{center}
 \begin{tabular}{ c | c | c  }
-    Model                             & BLEU Validaion  & BLEU (Test)      \\
+    Model                             & BLEU Validation  & BLEU Test      \\
     \hline
     Rote Learner (codeonly)                  &  &  \\
-    - \textit{softest}                     & $ 0.71 \pm  0.13 $ & $ 0.74 \pm 0.07 $   \\
-    - \textit{soft}                        & $ 6.93 \pm  0.34 $ & $ 7.09 \pm 0.22 $  \\
-    - \textit{hard}                        & $ 4.94 \pm  0.28 $ & $ 5.11 \pm 0.18 $  \\
-    - \textit{hardest}                     & $ 11.82 \pm  0.16 $ & $ 12.61 \pm 0.12 $  \\
+    - \textit{Subpath Proportional}              & $ 0.71 \pm  0.13 $ & $ 0.74 \pm 0.07 $   \\
+    - \textit{Subpath Max}                       & $ 6.93 \pm  0.34 $ & $ 7.09 \pm 0.22 $  \\
+    - \textit{Full Path Proportional}            & $ 4.94 \pm  0.28 $ & $ 5.11 \pm 0.18 $  \\
+    - \textit{Full Path Max}                     & $ 11.82 \pm  0.16 $ & $ 12.61 \pm 0.12 $  \\
     \hline
     Code2Vec                               & $ 18.94 $ & $ 18.13 $  \\
     % \hdashline
@@ -556,7 +584,28 @@ The outputs of the result are presented in Table \ref{table:name_code2vec_solo}.
 Most interestign to look at the attentions and vectors for code to vec. Is there any patter there?
 What about the weight matrices: whats important, name or path?
 
+
+\begin{enumerate}
+    \item With the code lstm we see some of the behaviour we like, but also, only overfitting. There is no sequence so in some cases, a path or a single variable can be informative, but it performs well.
+    \item See a single example and distribution of attention.
+    \item CLearly there are a lot of spikes compared to uniform. More masking the more spiking, though this is partly due to best bleu. Compare at cross entropy time?
+    \item Then look at, bleu per sentence, maybe av bleu per sentence per attn entropy.
+    \item Big COMPARE vs ROTE LEARNER - can we conclude this is worth more researcg?
+    \item Cna show how choices change w model for given example??
+
+    \item C2VEnc: does combining add anythin? More capacity, check weights.
+\end{enumerate}
+
+
+
+
+
+
 % subsubsection analysis (end)
+
+
+
+
 
 \subsection{Comparing Code2Vec Altered} % (fold)
 \label{sub:comparing_code2vec_altered}
