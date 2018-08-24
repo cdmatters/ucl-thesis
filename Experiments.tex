@@ -383,7 +383,9 @@ The attentions of the `plausible' and `nonsense' examples from  Table \ref{table
 
 \begin{figure}[ht!]
 \begin{center}
-    \includegraphics[width=0.7\linewidth]{images/otherargs_example.png}
+    % \includegraphics[width=0.7\linewidth]{images/otherargs_example.png}
+    \includegraphics[width=0.9\linewidth]{ImagesCodeRelated/attn1pretty.png}
+    \includegraphics[width=0.5\linewidth]{ImagesCodeRelated/attn2pretty.png}
     \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. Fig A) is a picture of a typical example, Fig B) bottom is an example that is very overdetermined.}
     \label{fig:otherarg_attn}
 \end{center}
@@ -404,7 +406,7 @@ The attentions for a single example are given in Figure ~\ref{fig:otherarg_attn_
 \begin{figure}
 
 \begin{center}
-    \includegraphics[width=0.7\linewidth]{images/different_translations_dupsXotherargs_3230minib.png}
+    \includegraphics[width=0.7\linewidth]{images/different_translations_dupsXotherargs_3230minib_white.png}
     \caption{Three translations and attentions for an example of some the attentions of from the Name + Other Arguments on the tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input }
     \label{fig:otherarg_attn_full_dataset}
 \end{center}
@@ -590,48 +592,19 @@ From this example it is interesting to note that the model has chosen two paths 
 
 Noting that the model seemed to be performing as expected on a microscopic level, we continued to investigate the behaviour of the model across the entire validation set. 
 Figure \ref{fig:entropy_code2vec} shows a the distribution of the entropies of the attentions of the Code2Vec vectors, for each point in the validation set. 
-Presented along side, is the distribution of entropies that would have occured if every data point in the validation set had attained a uniform, categorical distribution as attention. 
+Presented along side, is the distribution of entropies that would have occured if every data point in the validation set had attained a uniform, categorical distribution as attention.
+The shift to a lower entropy clearly verifies that the Code2Vecs attention focuses on only a fraction of the paths, and, in some few cases (where the entropy is effectively 0) decides resolutely on single points.
+
+Figure \ref{fig:sentence_bleu} shows the counts of sentence level BLEU score of each sentence in the validation set.
+Although this metric is prone to low scores on individual sentences <CITE> over the whole corpus, we can use it to get a sense for where the performance improvements come from in the Code2Vec Model.
+From this graph it is one can see both a significant increase in the models 1.0 scoring sentences, and also a modest increase in low scoring sentences. 
+This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. 
 
 
-Although this metric is prone to low scores on individual sentences <CITE> over the whole corpus, we can use it to get a sense for where the performance improvements come from.
-These are presented in Figureand show both a significant increase in the models 1.0 scoring sentences, and also a modest increase in low scoring sentences. This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. 
-
-
-It is also interesting to note that the attention patterns observed in the example above also hold on a macroscopic scale. By taking the distribution of entropies of each of the attentions.
-
-
-
-
-\begin{enumerate}
-    \item With the code lstm we see some of the behaviour we like, but also, only overfitting. There is no sequence so in some cases, a path or a single variable can be informative, but it performs well.
-    \item See a single example and distribution of attention.
-    \item CLearly there are a lot of spikes compared to uniform. More masking the more spiking, though this is partly due to best bleu. Compare at cross entropy time?
-    \item Then look at, bleu per sentence, maybe av bleu per sentence per attn entropy.
-    \item Big COMPARE vs ROTE LEARNER - can we conclude this is worth more researcg?
-    \item Cna show how choices change w model for given example??
-
-    \item C2VEnc: does combining add anythin? More capacity, check weights.
-\end{enumerate}
-
-% \begin{table}
-\begin{listing}[h!] 
+\begin{table}[ht!]
 \begin{center}
 
-\includegraphics[width=\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
-\begin{minted}[]{python}
-def xkcd_palette(colors):
-    palette = [xkcd_rgb[name] for name in colors]
-    return color_palette(palette, len(palette))
-
-\end{minted}
-\begin{tabular}{l}
-\textbf{I}: \mintinline[]{python}{colors}\\
-\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
-\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
-\end{tabular}
-
-
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/attention_xkcd.png}
+\includegraphics[width=0.9\linewidth]{ImagesCodeRelated/pretty_attention_XKCD.png}
         % how to set font size here to 10 px ?  
 \begingroup
     \fontsize{10pt}{12pt}\selectfont
@@ -639,8 +612,7 @@ def xkcd_palette(colors):
     & \textbf{Paths} \\
     \\
     \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
-    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\leftarrow$ FunctionDef[...] \\
-        & [...]$\rightarrow$ Assign $\rightarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
     \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
     \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
     \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
@@ -657,25 +629,35 @@ def xkcd_palette(colors):
 \end{center}
 \caption{Code \& List}
 \label{fig:single_examples}
-\end{listing}
-
+\end{table}
 
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
 \end{center}
+\caption{code2vec entropy}
 \label{fig:entropy_code2vec}
 \end{figure}
 
 
+% \begin{enumerate}
+%     \item With the code lstm we see some of the behaviour we like, but also, only overfitting. There is no sequence so in some cases, a path or a single variable can be informative, but it performs well.
+%     \item See a single example and distribution of attention.
+%     \item CLearly there are a lot of spikes compared to uniform. More masking the more spiking, though this is partly due to best bleu. Compare at cross entropy time?
+%     \item Then look at, bleu per sentence, maybe av bleu per sentence per attn entropy.
+%     \item Big COMPARE vs ROTE LEARNER - can we conclude this is worth more researcg?
+%     \item Cna show how choices change w model for given example??
+
+%     \item C2VEnc: does combining add anythin? More capacity, check weights.
+% \end{enumerate}
+
+% \begin{table}
+
+
 % subsubsection analysis (end)
 
-
-
-
-
-\subsection{Comparing Code2Vec Altered} % (fold)
+\subsection{Masking Identifiers in Code2Vec} % (fold)
 \label{sub:comparing_code2vec_altered}
 
 \subsubsection{Experiment Objective} % (fold)
@@ -686,24 +668,33 @@ We investigated masking these terminal node names, to be conclude that that the 
 
 \subsubsection{Method \& Results} % (fold)
 
-By using the code2vec tokenization of paths outlined in section X, we extracted all paths for each argument in question from the AST of the code. 
-The outputs of the result are presented in Table \ref{table:name_code2vec_solo}.
+We used the same dataset and tokenization procedure as described in Section \ref{sub:comparing_code2vec_to_baselines} to prepare the tokenized code paths as before.
+However, this time we investigated two different masking procedures, to hide the terminal node from the models.
 
-\subsubsection{Analysis} % (fold)
+In the first masking, we masked the only the coarguments in the code paths.
+We did this by creating new terminal node identifiers, for "first coargument", "second coargument", and so forth, and renaming all terminal node identifier indices to these numbers.
+This means that the model can still recognise when two code paths belong to the same terminal node, but no embedding can be generated linking the fact that that argument shares a coargument name with any other variables.
 
-Checkout the weights now that the masking has taken place. Is it genuinely lerning good patters? What are good patterns? Whats an example of whats been classified and what being referred to in the syntax tree?
+In our second masking, we masking we repeated this procedure, but for every point in the dataset.
+This meant that very indicative global variables were masked, but also any inbuilt method.
+Instead the model only had access to enough information to be able to differentiate terminal nodes within a function.
+
+Once again we trained these for 100 epochs, with the hyperparameters specified in Appendix X.
+
+We present the results in Table \ref{table:code_2_vec_masked}, noting that Coargument Masking only resulted in a slight performance drop, of one to two BLEU points, from the unmasked variables, while the Full Masking resulted in a significant drop of six BLEU points, while still beating the best Rote Learner baseline.
+
 
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+\begin{tabular}{ c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)    \\
     \hline
-    Rote Learner (best performer)          & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ & \\
+    Rote Learner (best performer)          & $ 11.82453 \pm  0.15695 $ & $ 12.61319 \pm 0.12093 $ \\
     \hline
-    Code2Vec                !!              & $ 18.93630 $ & $ 18.12909 $ & \\
-    Code2Vec (masked args)  !!              & $ 17.01868 $ & $ 16.93701 $ & \\                  
-    Code2Vec (masked all)   !!               & $ 13.27677 $ & $ 13.07374 $ & \\
+    Code2Vec                               & $ 18.93630 $ & $ 18.12909 $ \\
+    Code2Vec  (Coargument Masking)              & $ 17.01868 $ & $ 16.93701 $ \\                  
+    Code2Vec  (Full Masking)                & $ 13.27677 $ & $ 13.07374 $ \\
     % \hdashline
 
     % Code2Vec                              & $ 12.64199 $ & $ 12.80257 $ & \\
@@ -723,17 +714,52 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_encoder.png}
 \end{center}
+\caption{all entropies}
+\label{fig:all_entropies}
 \end{figure}
 
+
+\subsubsection{Analysis} % (fold)
+
+Once again we investigated the performance of these models on the validation set, examining the entropies of both the masked models, on the validation dataset.
+
+Noting the BLEU score and the lack of shift of the center of the entropies, it appears that losing coarguments, when the rest of the code is present, does not significantly impact the models behaviour.
+There is a spike in the number of attentions with close to zero entropy, which could be explained by having informative codepaths involving coarguments, now being accessed more regularly at test time, but otherwise there is little change.
+
+However, for the fully masked arguments we see alarge shift to even lower entropys, and greater mass closer to 0 entropy. In these cases it is likely the model is simply fitting to the paths it recognises, as the target nodes become less informative, and we start to see a performance of the model that starts to come close to the Rote Learner.
+
+However, this experiment shows that by completely renaming all variables (including aliasing built-ins!), the model is still able to learn features from the paths of the source code themselves, suggesting that types of variables, and idiomatic expressions can add information, even in potentially very large syntax trees.
 
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/SentenceBleuCodeonly.png}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentenceBleuNameOnly.png}
-\includegraphics[width=.8\linewidth]{ImagesCodeRelated/SentBleuCombined.png}
+\includegraphics[width=0.75\linewidth]{ImagesCodeRelated/pretty_sentence_c2v.png}
+\includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_s2s.png}
+\includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_c2e.png}
 \end{center}
+\caption{sentence bleu}
+\label{fig:sentence_bleu}
+
 \end{figure}
+
+\begin{listing}[h!] 
+\begin{center}
+
+\includegraphics[width=\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
+\begin{minted}[]{python}
+def xkcd_palette(colors):
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+\end{minted}
+\begin{tabular}{l}
+\textbf{I}: \mintinline[]{python}{colors}\\
+\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
+\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
+\end{tabular}
+\end{center}
+\end{listing}
+
 
 
 
@@ -749,25 +775,42 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
 
 % subsection comparing_code2vec_to_baselines (end)
 
+\subsubsection{Experiment Objective} % (fold)
+
+Both the Seq-to-Seq models and Code2Vec Decoder models fundamentally look at different modalities of code when making their inference.
+In this investigation we sought to compare what could happen by combining these two modalities of information, in the Code2Vec + Seq2Seq Decoder, to the individual components.
+
+\subsubsection{Method \& Results} % (fold)
+
+Given the nature of the code elements of this investigation, we continued with the Full Random-Split Library, and proceeded with the same format of investigation as outlined in previous sections. 
+We ran the full neural models for 100 epochs, using the name only tokenizations for the human readable channel and the full unmasked paths for the code2vec encoder.
+
+The results of these experiments are presented in Table \ref{table:code2vec_embed}. 
+We report that the combined model surpasses both individual models, though only making a small improvement on the Seq-to-Seq models, of about 2 points. 
+This is at least partly down to the presence of (name, description) duplicate pairs in the dataset, which boosts both the performance of the Seq-to-Seq, and that of the rote learner.
+
+Unlike the neural decoder models, the combined Rote Learner model performs worse wit 
+
+
 \begin{table}[h!]
 \begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+\begin{tabular}{ c | c | c  }
+    Model                             & BLEU (Unsplit)  & BLEU (Split)     \\
     \hline
-    Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ & \\
-    Code2Vec  (code only)         !!    & $ 18.93630 $ & $ 18.12909 $ & \\
+    Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ \\
+    Code2Vec Decoder                 & $ 18.93630 $ & $ 18.12909 $ \\
     % \hdashline
     % Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
     \hline
-    Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ & \\
-    Seq2Seq  (name only)      !!         & $ 26.39189 $ & $ 25.39841 $ & \\
+    Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ \\
+    Seq2Seq (name only)               & $ 26.39189 $ & $ 25.39841 $ \\
     % \hdashline
     % Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 15.01764 \pm  0.44897 $ & $ 15.75528 \pm 0.29560 $ & \\
-    Code2Vec  + Char to Seq       !!     & $ 28.76581 $ & $ 27.68100 $ & \\
+    Rote Learner (combined)            & $ 15.01764 \pm  0.44897 $ & $ 15.75528 \pm 0.29560 $ \\
+    Code2Vec+ Seq-to-Seq Decoder       & $ 28.76581 $ & $ 27.68100 $ \\
     % \hdashline
     % Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
     \hline
@@ -777,61 +820,53 @@ Checkout the weights now that the masking has taken place. Is it genuinely lerni
 \end{center}
 \end{table}
 
-\subsubsection{Experiment Objective} % (fold)
-
-\begin{itemize}
-    \item finally we decide to combine
-    \item we dont see a great improvemet separately, how about together?
-    \item surprised
-\end{itemize}
-
-
-\subsubsection{Method \& Results} % (
-
 \subsubsection{Analysis} % (fold)
+
+
+
 
 Attentio here will be important. 
 How do the code2vec vectors change direction when using names as well as code!
 Weights etc
 
-\section{Analysis} % (fold)
+
+\section{Investigating the Library Split Dataset} % (fold)
 \label{sec:analysis}
-
-% section sundry_analysis (end)
-
-\subsection{Investigating the Removal of Duplicates} % (fold)
-\label{sub:investigating_the_removal_of_duplicates}
 
 \subsubsection{Experiment Objective} % (fold)
 
-We now want to check whether generalisation is possible across results. 
-We take the best models and repeat them on th esplit dataset.
+Our final investigation sought to apply the most difficult test to our models, namely to investigate whether different modalities of code could help generate argument descriptions across completely differnet code bases and different authors.
+This involved taking our strongest models and repeat them on our Full Library-Split Dataset.
 
-\subsubsection{Method \& Results} % (
+\subsubsection{Method \& Results \& Analysis} % (
+
+The method of our investigations was as outlined above
+
+item 
 
 
 \begin{table}[!ht]
 \begin{center}
-\begin{tabular}{ c | c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)    & Perpelexity \\
+\begin{tabular}{ c | c | c }
+    Model                             & BLEU (Unsplit)  & BLEU (Split) \\
     \hline
-    Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ & \\
-    Code2Vec                     !!   & $ 0.88741 $ & $ 0.89466 $ & \\
-    Code2Vec  (mask args)             & $ 0.66894 $ & $ 0.67366 $ & \\
-    Code2Vec  (mask alls)             & $ 0.69457 $ & $ 0.71360 $ & \\
-    \hline
-    \hline
-    Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ & \\
-    \hline
-    Seq2Seq                             & &  & \\
-    - \textit{name only}              & $ 1.53474 $ & $ 1.58206 $ & \\
-    - \textit{name + function name}      & $ 1.54843 $ & $ 1.52191 $ & \\
-    - \textit{name + other args}         & $ 1.53296 $ & $ 1.45225 $ & \\   
-    - \textit{name + function name + other args}     & $ 1.50983 $ & $ 1.48267 $ & \\
+    Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ \\
+    Code2Vec                          & $ 0.88741 $ & $ 0.89466 $ \\
+    Code2Vec  (Mask Co-arguments)             & $ 0.66894 $ & $ 0.67366 $ \\
+    Code2Vec  (Mask All)             & $ 0.69457 $ & $ 0.71360 $ \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ & \\
-    Code2Vec  + Char to Seq        !!      & $ 1.84887 $ & $ 1.58697 $ & \\\\
+    Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ \\
+    \hline
+    Seq2Seq                             & &   \\
+    - \textit{name only}              & $ 1.53474 $ & $ 1.58206 $ \\
+    - \textit{name + function name}      & $ 1.54843 $ & $ 1.52191 $ \\
+    - \textit{name + co-argument names}         & $ 1.53296 $ & $ 1.45225 $ \\   
+    - \textit{name + function name +co-argument names}     & $ 1.50983 $ & $ 1.48267 $ \\
+    \hline
+    \hline
+    Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ \\
+    Code2Vec  + Char to Seq            & $ 1.84887 $ & $ 1.58697 $ \\\\
     \hline
 \end{tabular}
 \caption {Investigate split datasets}
@@ -839,7 +874,4 @@ We take the best models and repeat them on th esplit dataset.
 \end{center}
 \end{table}
 
-
-\subsection{Visualising Attention Weights} % (fold)
-\label{sub:visualising_attention_weights}
 
