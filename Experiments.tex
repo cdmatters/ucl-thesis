@@ -778,7 +778,7 @@ def xkcd_palette(colors):
 \subsubsection{Experiment Objective} % (fold)
 
 Both the Seq-to-Seq models and Code2Vec Decoder models fundamentally look at different modalities of code when making their inference.
-In this investigation we sought to compare what could happen by combining these two modalities of information, in the Code2Vec + Seq2Seq Decoder, to the individual components.
+In this investigation we sought to investigate what could happen by combining these two modalities of information in the Code2Vec + Seq2Seq Decoder.
 
 \subsubsection{Method \& Results} % (fold)
 
@@ -786,10 +786,11 @@ Given the nature of the code elements of this investigation, we continued with t
 We ran the full neural models for 100 epochs, using the name only tokenizations for the human readable channel and the full unmasked paths for the code2vec encoder.
 
 The results of these experiments are presented in Table \ref{table:code2vec_embed}. 
-We report that the combined model surpasses both individual models, though only making a small improvement on the Seq-to-Seq models, of about 2 points. 
+We report that the combined model surpasses both individual models achieving a BLEU of $28.7$ and $27.08$ on validation and test respectively. 
+However, this is only making a small improvement on the Seq-to-Seq models, of about 2 points. 
 This is at least partly down to the presence of (name, description) duplicate pairs in the dataset, which boosts both the performance of the Seq-to-Seq, and that of the rote learner.
 
-Unlike the neural decoder models, the combined Rote Learner model performs worse wit 
+It is interesting to note that the combined Rote Learner model performs worse when trying to learn on both modalities, achieving a score of $15.0$ annd $15.75$, which underperforms the name only model of $19.0$ and $19.68$ on validation and test.  
 
 
 \begin{table}[h!]
@@ -797,20 +798,39 @@ Unlike the neural decoder models, the combined Rote Learner model performs worse
 \begin{tabular}{ c | c | c  }
     Model                             & BLEU Validation  & BLEU Split     \\
     \hline
-    Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ \\
-    Code2Vec Decoder                 & $ 18.93630 $ & $ 18.12909 $ \\
+    Rote Learner  (code only)        & $ 11.84 \pm  0.16 $ & $ 12.62 \pm 0.12 $ \\
+    Code2Vec Decoder                 & $ 18.94 $ & $ 18.13 $ \\
     % \hdashline
     % Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
     \hline
     \hline
-    Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ \\
-    Seq2Seq (name only)               & $ 26.39189 $ & $ 25.39841 $ \\
+    Rote Learner  (name only)         & $ 19.04 \pm  0.35 $ & $ 19.69 \pm 0.28 $ \\
+    Seq2Seq (name only)               & $ 26.40 $ & $ 25.40 $ \\
     % \hdashline
     % Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 15.01764 \pm  0.44897 $ & $ 15.75528 \pm 0.29560 $ \\
-    Code2Vec+ Seq-to-Seq Decoder       & $ 28.76581 $ & $ 27.68100 $ \\
+    Rote Learner (combined)            & $ 15.02 \pm  0.45 $ & $ 15.76 \pm 0.30$ \\
+    Code2Vec+ Seq-to-Seq Decoder       & $ 28.77 $ & $ 27.68 $ \\
+    % \hdashline
+    % Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
+    % \hline
+    % Model                             & BLEU Validation  & BLEU Split     \\
+    % \hline
+    % Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ \\
+    % Code2Vec Decoder                 & $ 18.93630 $ & $ 18.12909 $ \\
+    % % \hdashline
+    % % Code2Vec  (code only)             & $ 12.64199 $ & $ 12.80257 $ & \\
+    % \hline
+    % \hline
+    % Rote Learner  (name only)         & $ 19.03534 \pm  0.35183 $ & $ 19.68826 \pm 0.28100 $ \\
+    % Seq2Seq (name only)               & $ 26.39189 $ & $ 25.39841 $ \\
+    % % \hdashline
+    % % Seq2Seq  (name only)              & $ 15.94701 $ & $ 15.71091 $ & \\
+    % \hline
+    % \hline
+    % Rote Learner (combined)            & $ 15.01764 \pm  0.44897 $ & $ 15.75528 \pm 0.29560 $ \\
+    % Code2Vec+ Seq-to-Seq Decoder       & $ 28.76581 $ & $ 27.68100 $ \\
     % \hdashline
     % Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
     \hline
@@ -823,12 +843,19 @@ Unlike the neural decoder models, the combined Rote Learner model performs worse
 \subsubsection{Analysis} % (fold)
 
 
+Analysis of the combined models largely followed the pattern of those in sections \ref{sec:investigating_the_computer_channel}, which involved looking at the entropies of the Code2Vec attention distributions and the sentence level BLEU scores, as evaluated over the whole of the validation set.
 
+We found the unsurprisingly the Code2Vec + Seq to Seq Decoder model has a significantly wider distribution of entropies, centered around a higher point. 
+This may partly be down to the fact that the model is now also learning from the highly informative variable name, and so depends less heavily on the specific code2vec paths. Nonetheless it still indicates the model is paying attention the codepaths when it makes its decisions.
 
-Attentio here will be important. 
-How do the code2vec vectors change direction when using names as well as code!
-Weights etc
+This indicates why the model should outperform the Seq-to-Seq, but it given it is only a small improvement, it suggests that most of the performance gain comes from the name element of the data. 
+Indeed, examining the distributions of sentence level BLEU scores, as visible in  \ref{fig:sentence_bleu}, suggests that te Seq-to-Seq model largely acts as a better Rote Learner, showing most of its improvements in the 1.0 scoring sentences. 
+This is unsurprising given the number of duplicates of (name, description) pairs in this dataset.
+Given the proximity of the BLEU scores for the Seq-to-Seq and Code2Vec + Seq-to-Seq scores, it is reasonable to assume a similar behavious is also occuring to some degree in the combined model.
 
+% This is in agreement with the distribution of bleu scores in \ref{fig:sentence_bleu} v 
+
+%  it is clear the availability of (name, description) duplicates helps both the name only learners, outperform the code only models ands suggests why the name only Rote Learner out performs the combined model. 
 
 \section{Investigating the Library Split Dataset} % (fold)
 \label{sec:analysis}
@@ -965,48 +992,6 @@ It is possible that other tokenizations of the source code on this dataset may p
 
 
 
-% Then CODE investigate. 
-
-
-
-% LIB SPLIT
-% (3697, 121)
-% UNK Tokens 5.358638863079008
-% UNIQUE (2866,)
-% (23463, 121)
-% UNK Tokens 5.4953593054582
-% UNIQUE (4701,)
-% Vocab of Valid not in Train 453
-% Vocab of Train not in Vocab?
-% Vocab of Test not in vocab?
-
-% RANDOM SPLIT
-% (3453, 121)
-% UNK Tokens 5.279460246875718
-% UNIQUE (3012,)
-% (24197, 121)
-% UNK Tokens 5.247896012242944
-% UNIQUE (5249,)
-% Vocab of Valid not in Train 122
-
-
-
-%  Libraries often treat code objects conceptually, having a unified framework to deal 
-
-%  In this (relatively) small dataset, the training language can end up being very context specific, resulting in a failure of the model being able to generalise. T
-
-%  mean that the models are fundamentally  different language mig. Since the target descriptions are real world argument descriptions, with all the context of the libraries they were in, it is very hard fro the model generate a large ngram overlap with the target descriptions.
-
-% For one thing the model already is limited by its access to the vocabulary. In the RandomSplit library the vo
-% * UNK tokens in valid \& main
-% * UNK paths train and test
-
-% Furthermore 
-
-
-% * qualitative looking at desscriptions
-% * one word overlap 
-% * also challenge of the dataset
 
 \begin{table}[ht]
 
