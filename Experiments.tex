@@ -795,7 +795,7 @@ Unlike the neural decoder models, the combined Rote Learner model performs worse
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{ c | c | c  }
-    Model                             & BLEU (Unsplit)  & BLEU (Split)     \\
+    Model                             & BLEU Validation  & BLEU Split     \\
     \hline
     Rote Learner  (code only)        & $ 11.83875 \pm  0.15697 $ & $ 12.62479 \pm 0.12103 $ \\
     Code2Vec Decoder                 & $ 18.93630 $ & $ 18.12909 $ \\
@@ -838,40 +838,250 @@ Weights etc
 Our final investigation sought to apply the most difficult test to our models, namely to investigate whether different modalities of code could help generate argument descriptions across completely differnet code bases and different authors.
 This involved taking our strongest models and repeat them on our Full Library-Split Dataset.
 
-\subsubsection{Method \& Results \& Analysis} % (
+\subsubsection{Method \& Results}  % (
 
-The method of our investigations was as outlined above
+The method of our investigations was as outlined above. In this case the models required significantly less training, plateauing their BLEU scores very early. We selected the best models that ran for at most 40 epochs. 
+The results for each experiment is visible in Table \ref{table:split_datasets_embed}, with the hyperparameters presented in Table X.
 
-item 
+We report that the neural model significantly struggled to learn the labelled translations on the library split datset.
+The weakest models, the code only Code2Vec Decoders, scored BLEU scores of $0.89$ on both train and dev, very close to the code only Rote Learner score of   $ 1.01257 \pm  0.11410$, while the argument name models manage to achieve BLEU scores of about $1.5$ across both the Rote Learner and Seq-to-Seq models. 
+Finally, the combined model of the Code2Dev + Seq-to-Seq model performs best, by a marginal amount, scoring  $ 1.85 $ and $ 1.59 $ across validation and test sets respectively,  outperforming the combined Rote Learner on both modalities byt about half a BLEU point.
+
 
 
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{ c | c | c }
-    Model                             & BLEU (Unsplit)  & BLEU (Split) \\
+    Model                             & BLEU Validation & BLEU Test \\
     \hline
-    Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ \\
-    Code2Vec                          & $ 0.88741 $ & $ 0.89466 $ \\
-    Code2Vec  (Mask Co-arguments)             & $ 0.66894 $ & $ 0.67366 $ \\
-    Code2Vec  (Mask All)             & $ 0.69457 $ & $ 0.71360 $ \\
+    Rote Learner  (code only)         & $ 1.02 \pm  0.11 $ & $ 0.85 \pm 0.05 $ \\
+    Code2Vec                          & $ 0.89 $ & $ 0.89 $ \\
+    Code2Vec  (Mask Co-arguments)             & $ 0.67 $ & $ 0.67 $ \\
+    Code2Vec  (Mask All)             & $ 0.69 $ & $ 0.71 $ \\
     \hline
     \hline
-    Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ \\
+    Rote Learner  (name only)         & $ 1.44 \pm  0.17 $ & $ 1.36 \pm 0.06$ \\
     \hline
     Seq2Seq                             & &   \\
-    - \textit{name only}              & $ 1.53474 $ & $ 1.58206 $ \\
-    - \textit{name + function name}      & $ 1.54843 $ & $ 1.52191 $ \\
-    - \textit{name + co-argument names}         & $ 1.53296 $ & $ 1.45225 $ \\   
-    - \textit{name + function name +co-argument names}     & $ 1.50983 $ & $ 1.48267 $ \\
+    - \textit{name only}              & $ 1.53 $ & $ 1.582$ \\
+    - \textit{name + function name}      & $ 1.55 $ & $ 1.52 $ \\
+    - \textit{name + co-argument names}         & $ 1.53 $ & $ 1.45$ \\   
+    - \textit{name + function name +co-argument names}     & $ 1.51 $ & $ 1.48$ \\
     \hline
     \hline
-    Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ \\
-    Code2Vec  + Char to Seq            & $ 1.84887 $ & $ 1.58697 $ \\\\
+    Rote Learner (combined)            & $ 1.23 \pm  0.169 $ & $ 1.157 \pm 0.101 $ \\
+    Code2Vec  + Char to Seq            & $ 1.85 $ & $ 1.59 $ \\\\
+    \hline
+
+
+    % Model                             & BLEU Validation & BLEU Test \\
+    % \hline
+    % Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ \\
+    % Code2Vec                          & $ 0.88741 $ & $ 0.89466 $ \\
+    % Code2Vec  (Mask Co-arguments)             & $ 0.66894 $ & $ 0.67366 $ \\
+    % Code2Vec  (Mask All)             & $ 0.69457 $ & $ 0.71360 $ \\
+    % \hline
+    % \hline
+    % Rote Learner  (name only)         & $ 1.43480 \pm  0.16744 $ & $ 1.36063 \pm 0.06452 $ \\
+    % \hline
+    % Seq2Seq                             & &   \\
+    % - \textit{name only}              & $ 1.53474 $ & $ 1.58206 $ \\
+    % - \textit{name + function name}      & $ 1.54843 $ & $ 1.52191 $ \\
+    % - \textit{name + co-argument names}         & $ 1.53296 $ & $ 1.45225 $ \\   
+    % - \textit{name + function name +co-argument names}     & $ 1.50983 $ & $ 1.48267 $ \\
+    % \hline
+    % \hline
+    % Rote Learner (combined)            & $ 1.23201 \pm  0.16873 $ & $ 1.15672 \pm 0.10083 $ \\
+    % Code2Vec  + Char to Seq            & $ 1.84887 $ & $ 1.58697 $ \\\\
     \hline
 \end{tabular}
 \caption {Investigate split datasets}
 \label{table:split_datasets_embed}
 \end{center}
 \end{table}
+
+
+
+
+\subsubsection{Analysis}
+
+These results at first glance seem to indicate that the neural models can perform no better in generalised translation than the overfitting Rote Learner models.
+However these low BLEU scores give little indication to the type of translations that are being generated.
+To investigate the quality of these translations we examined a random sample of translations from both the Rote Learner and the Code2Vec models. 
+These are visible in Table X.
+
+In these we see very little overlap, though the translations make grammatical sense. In particular the types of descriptions generated appear shorter and more general than their counterparts with the Rote Learner.
+
+% Although we see a very low ngram overlap,
+% 1)  descriptions of the neural models seem plausible, and certainly less repeated and specific that Rote Learner.
+% 2) (However,) looking at the one word overlap of the the models we see the following distributions.
+% Searching for direct repeats of translations we find that X of the validation sentences are found in the training, indicating /not invdicating overfitting.
+
+The fact that the qualitative performance of these models may be reasonable, but the BLEU scores are low leads us to the biggest problem with this task.
+When code is written by different authors, with different contexts and conventions, the generalisation across contexts becomes very difficult. 
+Although work has shown that idioms and patterns occur across code <CITE>, fundamentally the target language that we aim to generate can vary significantly between different libraries.
+This is because code from libraries that do not interact are under no obligation to use the same language when referring to the same similar underlying code objects, as it the `meaning' of these objects is may different to humans (though not computers). 
+
+For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, and picking out idiomatic code paths might help infer the type of the object, but if the model has no experience of the language around song categories and music, it will struggle to generalise to these descriptions.
+
+To investigate whether in fact such a problem is occuring, we examined how the different train set and validation set description vocabularies varied between the Random-Split and Library-Split Datasets. 
+We found that splitting on libraries has a deleterious effect of reducing the diversity of both the training set vocabularies and the validation set vocabularies. 
+This confirmed our expecatation that training could be affected by a lack of diversity in training examples. 
+Furthermore, the vocabularies confirmed our suspicion that splitting by language also changes the type of language involved. 
+We also found that, even after tokenization, 15.8\% of the words of the Library Split validation vocabulary do not even appear in the training set - even though they are not "UNK" tokens. 
+This is almost 4 times higher than Random Split set.
+These results are summarised in Table Blah
+
+Similarly with code paths, we found that a lot of information is lost by splitting data according to library. This was particularly pronounced because, unlike with the descriptions, the vocabulary for code paths is set entirely by the training set.
+We found that the fraction of codepaths with "<UNK>" path component in the validation set rose from 38\% to 58\%, and "<UNK>" terminal nodes ran from 15\% to 45\%. 
+These are significant increases, which explain why the Code2Vec models struggled to generalise, even though they operate on the computer readable channel. 
+
+This work shows how challenging it is to generalise code across repository. Syntax trees are vast and difficult to process, and yet even taking subpaths along a tree requires a significant vocabulary to process.
+
+
+
+% Then CODE investigate. 
+
+
+
+% LIB SPLIT
+% (3697, 121)
+% UNK Tokens 5.358638863079008
+% UNIQUE (2866,)
+% (23463, 121)
+% UNK Tokens 5.4953593054582
+% UNIQUE (4701,)
+% Vocab of Valid not in Train 453
+% Vocab of Train not in Vocab?
+% Vocab of Test not in vocab?
+
+% RANDOM SPLIT
+% (3453, 121)
+% UNK Tokens 5.279460246875718
+% UNIQUE (3012,)
+% (24197, 121)
+% UNK Tokens 5.247896012242944
+% UNIQUE (5249,)
+% Vocab of Valid not in Train 122
+
+
+
+%  Libraries often treat code objects conceptually, having a unified framework to deal 
+
+%  In this (relatively) small dataset, the training language can end up being very context specific, resulting in a failure of the model being able to generalise. T
+
+%  mean that the models are fundamentally  different language mig. Since the target descriptions are real world argument descriptions, with all the context of the libraries they were in, it is very hard fro the model generate a large ngram overlap with the target descriptions.
+
+% For one thing the model already is limited by its access to the vocabulary. In the RandomSplit library the vo
+% * UNK tokens in valid \& main
+% * UNK paths train and test
+
+% Furthermore 
+
+
+% * qualitative looking at desscriptions
+% * one word overlap 
+% * also challenge of the dataset
+
+
+\textbf{Argument}: \mintinline[]{python}{kind$<$END$>$}\\
+\textbf{D}: interpolation mode for the frequency estimator . see : `` scipy.interpolate.interp1d `` for valid settings .\\
+\textbf{P}: maximum number of iterations to use .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{query$<$END$>$}\\
+\textbf{D}: the query parameters , as a dictionary or as an iterable of key-value pairs .\\
+\textbf{P}: the name of the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{obj$<$END$>$}\\
+\textbf{D}: an object .\\
+\textbf{P}: a list of tensors to be used .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{networks$<$END$>$}\\
+\textbf{D}: list of network names or ids to attach the containers to .\\
+\textbf{P}: the number of jobs to use .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{G$<$END$>$}\\
+\textbf{D}: a networkx graph\\
+\textbf{P}: the $<$UNK$>$ object to use .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{create\_using$<$END$>$}\\
+\textbf{D}: use specified graph for result . the default is graph ( )\\
+\\
+\textbf{P}: $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $
+<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' .\\
+\textbf{Argument}: \mintinline[]{python}{range\_$<$END$>$}\\
+\textbf{D}: range of time that cells should match against .\\
+\textbf{P}: the $<$UNK$>$ to use for the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{module\_name$<$END$>$}\\
+\textbf{D}: str , the name of a python module .\\
+\textbf{P}: a string or a list of tensors to be used to the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{tol$<$END$>$}\\
+\textbf{D}: the tolerance ( a color value difference , where 255 is the maximal difference ) . the test fails if the average pixel difference is greater than this value .\\
+\textbf{P}: the number of jobs to use .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{bucket$<$END$>$}\\
+\textbf{D}: bucket to which the notification is bound .\\
+\textbf{P}: list of $<$UNK$>$ to be used .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{key$<$END$>$}\\
+\textbf{D}: the numeric values of notes belonging to this key . defaults to c-major if not provided .\\
+\textbf{P}: an optional list of collections to be used to the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{database$<$END$>$}\\
+\textbf{D}: database to use\\
+\textbf{P}: the $<$UNK$>$ to use for the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{is\_training$<$END$>$}\\
+\textbf{D}: bool . is it training phase or not ?\\
+\textbf{P}: if ` true ` , the $<$UNK$>$ is used to the $<$UNK$>$ .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{weight$<$END$>$}\\
+\textbf{D}: if this is a string , then edge weights will be accessed via the edge attribute with this key ( that is , the weight of the edge joining ` u ` to ` v ` will be `` g.edges [ u , v ] [ weight ] `` ) . if no such edge attribute exists , the weight of the edge is assumed to be one .\\
+\textbf{P}: input data .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{note\_sequence$<$END$>$}\\
+\textbf{D}: a music\_pb2.notesequence proto .\\
+\textbf{P}: a ` $<$UNK$>$ ` object .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{x$<$END$>$}\\
+\textbf{D}: the x coordinates of the nodes defining the curves .\\
+\textbf{P}: the number of jobs to use .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{reference\_beats$<$END$>$}\\
+\textbf{D}: reference beat times , in seconds\\
+\textbf{P}: the input array .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{file\_like$<$END$>$}\\
+\textbf{D}: file-like object having ` .read ( n ) ` method . if specified , unpacker reads serialized data from it and : meth : ` feed ( ) ` is not usable .\\
+\\
+\textbf{P}: $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $
+<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' .\\
+\textbf{Argument}: \mintinline[]{python}{retry\_strategy$<$END$>$}\\
+\textbf{D}: the strategy to use if the request fails and must be retried .\\
+\textbf{P}: string , uri to use for the request .\\
+\\
+
+\textbf{Argument}: \mintinline[]{python}{client$<$END$>$}\\
+\textbf{D}: the client used to connect to datastore .\\
+\textbf{P}: the $<$UNK$>$ to use for the request .\\
+
 
 
