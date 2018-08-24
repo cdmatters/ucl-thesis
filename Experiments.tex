@@ -908,35 +908,60 @@ Finally, the combined model of the Code2Dev + Seq-to-Seq model performs best, by
 These results at first glance seem to indicate that the neural models can perform no better in generalised translation than the overfitting Rote Learner models.
 However these low BLEU scores give little indication to the type of translations that are being generated.
 To investigate the quality of these translations we examined a random sample of translations from both the Rote Learner and the Code2Vec models. 
-These are visible in Table X.
+A random sample are shown in Table \ref{tab:lib_split}.
 
-In these we see very little overlap, though the translations make grammatical sense. In particular the types of descriptions generated appear shorter and more general than their counterparts with the Rote Learner.
+In these we see very little overlap, though the translations make grammatical sense. 
+In particular the types of descriptions generated appear shorter and more general than their counterparts with the Rote Learner, but both generally have a poor alignment with the true description.
 
 % Although we see a very low ngram overlap,
 % 1)  descriptions of the neural models seem plausible, and certainly less repeated and specific that Rote Learner.
 % 2) (However,) looking at the one word overlap of the the models we see the following distributions.
 % Searching for direct repeats of translations we find that X of the validation sentences are found in the training, indicating /not invdicating overfitting.
 
-The fact that the qualitative performance of these models may be reasonable, but the BLEU scores are low leads us to the biggest problem with this task.
-When code is written by different authors, with different contexts and conventions, the generalisation across contexts becomes very difficult. 
-Although work has shown that idioms and patterns occur across code <CITE>, fundamentally the target language that we aim to generate can vary significantly between different libraries.
-This is because code from libraries that do not interact are under no obligation to use the same language when referring to the same similar underlying code objects, as it the `meaning' of these objects is may different to humans (though not computers). 
+These low BLEU scores, despite grammatical sounding descriptions, lead us to the biggest problem with this task.
+Generalisation across code documentation is difficult when code is written by different authors, with different contexts and conventions. 
+Although related work in section X demonstrates that idioms and patterns in code do exist, we are fundamentally hampered by the both the variance of code between libraries and variation of the target language that we aim to generate when we split between libraries.
+Codebases develop idioms and name conventions within libraries, and often have a context when it comes the language used in descriptions. 
+Unlike in many words in the real world, descriptions of code artefacts are almost always metaphorical (for instance "colours", instead of "list of strings"),  and therefire different libraries are under no obligation to use the same language, or even vocabularies when referring to the same underlying code objects. 
 
-For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, and picking out idiomatic code paths might help infer the type of the object, but if the model has no experience of the language around song categories and music, it will struggle to generalise to these descriptions.
+For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, but generating language surround the second example may be difficult without training examples without example of the relevant context.
+ In the abstract the model may be able to infer something general, such as the type, but again idiomatic use of the code would need to be provided for this.
 
-To investigate whether in fact such a problem is occuring, we examined how the different train set and validation set description vocabularies varied between the Random-Split and Library-Split Datasets. 
-We found that splitting on libraries has a deleterious effect of reducing the diversity of both the training set vocabularies and the validation set vocabularies. 
-This confirmed our expecatation that training could be affected by a lack of diversity in training examples. 
-Furthermore, the vocabularies confirmed our suspicion that splitting by language also changes the type of language involved. 
-We also found that, even after tokenization, 15.8\% of the words of the Library Split validation vocabulary do not even appear in the training set - even though they are not "UNK" tokens. 
-This is almost 4 times higher than Random Split set.
-These results are summarised in Table Blah
+This lack of context and vocabulary, both with code and text, seems to be the case with our datasets.
+We investigated how the different train set and validation set description vocabularies varied between the Random-Split and Library-Split Datasets after tokenization, and found that the in our Library Split dataset, the vocabularies of our training set are reduced by over 10\%, compared to a Random Split. 
+Furthermore, we also found that after tokenization 16\% of the words in our validation set vocabulary do not even appar in the training set - even though these are not "UNK" tokens. This is almost a fourfold increase compared to the Random Split dataset.
 
-Similarly with code paths, we found that a lot of information is lost by splitting data according to library. This was particularly pronounced because, unlike with the descriptions, the vocabulary for code paths is set entirely by the training set.
-We found that the fraction of codepaths with "<UNK>" path component in the validation set rose from 38\% to 58\%, and "<UNK>" terminal nodes ran from 15\% to 45\%. 
-These are significant increases, which explain why the Code2Vec models struggled to generalise, even though they operate on the computer readable channel. 
+\begin{table}
+    \begin{center}
+        \begin{tabular}{c c c}
+           \hline
+            & Random Split & Library Split \\
+            \hline
+            Tokenized Train Description Vocab Size    & 5249  &  4701 \\
+            Tokenize Valid Description Vocab Size    & 3012  &  2866 \\
+            \% of Tok. Valid Vocab not in Tok. Train Vocab                & 4.1\% &  15.8\% \\
+            \hline
+            \% of $<$UNK$>$ path elements in Train          &  37.4\%  &  32.4 \%   \\
+            \% of $<$UNK$>$ path elements in Validation     &  37.5\%  &  57.4\% \\
+            \% of $<$UNK$>$ terminal nodes in Train         &  12.3\%  &  8.8\%  \\ 
+            \% of $<$UNK$>$ terminal nodes in Validation    &  14.7\% &  44.9\% \\   
+            \hline
+        \end{tabular}
+    \end{center}
+    \caption{A table showing the change in the actual vocabulary of the argument descriptions, and also change in out-of-vocabulary tokens, for different library splits.}
+    \label{tab:vocabsplit}
+\end{table}
 
-This work shows how challenging it is to generalise code across repository. Syntax trees are vast and difficult to process, and yet even taking subpaths along a tree requires a significant vocabulary to process.
+
+
+This behaviour is even worse when it comes to the code paths.
+Unlie the vocabulary for descriptions, the the vocabulary for code paths is set entirely by the training set - there are no Glove preembeddings of paths to help!
+As a results we found that the fraction of codepaths with "<UNK>" path component in the validation set rose from 38\% to 58\%, and "<UNK>" terminal nodes ran from 15\% to 45\%. 
+These large increases further explain why, even on a general level looking at the computer channel, our Code2Vec models struggled to generalise. A summary of these results in presented in Table \ref{tab:vocabsplit}
+
+This work shows how challenging it is to generalise code across repository. Syntax trees are vast and diverse, which poses a problem for vocabularies, even if only taking a small subsection of the tree. 
+Furthermore, the language thats used is necessarily different and metaphorical, which leads to fitting on training that fails to generalise.
+It is possible that other tokenizations of the source code on this dataset may prove more informative in future, which may be a promising path of future investigation.
 
 
 
@@ -983,105 +1008,57 @@ This work shows how challenging it is to generalise code across repository. Synt
 % * one word overlap 
 % * also challenge of the dataset
 
+\begin{table}[ht]
 
-\textbf{Argument}: \mintinline[]{python}{kind$<$END$>$}\\
-\textbf{D}: interpolation mode for the frequency estimator . see : `` scipy.interpolate.interp1d `` for valid settings .\\
-\textbf{P}: maximum number of iterations to use .\\
-\\
+    \centering
 
-\textbf{Argument}: \mintinline[]{python}{query$<$END$>$}\\
-\textbf{D}: the query parameters , as a dictionary or as an iterable of key-value pairs .\\
-\textbf{P}: the name of the $<$UNK$>$ .\\
-\\
+\makebox[\linewidth][c]{
+    \begin{tabular}{l}
 
-\textbf{Argument}: \mintinline[]{python}{obj$<$END$>$}\\
-\textbf{D}: an object .\\
-\textbf{P}: a list of tensors to be used .\\
-\\
+    \hline
+    \textbf{Argument}: \mintinline[]{python}{kind}\\
+    \textbf{Description}: interpolation mode for the frequency estimator . see :\\
+     `` scipy.interpolate.interp1d `` for valid settings .\\
+    \textbf{Rote Learner}:   sample weights . \\
+    \textbf{Code2Vec Decoder}: maximum number of iterations to use .\\
+    \\
+    
+    \textbf{A}: \mintinline[]{python}{query}\\
+    \textbf{D}: the query parameters , as a dictionary or as an iterable of key-value pairs .\\
+    \textbf{C2V}: the name of the $<$UNK$>$ .\\
+    \textbf{RL}: int , or tuple of $<$UNK$>$ , or tuple of 3 tuples of 2 ints . - if int : the same \\
+    symmetric cropping is applied to depth , height , and width . - if tuple of 3 ints : interpreted \\
+    as two different symmetric cropping values for depth , height , and width : ` ( $<$UNK$>$ , $<$UNK$>$ , \\
+     $<$UNK$>$ ) ` . - if tuple of 3 tuples of 2 ints : interpreted as ` ( ( $<$UNK$>$ , $<$UNK$>$ ) , ( $<$UNK$>$ ,\\
+      $<$UNK$>$ ) , ( $<$UNK$>$ , $<$UNK$>$ ) ) ` \\
+    \\
+    
+    \textbf{A}: \mintinline[]{python}{obj}\\
+    \textbf{D}: an object .\\
+    \textbf{C2V}: a list of tensors to be used .\\
+    \textbf{RL}: depth multiplier for $<$UNK$>$ convolution ( also called the resolution multiplier ) \\
+    \\
+    
+    \textbf{A}: \mintinline[]{python}{networks}\\
+    \textbf{D}: list of network names or ids to attach the containers to .\\
+    \textbf{C2V}: the number of jobs to use .\\
+    \textbf{RL}: copy data from inputs . only affects $<$UNK$>$ / 2d $<$UNK$>$ input \\
+    \\
+    
+    \textbf{A}: \mintinline[]{python}{G}\\
+    \textbf{D}: a networkx graph\\
+    \textbf{C2V}: the $<$UNK$>$ object to use .\\
+    \textbf{RL}: \ ` $<$UNK$>$ ` . \\
 
-\textbf{Argument}: \mintinline[]{python}{networks$<$END$>$}\\
-\textbf{D}: list of network names or ids to attach the containers to .\\
-\textbf{P}: the number of jobs to use .\\
-\\
+    \hline
 
-\textbf{Argument}: \mintinline[]{python}{G$<$END$>$}\\
-\textbf{D}: a networkx graph\\
-\textbf{P}: the $<$UNK$>$ object to use .\\
-\\
+    \hline
+    \end{tabular}
+    }
 
-\textbf{Argument}: \mintinline[]{python}{create\_using$<$END$>$}\\
-\textbf{D}: use specified graph for result . the default is graph ( )\\
-\\
-\textbf{P}: $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $
-<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' .\\
-\textbf{Argument}: \mintinline[]{python}{range\_$<$END$>$}\\
-\textbf{D}: range of time that cells should match against .\\
-\textbf{P}: the $<$UNK$>$ to use for the $<$UNK$>$ .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{module\_name$<$END$>$}\\
-\textbf{D}: str , the name of a python module .\\
-\textbf{P}: a string or a list of tensors to be used to the $<$UNK$>$ .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{tol$<$END$>$}\\
-\textbf{D}: the tolerance ( a color value difference , where 255 is the maximal difference ) . the test fails if the average pixel difference is greater than this value .\\
-\textbf{P}: the number of jobs to use .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{bucket$<$END$>$}\\
-\textbf{D}: bucket to which the notification is bound .\\
-\textbf{P}: list of $<$UNK$>$ to be used .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{key$<$END$>$}\\
-\textbf{D}: the numeric values of notes belonging to this key . defaults to c-major if not provided .\\
-\textbf{P}: an optional list of collections to be used to the $<$UNK$>$ .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{database$<$END$>$}\\
-\textbf{D}: database to use\\
-\textbf{P}: the $<$UNK$>$ to use for the $<$UNK$>$ .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{is\_training$<$END$>$}\\
-\textbf{D}: bool . is it training phase or not ?\\
-\textbf{P}: if ` true ` , the $<$UNK$>$ is used to the $<$UNK$>$ .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{weight$<$END$>$}\\
-\textbf{D}: if this is a string , then edge weights will be accessed via the edge attribute with this key ( that is , the weight of the edge joining ` u ` to ` v ` will be `` g.edges [ u , v ] [ weight ] `` ) . if no such edge attribute exists , the weight of the edge is assumed to be one .\\
-\textbf{P}: input data .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{note\_sequence$<$END$>$}\\
-\textbf{D}: a music\_pb2.notesequence proto .\\
-\textbf{P}: a ` $<$UNK$>$ ` object .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{x$<$END$>$}\\
-\textbf{D}: the x coordinates of the nodes defining the curves .\\
-\textbf{P}: the number of jobs to use .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{reference\_beats$<$END$>$}\\
-\textbf{D}: reference beat times , in seconds\\
-\textbf{P}: the input array .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{file\_like$<$END$>$}\\
-\textbf{D}: file-like object having ` .read ( n ) ` method . if specified , unpacker reads serialized data from it and : meth : ` feed ( ) ` is not usable .\\
-\\
-\textbf{P}: $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $
-<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' , $<$UNK$>$ ' .\\
-\textbf{Argument}: \mintinline[]{python}{retry\_strategy$<$END$>$}\\
-\textbf{D}: the strategy to use if the request fails and must be retried .\\
-\textbf{P}: string , uri to use for the request .\\
-\\
-
-\textbf{Argument}: \mintinline[]{python}{client$<$END$>$}\\
-\textbf{D}: the client used to connect to datastore .\\
-\textbf{P}: the $<$UNK$>$ to use for the request .\\
+    \caption{A sample of translations on the Library Split Dataset, in this case with the Code2Vec Decoder model}
+    \label{tab:lib_split}
+\end{table}
 
 
 
