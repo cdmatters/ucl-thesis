@@ -1,20 +1,88 @@
 \chapter{Literature Survey}
 \label{literature_survey}
 
-\begin{itemize}
-    \item Code has become an integral part of the underpinnings of modern life. This seems likely to continue if not accelerate.
-    \item However the number of people who can read \& write code remains small as a percentage of the population. 
-    \item Tools that can help either read, write or analyse code hold the potential to provide great value, for both professional software engineers, and also non-coders.
-    \item With the proliferation of industry quality open source code, a great deal of research has gone into the field of trying do this translation.
-\end{itemize}
+% \begin{itemize}
+%     \item Code has become an integral part of the underpinnings of modern life. This seems likely to continue if not accelerate.
+%     \item However the number of people who can read \& write code remains small as a percentage of the population. 
+%     \item Tools that can help either read, write or analyse code hold the potential to provide great value, for both professional software engineers, and also non-coders.
+%     \item With the proliferation of industry quality open source code, a great deal of research has gone into the field of trying do this translation.
+% \end{itemize}
 
 \section{Big Code \& Naturalness} % (fold)
 
 \subsection{The Naturalness Hypothesis} % (fold)
 \label{ssub:the_naturalness_hypothesis}
 
+Traditionally, academic research surrounding programming languages has focused on formal and deductive methods in the search for useful software tools.
+For instance, in the field of bug finding and code correctness, static analysis has formed the basis of industrial products that aim to reduce runtime errors of software through explicit checks \cite{okada_combination_2007}, or even through reasoning about abstract sets of execution traces
+% by analysing syntax
+\cite{bessey_few_2010}.
+These analyses exploit the fact that code has a structure that is logically consistent and can be reasoned about mathematically.
+Historically these methods have been attractive due to their formal nature and, in some cases, the guarantees they can offer in the worst case.
+
+ % and formally, despite ignoring potentially valuable non-semantic information such as variable name conventions, programming idioms or comments.  
+
+However, the recent proliferation of real world open-source code has provided opportunities for a more statistical approach to software tooling. 
+Instead of formalising rule-based systems, the development of tools can now be guided by the most statistically significant features of the code.
+% CITE ALLAMANIS?
+Such a transition, from rule-based approach to statistical approach, signals a different end-goal for these tools, abandoning worst case guarantees for better performance on average. %most of the time.
+% from a focus of best perfomance in the worst case (or in specific conditions), to best performance in most cases. PARAPHRASE
+This promises to be of much value to growing computing industry, while opening up tooling research to the recent advances machine learning techniques.
+ 
+A key idea supporting such a transition is the Naturalness Hypothesis, proposed by Allamanis et al \cite{allamanis_mining_nodate}. 
+This hypothesis suggests that \textit{``Software is a form of human communications; software corpora have a similar statistical properties to natural language copora; and these properties can be exploited to build better software tools''}.\cite{allamanis_mining_nodate} 
+This draws inspiration Don Knuth's idea of \textit{literate programming}\cite{knuth_literate_1984}, that the primary task of programming should be ``explaining to human beings what we want a computer to do...''\cite{knuth_literate_1984}, not simply preparing a set of commands for a machine.
+Allamanis cites the successes that recent natural language processing and statistical machine learning approaches have had when applied to `Big Code, whilst pointing tp evidence of cognitive science studies that demonstrate that brain behaviour in reading programming languages is akin to reading ``natural languages with greater expertise''\cite{floyd_decoding_2017}.
+This hypothesis, and the success that natural language processing and machine learning method have had on the code as a `unnatural' language,  forms a key inspiration for the approach and methods used in this paper, in particular the focus on naming:...
+
+
+\subsection{Natural Language and Code} % (fold)
+\label{ssub:the_naturalness_hypothesis}
+
+The earliest work modelling source code with natural language techniques comes from Hindle at al \cite{hindle_naturalness_nodate}, who used simple Kneser-Ney smoothed n-gram models of code tokens, to create language models for large-scale Java and C projects.
+With these models, Hindle was able to demonstrate that the cross-entropy of source code within projects was lower than that of large English corpora - indicating the presence of repetetive common patterns that could be leveraged for code completion, naming and summarization.
+This was consistent with findings by Gabel and Su \cite{gabel_study_2010} who examined the lines of approximately 6000 projects of code and found widespread repetition of sections of up to several lines, both within and across projects.
+By examining the cross-entropies of the n-gram models, Hindle demonstrated that these repetitions were more common within projects, and again within domains, suggesting ideosyncracies to projects and subject matters\cite{hindle_naturalness_nodate}.
+
+This model was improved by Nguyen et al\cite{nguyen_statistical_2013}, who surpassed code completion accuracy by integrating semantic information into the n-gram model.
+Instead of training on the raw string of the token, the \textit{lexeme}, this model condensed information such as data type, scope, role (such as literal, variable, function call) into a \textit{sememe}, and trained an n-gram topic model, modelling both local context \textit{sememes} ngrams, and global trends in the code.
+This highlighted the value of taking into account the semantic information in code, as well as the lexical, in future prediction tasks.
+% This approach, of finding the patterns in semantic meaning of code, led to an improvement in the accuracy of code completion task that surpassed that Hindle et als.
+
+Since then, a number of language models used to capture the patterns and behaviours of code have been developed, ranging from adding cache mechanisms to ngram models \cite{tu_localness_nodate}, up to fully fledged neural language models with sparse pointer networks \cite{bhoopchand_learning_2016}. 
+Although the primary challenge of language modelling is to model the language itself, these approaches have been a source of inspiration for related tasks to help humans understand code, such as predicting types, comments or variable names.
+
+Moshovitz et al used the an ngram and topic models to predict comments mixed within source code, in a task of commetn completions, leading to a 47\% saving in comment typing. 
+This code completion task uses 9 opensource Java libraries, and noes that, in concordance with Hindle, evaluations within projects are significant more successful (paraphrase) than those between projects.
+Raychev et al use 
+
+
+
+
+ % and this was more pronounced across domains, suggesting that these patterns can be ideosyncratic to projects or even within project domains.
+
+% This was used to demonstrate the validity of `naturalness' (in the sense of natural language) being applied to code, hypothesizing that although the Java language may potentially be rich and complex (like English), the utterances made in it are repetiive and common.
+
+
+ % Our experiments, covering 430 million lines of source code and consuming approximately four months of CPU time, revealed a general lack of uniqueness in software at levels of granularity equivalent to approximately one to seven lines of source code. This phenomenon appears to be pervasive, crossing both project and programming language boundaries.
+
+
+A related field of research t
+
+
+. It has a simple model that does blah, with x degree of success. Its advantages and disadvantages
+* Since then other other attempts to model code as natural language include generating statistical semantic language model for source code.
+* This has been promising indicating that treating code as nlp works.
+* in terms of generating natural language
+
+\subsection{Representations of Code}
+
+\subsection{Existing Datasets}
+
+
 % subsubsection the_naturalness_hypothesis (end)
 \begin{itemize}
+    \item THIS GOES IN THE INTRODUCTION
     \item How does code vary from natural language?
         \begin{itemize}
             \item formal, executable, brittle, unique sentences, neologisms, reuse, ambiguity, two channels vs one channel
@@ -45,7 +113,7 @@ Big Code papers:
 * convlutional attention network
 * graph to spot bugs
 
-Also significant work inolving natural laguage & code
+Also significant work inolving natural laguage \& code
 * semantic language model
 * phrase based statistical translation
 * predicting program code
@@ -57,6 +125,7 @@ Differnet approachs:
 
 Traditional Machine Translation approaches
 * Bahdnause
+* pointer networks
 * Seq to seq
 
 Existing datasets

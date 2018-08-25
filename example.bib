@@ -1,19 +1,489 @@
-@article{example-citation,
-    abstract = {{We describe a set of best practices for scientific software development, based on research and experience, that will improve scientists' productivity and the reliability of their software.}},
-    author = {Anne Author},
-    doi = {10.xxxx/example.example.0001},
-    journal = {Journal of Classic Examples},
-    keywords = {stuff},
-    month = jan,
-    number = {1},
-    pages = {e1001745+},
-    pmcid = {PMC3886731},
-    pmid = {24415924},
-    posted-at = {1970-01-01 00:00:01},
-    publisher = {Public Library of Science},
-    title = {{Example Journal Paper Title}},
-    url = {http://dx.doi.org/10.xxx/example.example.0001},
-    volume = {1},
-    year = {1970}
+
+@article{luong_effective_2015,
+    title = {Effective {Approaches} to {Attention}-based {Neural} {Machine} {Translation}},
+    url = {http://arxiv.org/abs/1508.04025},
+    abstract = {An attentional mechanism has lately been used to improve neural machine translation (NMT) by selectively focusing on parts of the source sentence during translation. However, there has been little work exploring useful architectures for attention-based NMT. This paper examines two simple and effective classes of attentional mechanism: a global approach which always attends to all source words and a local one that only looks at a subset of source words at a time. We demonstrate the effectiveness of both approaches over the WMT translation tasks between English and German in both directions. With local attention, we achieve a significant gain of 5.0 BLEU points over non-attentional systems which already incorporate known techniques such as dropout. Our ensemble model using different attention architectures has established a new state-of-the-art result in the WMT'15 English to German translation task with 25.9 BLEU points, an improvement of 1.0 BLEU points over the existing best system backed by NMT and an n-gram reranker.},
+    language = {en},
+    urldate = {2018-08-20},
+    journal = {arXiv:1508.04025 [cs]},
+    author = {Luong, Minh-Thang and Pham, Hieu and Manning, Christopher D.},
+    month = aug,
+    year = {2015},
+    note = {arXiv: 1508.04025},
+    keywords = {Computer Science - Computation and Language},
+    annote = {Comment: 11 pages, 7 figures, EMNLP 2015 camera-ready version, more training details},
+    file = {Luong et al. - 2015 - Effective Approaches to Attention-based Neural Mac.pdf:/Users/erichambro/Zotero/storage/D9GSCUM8/Luong et al. - 2015 - Effective Approaches to Attention-based Neural Mac.pdf:application/pdf}
 }
 
+@article{bahdanau_neural_2014,
+    title = {Neural {Machine} {Translation} by {Jointly} {Learning} to {Align} and {Translate}},
+    url = {http://arxiv.org/abs/1409.0473},
+    abstract = {Neural machine translation is a recently proposed approach to machine translation. Unlike the traditional statistical machine translation, the neural machine translation aims at building a single neural network that can be jointly tuned to maximize the translation performance. The models proposed recently for neural machine translation often belong to a family of encoder–decoders and encode a source sentence into a ﬁxed-length vector from which a decoder generates a translation. In this paper, we conjecture that the use of a ﬁxed-length vector is a bottleneck in improving the performance of this basic encoder–decoder architecture, and propose to extend this by allowing a model to automatically (soft-)search for parts of a source sentence that are relevant to predicting a target word, without having to form these parts as a hard segment explicitly. With this new approach, we achieve a translation performance comparable to the existing state-of-the-art phrase-based system on the task of English-to-French translation. Furthermore, qualitative analysis reveals that the (soft-)alignments found by the model agree well with our intuition.},
+    language = {en},
+    urldate = {2018-08-20},
+    journal = {arXiv:1409.0473 [cs, stat]},
+    author = {Bahdanau, Dzmitry and Cho, Kyunghyun and Bengio, Yoshua},
+    month = sep,
+    year = {2014},
+    note = {arXiv: 1409.0473},
+    keywords = {Computer Science - Computation and Language, Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing, Statistics - Machine Learning},
+    annote = {Comment: Accepted at ICLR 2015 as oral presentation},
+    file = {Bahdanau et al. - 2014 - Neural Machine Translation by Jointly Learning to .pdf:/Users/erichambro/Zotero/storage/4RSKGU6J/Bahdanau et al. - 2014 - Neural Machine Translation by Jointly Learning to .pdf:application/pdf}
+}
+
+@article{kalchbrenner_recurrent_nodate,
+    title = {Recurrent {Continuous} {Translation} {Models}},
+    abstract = {We introduce a class of probabilistic continuous translation models called Recurrent Continuous Translation Models that are purely based on continuous representations for words, phrases and sentences and do not rely on alignments or phrasal translation units. The models have a generation and a conditioning aspect. The generation of the translation is modelled with a target Recurrent Language Model, whereas the conditioning on the source sentence is modelled with a Convolutional Sentence Model. Through various experiments, we show ﬁrst that our models obtain a perplexity with respect to gold translations that is {\textgreater} 43\% lower than that of stateof-the-art alignment-based translation models. Secondly, we show that they are remarkably sensitive to the word order, syntax, and meaning of the source sentence despite lacking alignments. Finally we show that they match a state-of-the-art system when rescoring n-best lists of translations.},
+    language = {en},
+    author = {Kalchbrenner, Nal and Blunsom, Phil},
+    pages = {10},
+    file = {Kalchbrenner and Blunsom - Recurrent Continuous Translation Models.pdf:/Users/erichambro/Zotero/storage/GX3KHIIC/Kalchbrenner and Blunsom - Recurrent Continuous Translation Models.pdf:application/pdf}
+}
+
+@article{ghader_what_nodate,
+    title = {What does {Attention} in {Neural} {Machine} {Translation} {Pay} {Attention} to?},
+    abstract = {Attention in neural machine translation provides the possibility to encode relevant parts of the source sentence at each translation step. As a result, attention is considered to be an alignment model as well. However, there is no work that speciﬁcally studies attention and provides analysis of what is being learned by attention models. Thus, the question still remains that how attention is similar or different from the traditional alignment. In this paper, we provide detailed analysis of attention and compare it to traditional alignment. We answer the question of whether attention is only capable of modelling translational equivalent or it captures more information. We show that attention is different from alignment in some cases and is capturing useful information other than alignments.},
+    language = {en},
+    author = {Ghader, Hamidreza and Monz, Christof},
+    pages = {10},
+    file = {Ghader and Monz - What does Attention in Neural Machine Translation .pdf:/Users/erichambro/Zotero/storage/KDL8ZRTH/Ghader and Monz - What does Attention in Neural Machine Translation .pdf:application/pdf}
+}
+
+@article{chaganty_price_2018,
+    title = {The price of debiasing automatic metrics in natural language evaluation},
+    url = {http://arxiv.org/abs/1807.02202},
+    abstract = {For evaluating generation systems, automatic metrics such as BLEU cost nothing to run but have been shown to correlate poorly with human judgment, leading to systematic bias against certain model improvements. On the other hand, averaging human judgments, the unbiased gold standard, is often too expensive. In this paper, we use control variates to combine automatic metrics with human evaluation to obtain an unbiased estimator with lower cost than human evaluation alone. In practice, however, we obtain only a 7–13\% cost reduction on evaluating summarization and open-response question answering systems. We then prove that our estimator is optimal: there is no unbiased estimator with lower cost. Our theory further highlights the two fundamental bottlenecks—the automatic metric and the prompt shown to human evaluators—both of which need to be improved to obtain greater cost savings.},
+    language = {en},
+    urldate = {2018-08-22},
+    journal = {arXiv:1807.02202 [cs]},
+    author = {Chaganty, Arun Tejasvi and Mussman, Stephen and Liang, Percy},
+    month = jul,
+    year = {2018},
+    note = {arXiv: 1807.02202},
+    keywords = {Computer Science - Computation and Language},
+    annote = {Comment: To appear ACL 2018},
+    file = {Chaganty et al. - 2018 - The price of debiasing automatic metrics in natura.pdf:/Users/erichambro/Zotero/storage/VAEX8FQV/Chaganty et al. - 2018 - The price of debiasing automatic metrics in natura.pdf:application/pdf}
+}
+
+@article{movshovitz-attias_natural_nodate,
+    title = {Natural {Language} {Models} for {Predicting} {Programming} {Comments}},
+    abstract = {Statistical language models have successfully been used to describe and analyze natural language documents. Recent work applying language models to programming languages is focused on the task of predicting code, while mainly ignoring the prediction of programmer comments. In this work, we predict comments from JAVA source ﬁles of open source projects, using topic models and n-grams, and we analyze the performance of the models given varying amounts of background data on the project being predicted. We evaluate models on their comment-completion capability in a setting similar to codecompletion tools built into standard code editors, and show that using a comment completion tool can save up to 47\% of the comment typing.},
+    language = {en},
+    author = {Movshovitz-Attias, Dana and Cohen, William W},
+    pages = {6},
+    file = {Movshovitz-Attias and Cohen - Natural Language Models for Predicting Programming.pdf:/Users/erichambro/Zotero/storage/NMS92QHI/Movshovitz-Attias and Cohen - Natural Language Models for Predicting Programming.pdf:application/pdf}
+}
+
+@inproceedings{nguyen_statistical_2013,
+    address = {Saint Petersburg, Russia},
+    title = {A statistical semantic language model for source code},
+    isbn = {978-1-4503-2237-9},
+    url = {http://dl.acm.org/citation.cfm?doid=2491411.2491458},
+    doi = {10.1145/2491411.2491458},
+    abstract = {Recent research has successfully applied the statistical ngram language model to show that source code exhibits a good level of repetition. The n-gram model is shown to have good predictability in supporting code suggestion and completion. However, the state-of-the-art n-gram approach to capture source code regularities/patterns is based only on the lexical information in a local context of the code units. To improve predictability, we introduce SLAMC, a novel statistical semantic language model for source code. It incorporates semantic information into code tokens and models the regularities/patterns of such semantic annotations, called sememes, rather than their lexemes. It combines the local context in semantic n-grams with the global technical concerns/ functionality into an n-gram topic model, together with pairwise associations of program elements. Based on SLAMC, we developed a new code suggestion method, which is empirically evaluated on several projects to have relatively 18–68\% higher accuracy than the state-of-the-art approach.},
+    language = {en},
+    urldate = {2018-08-24},
+    booktitle = {Proceedings of the 2013 9th {Joint} {Meeting} on {Foundations} of {Software} {Engineering} - {ESEC}/{FSE} 2013},
+    publisher = {ACM Press},
+    author = {Nguyen, Tung Thanh and Nguyen, Anh Tuan and Nguyen, Hoan Anh and Nguyen, Tien N.},
+    year = {2013},
+    pages = {532},
+    file = {Nguyen et al. - 2013 - A statistical semantic language model for source c.pdf:/Users/erichambro/Zotero/storage/4SDSUGCE/Nguyen et al. - 2013 - A statistical semantic language model for source c.pdf:application/pdf}
+}
+
+@inproceedings{karaivanov_phrase-based_2014,
+    address = {Portland, Oregon, USA},
+    title = {Phrase-{Based} {Statistical} {Translation} of {Programming} {Languages}},
+    isbn = {978-1-4503-3210-1},
+    url = {http://dl.acm.org/citation.cfm?doid=2661136.2661148},
+    doi = {10.1145/2661136.2661148},
+    abstract = {Phrase-based statistical machine translation approaches have been highly successful in translating between natural languages and are heavily used by commercial systems (e.g. Google Translate).},
+    language = {en},
+    urldate = {2018-08-24},
+    booktitle = {Proceedings of the 2014 {ACM} {International} {Symposium} on {New} {Ideas}, {New} {Paradigms}, and {Reflections} on {Programming} \& {Software} - {Onward}! '14},
+    publisher = {ACM Press},
+    author = {Karaivanov, Svetoslav and Raychev, Veselin and Vechev, Martin},
+    year = {2014},
+    pages = {173--184},
+    file = {Karaivanov et al. - 2014 - Phrase-Based Statistical Translation of Programmin.pdf:/Users/erichambro/Zotero/storage/479BZVYI/Karaivanov et al. - 2014 - Phrase-Based Statistical Translation of Programmin.pdf:application/pdf}
+}
+
+@inproceedings{iyer_summarizing_2016,
+    address = {Berlin, Germany},
+    title = {Summarizing {Source} {Code} using a {Neural} {Attention} {Model}},
+    url = {http://aclweb.org/anthology/P16-1195},
+    doi = {10.18653/v1/P16-1195},
+    abstract = {High quality source code is often paired with high level summaries of the computation it performs, for example in code documentation or in descriptions posted in online forums. Such summaries are extremely useful for applications such as code search but are expensive to manually author, hence only done for a small fraction of all code that is produced. In this paper, we present the ﬁrst completely datadriven approach for generating high level summaries of source code. Our model, CODE-NN , uses Long Short Term Memory (LSTM) networks with attention to produce sentences that describe C\# code snippets and SQL queries. CODE-NN is trained on a new corpus that is automatically collected from StackOverﬂow, which we release. Experiments demonstrate strong performance on two tasks: (1) code summarization, where we establish the ﬁrst end-to-end learning results and outperform strong baselines, and (2) code retrieval, where our learned model improves the state of the art on a recently introduced C\# benchmark by a large margin.},
+    language = {en},
+    urldate = {2018-08-24},
+    booktitle = {Proceedings of the 54th {Annual} {Meeting} of the {Association} for {Computational} {Linguistics} ({Volume} 1: {Long} {Papers})},
+    publisher = {Association for Computational Linguistics},
+    author = {Iyer, Srinivasan and Konstas, Ioannis and Cheung, Alvin and Zettlemoyer, Luke},
+    year = {2016},
+    pages = {2073--2083},
+    file = {Iyer et al. - 2016 - Summarizing Source Code using a Neural Attention M.pdf:/Users/erichambro/Zotero/storage/C49SKRPS/Iyer et al. - 2016 - Summarizing Source Code using a Neural Attention M.pdf:application/pdf}
+}
+
+@article{allamanis_convolutional_2016,
+    title = {A {Convolutional} {Attention} {Network} for {Extreme} {Summarization} of {Source} {Code}},
+    url = {http://arxiv.org/abs/1602.03001},
+    abstract = {Attention mechanisms in neural networks have proved useful for problems in which the input and output do not have ﬁxed dimension. Often there exist features that are locally translation invariant and would be valuable for directing the model’s attention, but previous attentional architectures are not constructed to learn such features speciﬁcally. We introduce an attentional neural network that employs convolution on the input tokens to detect local time-invariant and long-range topical attention features in a context-dependent way. We apply this architecture to the problem of extreme summarization of source code snippets into short, descriptive function name-like summaries. Using those features, the model sequentially generates a summary by marginalizing over two attention mechanisms: one that predicts the next summary token based on the attention weights of the input tokens and another that is able to copy a code token as-is directly into the summary. We demonstrate our convolutional attention neural network’s performance on 10 popular Java projects showing that it achieves better performance compared to previous attentional mechanisms.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1602.03001 [cs]},
+    author = {Allamanis, Miltiadis and Peng, Hao and Sutton, Charles},
+    month = feb,
+    year = {2016},
+    note = {arXiv: 1602.03001},
+    keywords = {Computer Science - Computation and Language, Computer Science - Machine Learning, Computer Science - Software Engineering},
+    annote = {Comment: Code, data and visualization at http://groups.inf.ed.ac.uk/cup/codeattention/},
+    file = {Allamanis et al. - 2016 - A Convolutional Attention Network for Extreme Summ.pdf:/Users/erichambro/Zotero/storage/7GIUG67L/Allamanis et al. - 2016 - A Convolutional Attention Network for Extreme Summ.pdf:application/pdf}
+}
+
+@inproceedings{raychev_predicting_2015,
+    address = {Mumbai, India},
+    title = {Predicting {Program} {Properties} from "{Big} {Code}"},
+    isbn = {978-1-4503-3300-9},
+    url = {http://dl.acm.org/citation.cfm?doid=2676726.2677009},
+    doi = {10.1145/2676726.2677009},
+    abstract = {We present a new approach for predicting program properties from massive codebases (aka “Big Code”). Our approach ﬁrst learns a probabilistic model from existing data and then uses this model to predict properties of new, unseen programs.},
+    language = {en},
+    urldate = {2018-08-24},
+    booktitle = {Proceedings of the 42nd {Annual} {ACM} {SIGPLAN}-{SIGACT} {Symposium} on {Principles} of {Programming} {Languages} - {POPL} '15},
+    publisher = {ACM Press},
+    author = {Raychev, Veselin and Vechev, Martin and Krause, Andreas},
+    year = {2015},
+    pages = {111--124},
+    file = {Raychev et al. - 2015 - Predicting Program Properties from Big Code.pdf:/Users/erichambro/Zotero/storage/Q3NAJQRM/Raychev et al. - 2015 - Predicting Program Properties from Big Code.pdf:application/pdf}
+}
+
+@article{allamanis_learning_2017,
+    title = {Learning to {Represent} {Programs} with {Graphs}},
+    url = {http://arxiv.org/abs/1711.00740},
+    abstract = {Learning tasks on source code (i.e., formal languages) have been considered recently, but most work has tried to transfer natural language methods and does not capitalize on the unique opportunities offered by code’s known sematics. For example, long-range dependencies induced by using the same variable or function in distant locations are often not considered. We propose to use graphs to represent both the syntactic and semantic structure of code and use graph-based deep learning methods to learn to reason over program structures.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1711.00740 [cs]},
+    author = {Allamanis, Miltiadis and Brockschmidt, Marc and Khademi, Mahmoud},
+    month = nov,
+    year = {2017},
+    note = {arXiv: 1711.00740},
+    keywords = {Computer Science - Machine Learning, Computer Science - Software Engineering, Computer Science - Artificial Intelligence, Computer Science - Programming Languages},
+    annote = {Comment: Published in ICLR 2018. arXiv admin note: text overlap with arXiv:1705.07867},
+    file = {Allamanis et al. - 2017 - Learning to Represent Programs with Graphs.pdf:/Users/erichambro/Zotero/storage/SDJUV5PZ/Allamanis et al. - 2017 - Learning to Represent Programs with Graphs.pdf:application/pdf}
+}
+
+@article{bhoopchand_learning_2016,
+    title = {Learning {Python} {Code} {Suggestion} with a {Sparse} {Pointer} {Network}},
+    url = {http://arxiv.org/abs/1611.08307},
+    abstract = {To enhance developer productivity, all modern integrated development environments (IDEs) include code suggestion functionality that proposes likely next tokens at the cursor. While current IDEs work well for statically-typed languages, their reliance on type annotations means that they do not provide the same level of support for dynamic programming languages as for statically-typed languages. Moreover, suggestion engines in modern IDEs do not propose expressions or multi-statement idiomatic code. Recent work has shown that language models can improve code suggestion systems by learning from software repositories. This paper introduces a neural language model with a sparse pointer network aimed at capturing very longrange dependencies. We release a large-scale code suggestion corpus of 41M lines of Python code crawled from GitHub. On this corpus, we found standard neural language models to perform well at suggesting local phenomena, but struggle to refer to identiﬁers that are introduced many tokens in the past. By augmenting a neural language model with a pointer network specialized in referring to predeﬁned classes of identiﬁers, we obtain a much lower perplexity and a 5 percentage points increase in accuracy for code suggestion compared to an LSTM baseline. In fact, this increase in code suggestion accuracy is due to a 13 times more accurate prediction of identiﬁers. Furthermore, a qualitative analysis shows this model indeed captures interesting long-range dependencies, like referring to a class member deﬁned over 60 tokens in the past.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1611.08307 [cs]},
+    author = {Bhoopchand, Avishkar and Rocktäschel, Tim and Barr, Earl and Riedel, Sebastian},
+    month = nov,
+    year = {2016},
+    note = {arXiv: 1611.08307},
+    keywords = {Computer Science - Computation and Language, Computer Science - Neural and Evolutionary Computing, Computer Science - Software Engineering, Computer Science - Artificial Intelligence},
+    annote = {Comment: Under review as a conference paper at ICLR 2017},
+    file = {Bhoopchand et al. - 2016 - Learning Python Code Suggestion with a Sparse Poin.pdf:/Users/erichambro/Zotero/storage/BS9NQECI/Bhoopchand et al. - 2016 - Learning Python Code Suggestion with a Sparse Poin.pdf:application/pdf}
+}
+
+@article{allamanis_mining_nodate,
+    title = {Mining {Semantic} {Loop} {Idioms} from {Big} {Code}},
+    abstract = {During maintenance, developers spend a lot of time transforming existing code: refactoring, optimizing, and adding checks to make it more robust. Much of this work is the drudgery of identifying and replacing speciﬁc patterns, yet it resists automation, because of meaningful patterns are hard to automatically ﬁnd. We present a technique for mining loop idioms, surprisingly probable semantic patterns that occur in loops, from big code to ﬁnd meaningful patterns. First, we show that automatically identiﬁable patterns exist, in great numbers, with a large scale empirical study of loop over 25 MLOC. We ﬁnd that loops in this corpus are simple and predictable: 90\% of them have fewer than 15LOC and 90\% have no nesting and very simple control structure. Encouraged by this result, we coil loops to abstract away syntactic diversity to deﬁne information rich loop idioms. We show that only 50 loop idioms cover 50\% of the concrete loops. We show how loop idioms can help a tool developers identify and prioritize refactorings. We also show how our framework opens the door to data-driven tool and language design discovering opportunities to introduce new API calls and language constructs: loop idioms show that LINQ would beneﬁt from an Enumerate operator, a result conﬁrmed by the fact that precisely this feature is one of the most requested features on StackOverﬂow with 197 votes and 95k views.},
+    language = {en},
+    author = {Allamanis, Miltiadis and Devanbu, Premkumar and Barr, Earl T and Marron, Mark},
+    pages = {20},
+    file = {Allamanis et al. - Mining Semantic Loop Idioms from Big Code.pdf:/Users/erichambro/Zotero/storage/9DT5T9XR/Allamanis et al. - Mining Semantic Loop Idioms from Big Code.pdf:application/pdf}
+}
+
+@article{alon_code2vec:_2018,
+    title = {code2vec: {Learning} {Distributed} {Representations} of {Code}},
+    shorttitle = {code2vec},
+    url = {http://arxiv.org/abs/1803.09473},
+    abstract = {We present a neural model for representing snippets of code as continuous distributed vectors (“code embeddings”). The main idea is to represent code as a collection of paths in its abstract syntax tree, and aggregate these paths, in a smart and scalable way, into a single fixed-length code vector, which can be used to predict semantic properties of the snippet. We demonstrate the effectiveness of our approach by using it to predict a method’s name from the vector representation of its body. We evaluate our approach by training a model on a dataset of 14M methods. We show that code vectors trained on this dataset can predict method names from files that were completely unobserved during training. Furthermore, we show that our model learns useful method name vectors that capture semantic similarities, combinations, and analogies. Comparing previous techniques over the same data set, our approach obtains a relative improvement of over 75\%, being the first to successfully predict method names based on a large, cross-project, corpus.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1803.09473 [cs, stat]},
+    author = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
+    month = mar,
+    year = {2018},
+    note = {arXiv: 1803.09473},
+    keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Artificial Intelligence, Computer Science - Programming Languages},
+    file = {Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf:/Users/erichambro/Zotero/storage/TZWRQSP6/Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf:application/pdf}
+}
+
+@article{alon_code2seq:_2018,
+    title = {code2seq: {Generating} {Sequences} from {Structured} {Representations} of {Code}},
+    shorttitle = {code2seq},
+    url = {http://arxiv.org/abs/1808.01400},
+    abstract = {The ability to generate natural language sequences from source code snippets can be used for code summarization, documentation, and retrieval. Sequence-to-sequence (seq2seq) models, adopted from neural machine translation (NMT), have achieved state-of-the-art performance on these tasks by treating source code as a sequence of tokens. We present CODE2SEQ: an alternative approach that leverages the syntactic structure of programming languages to better encode source code. Our model represents a code snippet as the set of paths in its abstract syntax tree (AST) and uses attention to select the relevant paths during decoding, much like contemporary NMT models. We demonstrate the effectiveness of our approach for two tasks, two programming languages, and four datasets of up to 16M examples. Our model signiﬁcantly outperforms previous models that were speciﬁcally designed for programming languages, as well as general state-of-the-art NMT models.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1808.01400 [cs, stat]},
+    author = {Alon, Uri and Levy, Omer and Yahav, Eran},
+    month = aug,
+    year = {2018},
+    note = {arXiv: 1808.01400},
+    keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Programming Languages},
+    file = {Alon et al. - 2018 - code2seq Generating Sequences from Structured Rep.pdf:/Users/erichambro/Zotero/storage/UMSJDARJ/Alon et al. - 2018 - code2seq Generating Sequences from Structured Rep.pdf:application/pdf}
+}
+
+@inproceedings{shi_why_2016,
+    address = {Austin, Texas},
+    title = {Why {Neural} {Translations} are the {Right} {Length}},
+    url = {http://aclweb.org/anthology/D16-1248},
+    doi = {10.18653/v1/D16-1248},
+    abstract = {We investigate how neural, encoder-decoder translation systems output target strings of appropriate lengths, ﬁnding that a collection of hidden units learns to explicitly implement this functionality.},
+    language = {en},
+    urldate = {2018-08-24},
+    booktitle = {Proceedings of the 2016 {Conference} on {Empirical} {Methods} in {Natural}           {Language} {Processing}},
+    publisher = {Association for Computational Linguistics},
+    author = {Shi, Xing and Knight, Kevin and Yuret, Deniz},
+    year = {2016},
+    pages = {2278--2282},
+    file = {Shi et al. - 2016 - Why Neural Translations are the Right Length.pdf:/Users/erichambro/Zotero/storage/FM7HE4DZ/Shi et al. - 2016 - Why Neural Translations are the Right Length.pdf:application/pdf}
+}
+
+@article{noraset_definition_2016,
+    title = {Definition {Modeling}: {Learning} to define word embeddings in natural language},
+    shorttitle = {Definition {Modeling}},
+    url = {http://arxiv.org/abs/1612.00394},
+    abstract = {Distributed representations of words have been shown to capture lexical semantics, as demonstrated by their effectiveness in word similarity and analogical relation tasks. But, these tasks only evaluate lexical semantics indirectly. In this paper, we study whether it is possible to utilize distributed representations to generate dictionary deﬁnitions of words, as a more direct and transparent representation of the embeddings’ semantics. We introduce deﬁnition modeling, the task of generating a deﬁnition for a given word and its embedding. We present several deﬁnition model architectures based on recurrent neural networks, and experiment with the models over multiple data sets. Our results show that a model that controls dependencies between the word being deﬁned and the deﬁnition words performs signiﬁcantly better, and that a characterlevel convolution layer designed to leverage morphology can complement word-level embeddings. Finally, an error analysis suggests that the errors made by a deﬁnition model may provide insight into the shortcomings of word embeddings.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1612.00394 [cs]},
+    author = {Noraset, Thanapon and Liang, Chen and Birnbaum, Larry and Downey, Doug},
+    month = dec,
+    year = {2016},
+    note = {arXiv: 1612.00394},
+    keywords = {Computer Science - Computation and Language},
+    annote = {Comment: To appear in AAAI Conference 2017},
+    file = {Noraset et al. - 2016 - Definition Modeling Learning to define word embed.pdf:/Users/erichambro/Zotero/storage/PUYZ3SVR/Noraset et al. - 2016 - Definition Modeling Learning to define word embed.pdf:application/pdf}
+}
+
+@article{alon_code2vec:_2018-1,
+    title = {code2vec: {Learning} {Distributed} {Representations} of {Code}},
+    shorttitle = {code2vec},
+    url = {http://arxiv.org/abs/1803.09473},
+    abstract = {We present a neural model for representing snippets of code as continuous distributed vectors. The main idea is to represent code as a collection of paths in its abstract syntax tree, and aggregate these paths, in a smart and scalable way, into a single fixed-length \${\textbackslash}textit\{code vector\}\$, which can be used to predict semantic properties of the snippet. We demonstrate the effectiveness of our approach by using it to predict a method's name from the vector representation of its body. We evaluate our approach by training a model on a dataset of \$14\$M methods. We show that code vectors trained on this dataset can predict method names from files that were completely unobserved during training. Furthermore, we show that our model learns useful method name vectors that capture semantic similarities, combinations, and analogies. Comparing previous techniques over the same data set, our approach obtains a relative improvement of over \$75{\textbackslash}\%\$, being the first to successfully predict method names based on a large, cross-project, corpus.},
+    urldate = {2018-08-24},
+    journal = {arXiv:1803.09473 [cs, stat]},
+    author = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
+    month = mar,
+    year = {2018},
+    note = {arXiv: 1803.09473},
+    keywords = {Computer Science - Artificial Intelligence, Computer Science - Machine Learning, Computer Science - Programming Languages, Statistics - Machine Learning},
+    file = {arXiv\:1803.09473 PDF:/Users/erichambro/Zotero/storage/2I3B96SA/Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf:application/pdf;arXiv.org Snapshot:/Users/erichambro/Zotero/storage/V3FAY7TY/1803.html:text/html}
+}
+
+@article{alon_code2vec:_2018-2,
+    title = {code2vec: {Learning} {Distributed} {Representations} of {Code}},
+    shorttitle = {code2vec},
+    url = {http://arxiv.org/abs/1803.09473},
+    abstract = {We present a neural model for representing snippets of code as continuous distributed vectors (“code embeddings”). The main idea is to represent code as a collection of paths in its abstract syntax tree, and aggregate these paths, in a smart and scalable way, into a single fixed-length code vector, which can be used to predict semantic properties of the snippet. We demonstrate the effectiveness of our approach by using it to predict a method’s name from the vector representation of its body. We evaluate our approach by training a model on a dataset of 14M methods. We show that code vectors trained on this dataset can predict method names from files that were completely unobserved during training. Furthermore, we show that our model learns useful method name vectors that capture semantic similarities, combinations, and analogies. Comparing previous techniques over the same data set, our approach obtains a relative improvement of over 75\%, being the first to successfully predict method names based on a large, cross-project, corpus.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1803.09473 [cs, stat]},
+    author = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
+    month = mar,
+    year = {2018},
+    note = {arXiv: 1803.09473},
+    keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Artificial Intelligence, Computer Science - Programming Languages},
+    file = {Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf:/Users/erichambro/Zotero/storage/5QZMXH8H/Alon et al. - 2018 - code2vec Learning Distributed Representations of .pdf:application/pdf}
+}
+
+@article{alon_code2seq:_2018-1,
+    title = {code2seq: {Generating} {Sequences} from {Structured} {Representations} of {Code}},
+    shorttitle = {code2seq},
+    url = {http://arxiv.org/abs/1808.01400},
+    abstract = {The ability to generate natural language sequences from source code snippets can be used for code summarization, documentation, and retrieval. Sequence-to-sequence (seq2seq) models, adopted from neural machine translation (NMT), have achieved state-of-the-art performance on these tasks by treating source code as a sequence of tokens. We present CODE2SEQ: an alternative approach that leverages the syntactic structure of programming languages to better encode source code. Our model represents a code snippet as the set of paths in its abstract syntax tree (AST) and uses attention to select the relevant paths during decoding, much like contemporary NMT models. We demonstrate the effectiveness of our approach for two tasks, two programming languages, and four datasets of up to 16M examples. Our model signiﬁcantly outperforms previous models that were speciﬁcally designed for programming languages, as well as general state-of-the-art NMT models.},
+    language = {en},
+    urldate = {2018-08-24},
+    journal = {arXiv:1808.01400 [cs, stat]},
+    author = {Alon, Uri and Levy, Omer and Yahav, Eran},
+    month = aug,
+    year = {2018},
+    note = {arXiv: 1808.01400},
+    keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Programming Languages},
+    file = {Alon et al. - 2018 - code2seq Generating Sequences from Structured Rep.pdf:/Users/erichambro/Zotero/storage/SQTHPGG7/Alon et al. - 2018 - code2seq Generating Sequences from Structured Rep.pdf:application/pdf}
+}
+
+@article{oda_learning_nodate,
+    title = {Learning to {Generate} {Pseudo}-code from {Source} {Code} using {Statistical} {Machine} {Translation}},
+    abstract = {Pseudo-code written in natural language can aid the comprehension of source code in unfamiliar programming languages. However, the great majority of source code has no corresponding pseudo-code, because pseudo-code is redundant and laborious to create. If pseudo-code could be generated automatically and instantly from given source code, we could allow for on-demand production of pseudo-code without human effort. In this paper, we propose a method to automatically generate pseudo-code from source code, speciﬁcally adopting the statistical machine translation (SMT) framework. SMT, which was originally designed to translate between two natural languages, allows us to automatically learn the relationship between source code/pseudo-code pairs, making it possible to create a pseudo-code generator with less human effort. In experiments, we generated English or Japanese pseudo-code from Python statements using SMT, and ﬁnd that the generated pseudo-code is largely accurate, and aids code understanding.},
+    language = {en},
+    author = {Oda, Yusuke and Fudaba, Hiroyuki and Neubig, Graham and Hata, Hideaki and Sakti, Sakriani and Toda, Tomoki and Nakamura, Satoshi},
+    pages = {11},
+    file = {Oda et al. - Learning to Generate Pseudo-code from Source Code .pdf:/Users/erichambro/Zotero/storage/BVJHLFET/Oda et al. - Learning to Generate Pseudo-code from Source Code .pdf:application/pdf}
+}
+
+@article{barzilay_using_nodate,
+    title = {Using {Semantic} {Uniﬁcation} to {Generate} {Regular} {Expressions} from {Natural} {Language}},
+    language = {en},
+    author = {Barzilay, Nate Kushman Regina},
+    pages = {11},
+    file = {Barzilay - Using Semantic Uniﬁcation to Generate Regular Expr.pdf:/Users/erichambro/Zotero/storage/LFXAUCGB/Barzilay - Using Semantic Uniﬁcation to Generate Regular Expr.pdf:application/pdf}
+}
+
+@article{bessey_few_2010,
+    title = {A few billion lines of code later: using static analysis to find bugs in the real world},
+    volume = {53},
+    issn = {00010782},
+    shorttitle = {A few billion lines of code later},
+    url = {http://portal.acm.org/citation.cfm?doid=1646353.1646374},
+    doi = {10.1145/1646353.1646374},
+    language = {en},
+    number = {2},
+    urldate = {2018-08-25},
+    journal = {Communications of the ACM},
+    author = {Bessey, Al and Engler, Dawson and Block, Ken and Chelf, Ben and Chou, Andy and Fulton, Bryan and Hallem, Seth and Henri-Gros, Charles and Kamsky, Asya and McPeak, Scott},
+    month = feb,
+    year = {2010},
+    pages = {66--75},
+    file = {Bessey et al. - 2010 - A few billion lines of code later using static an.pdf:/Users/erichambro/Zotero/storage/9YK4X6SC/Bessey et al. - 2010 - A few billion lines of code later using static an.pdf:application/pdf}
+}
+
+@incollection{okada_combination_2007,
+    address = {Berlin, Heidelberg},
+    title = {Combination of {Abstractions} in the {ASTRÉE} {Static} {Analyzer}},
+    volume = {4435},
+    isbn = {978-3-540-77504-1 978-3-540-77505-8},
+    url = {http://link.springer.com/10.1007/978-3-540-77505-8_23},
+    abstract = {We describe the structure of the abstract domains in the Astre´e static analyzer, their modular organization into a hierarchical network, their cooperation to over-approximate the conjunction/reduced product of diﬀerent abstractions and to ensure termination using collaborative widenings and narrowings. This separation of the abstraction into a combination of cooperative abstract domains makes Astre´e extensible, an essential feature to cope with false alarms and ultimately provide sound formal veriﬁcation of the absence of runtime errors in very large software.},
+    language = {en},
+    urldate = {2018-08-25},
+    booktitle = {Advances in {Computer} {Science} - {ASIAN} 2006. {Secure} {Software} and {Related} {Issues}},
+    publisher = {Springer Berlin Heidelberg},
+    author = {Cousot, Patrick and Cousot, Radhia and Feret, Jérôme and Mauborgne, Laurent and Miné, Antoine and Monniaux, David and Rival, Xavier},
+    editor = {Okada, Mitsu and Satoh, Ichiro},
+    year = {2007},
+    doi = {10.1007/978-3-540-77505-8_23},
+    pages = {272--300},
+    file = {Cousot et al. - 2007 - Combination of Abstractions in the ASTRÉE Static A.pdf:/Users/erichambro/Zotero/storage/N629XJM4/Cousot et al. - 2007 - Combination of Abstractions in the ASTRÉE Static A.pdf:application/pdf}
+}
+
+@misc{knuth_donald_e._knuthweb.pdf_nodate,
+    title = {knuthweb.pdf},
+    url = {http://dx.doi.org/10.1093/comjnl/27.2.97},
+    urldate = {2018-08-25},
+    author = {Knuth, Donald E.},
+    file = {knuthweb.pdf:/Users/erichambro/Zotero/storage/GU3M6LBI/knuthweb.pdf:application/pdf}
+}
+
+@article{knuth_literate_1984,
+    title = {Literate {Programming}},
+    volume = {27},
+    issn = {0010-4620},
+    url = {http://dx.doi.org/10.1093/comjnl/27.2.97},
+    doi = {10.1093/comjnl/27.2.97},
+    abstract = {The author and his associates have been experimenting for the past several years with a programming language and documentation system called WEB. This paper presents WEB by example, and discusses why the new system appears to be an improvement over previous ones.},
+    number = {2},
+    journal = {The Computer Journal},
+    author = {Knuth, D. E.},
+    month = jan,
+    year = {1984},
+    pages = {97--111},
+    annote = {10.1093/comjnl/27.2.97}
+}
+
+@inproceedings{floyd_decoding_2017,
+    title = {Decoding the {Representation} of {Code} in the {Brain}: {An} {fMRI} {Study} of {Code} {Review} and {Expertise}},
+    shorttitle = {Decoding the {Representation} of {Code} in the {Brain}},
+    doi = {10.1109/ICSE.2017.24},
+    abstract = {Subjective judgments in software engineering tasks are of critical importance but can be difficult to study with conventional means. Medical imaging techniques hold the promise of relating cognition to physical activities and brain structures. In a controlled experiment involving 29 participants, we examine code comprehension, code review and prose review using functional magnetic resonance imaging. We find that the neural representations of programming languages vs. natural languages are distinct. We can classify which task a participant is undertaking based solely on brain activity (balanced accuracy 79\%, p {\textless}; 0.001). Further, we find that the same set of brain regions distinguish between code and prose (near-perfect correlation, r = 0.99, p {\textless}; 0.001). Finally, we find that task distinctions are modulated by expertise, such that greater skill predicts a less differentiated neural representation (r = -0.44, p = 0.016) indicating that more skilled participants treat code and prose more similarly at a neural activation level.},
+    booktitle = {2017 {IEEE}/{ACM} 39th {International} {Conference} on {Software} {Engineering} ({ICSE})},
+    author = {Floyd, B. and Santander, T. and Weimer, W.},
+    month = may,
+    year = {2017},
+    keywords = {Biomedical imaging, biomedical MRI, Brain, code comprehension, code review, Computer science, fMRI study, functional magnetic resonance imaging, medical image processing, medical imaging, medical imaging techniques, natural languages, Natural languages, neural representations, programming languages, prose review, Software, software engineering, Software engineering, software engineering tasks, Tools},
+    pages = {175--186},
+    file = {IEEE Xplore Abstract Record:/Users/erichambro/Zotero/storage/3ZUDX2UK/7985660.html:text/html;IEEE Xplore Full Text PDF:/Users/erichambro/Zotero/storage/RGY4LN3T/Floyd et al. - 2017 - Decoding the Representation of Code in the Brain .pdf:application/pdf}
+}
+
+@article{hindle_naturalness_nodate,
+    title = {On the naturalness of software},
+    abstract = {Natural languages like English are rich, complex, and powerful. The highly creative and graceful use of languages like English and Tamil, by masters like Shakespeare and Avvaiyar, can certainly delight and inspire. But in practice, given cognitive constraints and the exigencies of daily life, most human utterances are far simpler and much more repetitive and predictable. In fact, these utterances can be very usefully modeled using modern statistical methods. This fact has led to the phenomenal success of statistical approaches to speech recognition, natural language translation, question-answering, and text mining and comprehension. We begin with the conjecture that most software is also natural, in the sense that it is created by humans at work, with all the attendant constraints and limitations—and thus, like natural language, it is also likely to be repetitive and predictable. We then proceed to ask whether a) code can be usefully modeled by statistical language models and b) such models can be leveraged to support software engineers. Using the widely adopted n-gram model, we provide empirical evidence supportive of a positive answer to both these questions. We show that code is also very repetitive, and in fact even more so than natural languages. As an example use of the model, we have developed a simple code completion engine for Java that, despite its simplicity, already improves Eclipse’s built-in completion capability. We conclude the paper by laying out a vision for future research in this area.},
+    language = {en},
+    author = {Hindle, Abram and Barr, Earl T and Su, Zhendong and Gabel, Mark and Devanbu, Premkumar},
+    pages = {11},
+    file = {Hindle et al. - On the naturalness of software.pdf:/Users/erichambro/Zotero/storage/E85YXJAP/Hindle et al. - On the naturalness of software.pdf:application/pdf}
+}
+
+@inproceedings{sridhara_[not_2010,
+    address = {Antwerp, Belgium},
+    title = {[{NOT} {NATURALNESS}] {Towards} automatically generating summary comments for {Java} methods},
+    isbn = {978-1-4503-0116-9},
+    url = {http://portal.acm.org/citation.cfm?doid=1858996.1859006},
+    doi = {10.1145/1858996.1859006},
+    language = {en},
+    urldate = {2018-08-25},
+    booktitle = {Proceedings of the {IEEE}/{ACM} international conference on {Automated} software engineering - {ASE} '10},
+    publisher = {ACM Press},
+    author = {Sridhara, Giriprasad and Hill, Emily and Muppaneni, Divya and Pollock, Lori and Vijay-Shanker, K.},
+    year = {2010},
+    pages = {43},
+    file = {Sridhara et al. - 2010 - Towards automatically generating summary comments .pdf:/Users/erichambro/Zotero/storage/5LNWWVKR/Sridhara et al. - 2010 - Towards automatically generating summary comments .pdf:application/pdf}
+}
+
+@inproceedings{sridhara_[not_2011,
+    address = {Waikiki, Honolulu, HI, USA},
+    title = {[{NOT} {NATURALNESS}] {Automatically} detecting and describing high level actions within methods},
+    isbn = {978-1-4503-0445-0},
+    url = {http://portal.acm.org/citation.cfm?doid=1985793.1985808},
+    doi = {10.1145/1985793.1985808},
+    abstract = {One approach to easing program comprehension is to reduce the amount of code that a developer has to read. Describing the high level abstract algorithmic actions associated with code fragments using succinct natural language phrases potentially enables a newcomer to focus on fewer and more abstract concepts when trying to understand a given method. Unfortunately, such descriptions are typically missing because it is tedious to create them manually.},
+    language = {en},
+    urldate = {2018-08-25},
+    booktitle = {Proceeding of the 33rd international conference on {Software} engineering - {ICSE} '11},
+    publisher = {ACM Press},
+    author = {Sridhara, Giriprasad and Pollock, Lori and Vijay-Shanker, K.},
+    year = {2011},
+    pages = {101},
+    file = {Sridhara et al. - 2011 - Automatically detecting and describing high level .pdf:/Users/erichambro/Zotero/storage/MZ5HUG46/Sridhara et al. - 2011 - Automatically detecting and describing high level .pdf:application/pdf}
+}
+
+@inproceedings{buse_[not_2010,
+    address = {Antwerp, Belgium},
+    title = {[{NOT} {NATURALNESS}] {Automatically} documenting program changes},
+    isbn = {978-1-4503-0116-9},
+    url = {http://portal.acm.org/citation.cfm?doid=1858996.1859005},
+    doi = {10.1145/1858996.1859005},
+    abstract = {Source code modiﬁcations are often documented with log messages. Such messages are a key component of software maintenance: they can help developers validate changes, locate and triage defects, and understand modiﬁcations. However, this documentation can be burdensome to create and can be incomplete or inaccurate.},
+    language = {en},
+    urldate = {2018-08-25},
+    booktitle = {Proceedings of the {IEEE}/{ACM} international conference on {Automated} software engineering - {ASE} '10},
+    publisher = {ACM Press},
+    author = {Buse, Raymond P.L. and Weimer, Westley R.},
+    year = {2010},
+    pages = {33},
+    annote = {AUTOMATIC PROGRAM ANALYSIS not BIG CODE},
+    file = {Buse and Weimer - 2010 - Automatically documenting program changes.pdf:/Users/erichambro/Zotero/storage/V5UMSCFF/Buse and Weimer - 2010 - Automatically documenting program changes.pdf:application/pdf}
+}
+
+@inproceedings{gabel_study_2010,
+    address = {Santa Fe, New Mexico, USA},
+    title = {A study of the uniqueness of source code},
+    isbn = {978-1-60558-791-2},
+    url = {http://portal.acm.org/citation.cfm?doid=1882291.1882315},
+    doi = {10.1145/1882291.1882315},
+    abstract = {This paper presents the results of the ﬁrst study of the uniqueness of source code. We deﬁne the uniqueness of a unit of source code with respect to the entire body of written software, which we approximate with a corpus of 420 million lines of source code. Our high-level methodology consists of examining a collection of 6,000 software projects and measuring the degree to which each project can be ‘assembled’ solely from portions of this corpus, thus providing a precise measure of ‘uniqueness’ that we call syntactic redundancy. We parameterized our study over a variety of variables, the most important of which being the level of granularity at which we view source code. Our suite of experiments together consumed approximately four months of CPU time, providing quantitative answers to the following questions: at what levels of granularity is software unique, and at a given level of granularity, how unique is software? While we believe these questions to be of intrinsic interest, we discuss possible applications to genetic programming and developer productivity tools.},
+    language = {en},
+    urldate = {2018-08-25},
+    booktitle = {Proceedings of the eighteenth {ACM} {SIGSOFT} international symposium on {Foundations} of software engineering - {FSE} '10},
+    publisher = {ACM Press},
+    author = {Gabel, Mark and Su, Zhendong},
+    year = {2010},
+    pages = {147},
+    file = {Gabel and Su - 2010 - A study of the uniqueness of source code.pdf:/Users/erichambro/Zotero/storage/JUMBYXZP/Gabel and Su - 2010 - A study of the uniqueness of source code.pdf:application/pdf}
+}
+
+@article{tu_localness_nodate,
+    title = {On the {Localness} of {Software}},
+    abstract = {The n-gram language model, which has its roots in statistical natural language processing, has been shown to successfully capture the repetitive and predictable regularities (“naturalness") of source code, and help with tasks such as code suggestion, porting, and designing assistive coding devices. However, we show in this paper that this natural-language-based model fails to exploit a special property of source code: localness. We ﬁnd that human-written programs are localized: they have useful local regularities that can be captured and exploited. We introduce a novel cache language model that consists of both an n-gram and an added “cache" component to exploit localness. We show empirically that the additional cache component greatly improves the n-gram approach by capturing the localness of software, as measured by both cross-entropy and suggestion accuracy. Our model’s suggestion accuracy is actually comparable to a state-of-the-art, semantically augmented language model; but it is simpler and easier to implement. Our cache language model requires nothing beyond lexicalization, and thus is applicable to all programming languages.},
+    language = {en},
+    author = {Tu, Zhaopeng and Su, Zhendong and Devanbu, Premkumar},
+    pages = {12},
+    file = {Tu et al. - On the Localness of Software.pdf:/Users/erichambro/Zotero/storage/VREW3WCB/Tu et al. - On the Localness of Software.pdf:application/pdf}
+}
