@@ -16,7 +16,7 @@
 Traditionally, academic research surrounding programming languages has focused on formal and deductive methods in the search for useful software tools.
 For instance, in the field of bug finding and code correctness, static analysis has formed the basis of industrial products that aim to reduce runtime errors of software through explicit checks \cite{okada_combination_2007}, or even through reasoning about abstract sets of execution traces
 % by analysing syntax
-\cite{bessey_few_2010}.
+\cite{bessey_few_2010}. 
 These analyses exploit the fact that code has a structure that is logically consistent and can be reasoned about mathematically.
 Historically these methods have been attractive due to their formal nature and, in some cases, the guarantees they can offer in the worst case.
 
@@ -36,8 +36,20 @@ Allamanis cites the successes that recent natural language processing and statis
 This hypothesis, and the success that natural language processing and machine learning method have had on the code as a `unnatural' language,  forms a key inspiration for the approach and methods used in this paper, in particular the focus on naming:...
 
 
-\subsection{Natural Language and Code} % (fold)
-\label{ssub:the_naturalness_hypothesis}
+\subsection{IntroToLitReview} % (fold)
+\label{sub:introtolitreview}
+
+As mentioned in section above, it is only through the recent development of large open source datasets that statistical approaches to code related tasks have been available to machine learning researchers. 
+As would be expected of any new and growing field, the range of attempted tasks is still expanding. 
+Although as of writing no formal attempt has been made to translate fine grained elements of source code into their natural language descriptions, a great deal of relevant insight has been made in the related fields of source code summarization, variable naming, ocumentation generation, and code language modelling. 
+These advances all highlight approaches to modelling the patterns and structure of code as language, whilst sometimes incorporating natural language as well. 
+
+In this review we summarise the current advances of these topics and how they relate to the task at hand.  
+
+% subsection introtolitreview (end)
+
+\subsection{Code Language Models} % (fold)
+\label{ssub:language_models}
 
 The earliest work modelling source code with natural language techniques comes from Hindle at al \cite{hindle_naturalness_nodate}, who used simple Kneser-Ney smoothed n-gram models of code tokens, to create language models for large-scale Java and C projects.
 With these models, Hindle was able to demonstrate that the cross-entropy of source code within projects was lower than that of large English corpora - indicating the presence of repetetive common patterns that could be leveraged for code completion, naming and summarization.
@@ -54,10 +66,25 @@ Although the primary challenge of language modelling is to model the language it
 
 Moshovitz et al used the an ngram and topic models to predict comments mixed within source code, in a task of commetn completions, leading to a 47\% saving in comment typing. 
 This code completion task uses 9 opensource Java libraries, and noes that, in concordance with Hindle, evaluations within projects are significant more successful (paraphrase) than those between projects.
-Raychev et al use 
+Raychev et al use a WHAT tovariable naming 
+
+\subsection{Code Summarization}
+
+A related task to translation of fine grained code elements into English, is code summarization. This involves taking a large sections of code and producing overall summaries of the code as a whole.
+This has been attempted with a number of neural approaches that have been vary promising.
+
+Iyer et al use a neural attention model to produce sentences descripbing C\# code and \cite{iyer_summarizing_2016} 
+
+* Problem: this dataset is is not fine grained enough,  stak overflow is 
 
 
 
+ 
+
+
+
+A number of models have built on the early work of code of code based language models to include natural language in the tasks they aim to achieve. 
+These include code summarization, such as 
 
  % and this was more pronounced across domains, suggesting that these patterns can be ideosyncratic to projects or even within project domains.
 
