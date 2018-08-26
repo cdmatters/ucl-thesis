@@ -4,9 +4,9 @@
 
 As mentioned in the Introduction, it is only through the recent development of large open source datasets that statistical approaches to code related tasks have been available to machine learning researchers. 
 As would be expected of any new and growing field, the range of attempted tasks is still expanding. 
-Although as of writing no formal attempt has been made to translate fine grained elements of source code into their natural language descriptions, a great deal of relevant insight has been made in the related fields of source code summarization, variable naming, documentation generation, and code language modelling. Many of these problems can be cast into a machine translation framework, and  highlight possible  approaches to modelling the patterns and structure of code as language.
+Although as of writing no formal attempt has been made to translate fine grained elements of source code into their natural language descriptions, a great deal of relevant insight has been made in the related fields of source code summarization, variable naming, documentation generation, and code language modelling. Many of these problems highlight possible approaches to modelling the patterns and structure of code as language, and can even be cast into a machine translation framework.  
 
-In this review we summarise the current advances of these methods and how they relate to the task at hand.  We start by examining with the general progress in the language modelling of code, before moving on to specific tasks that can be cast into a machine translation framework such code comment prediction or code summarization. Finally we examine the existing datasets, and the scope of the problems they are suitable to address. 
+In this review we summarise the current advances of these methods and how they relate to the task at hand.  We start by examining with the general progress in the language modelling of code, before moving on to specific tasks that can be posed as sequence generation tasks, such code comment prediction, code summarization or function naming. We subsequently examine advance in the related fields of representation of programs, before we finally examine the existing datasets, and the scope of the problems they are suitable to address. 
 
 \section{Language Models of Source Code}
 
@@ -26,30 +26,25 @@ This work in language modelling has direct applicability to our task at hand, as
 
 \section{Sequence Generation from Code: Machine Pseudo-Translation}
 
-One of the earliest statistical approaches to generating language from code comes from Movshovitz-Attias et al \cite{movshovitz-attias_natural_nodate}, who used ngrams and topic models to predict comments from JAVA source code.
-\textbf{What is an Ngram model, mathematically, and what is a mixture model}
-By modelling the code and text as lexical ngrams in a mixed membership model, Moshovitz-Attias' model achieved a reasonable saving of characters to type on their comment completion task despite ignoring the semantic properties of the code.
-This lexical approach to the language modelling of code was first established Hindle et al \cite{hindle_naturalness_nodate} who used a Kneser-Ney smoothed ngram model to demonstrate a lower cross entropy within corpora of JAVA and C code, than standard English corpora. This work had shown level of repetitiveness in code that was in concordance with work by Gabel and Su et al\cite{gabel_study_2010}, and was soon surpassed by ngram topic models that incorporated semantic information into the model, such as the models by Nyguyen et all \cite{nguyen_statistical_2013}.
-Despite the simplistic treatment of the programming language, Moshovitz' comment generation demonstrated a positive start to the generation of language from code, and has opened up new tasks in the field.
-%%% EXPLAIN N GRAM MODELS??
-
-
-A popular task related to code comment prediction is that of code summarization. 
-This task involves taking large sections of code blocks, and summarising the meaning in natural language. 
-% It is very tied to the inverse problem of semantic parsing thouhgh only in part\textbf{rewrite}
-The first approaches to this problem completely ignored the `naturalness' properties of code and its comments.  
-Instead, automatic summarization of source code was tackled with rule-based methods. 
+Given the industrial importance of software engineers understanding sections of code, a long running task is that of code summarization. 
+This task involves taking large sections of code blocks, and summarising its meaning in natural language. It has historically had parallels with the long running (inverse) problem of semantic parsing. CITE
+As such, early approaches to this problem completely ignored the `naturalness' properties of code and its comments, and instead, automatic summarization of source code was tackled with rule-based methods. 
 
 Work by Sridhara et al \cite{sridhara_[not_2010}  used static analysis to find important semantic subunits of code in Java projects, and used sets of sentence templates to produce English from these subunits.
 % This model revolved around automatic rule-based summarization of the source code in the source code in consideration.
 This work produced text that describe the functions in question to a high degree of accuracy, but Sridhara noted the potential lack of transferrability to other settings, and lack of examples with which to compare their summaries.  
-The size of their dataset, four projects in total, indicates a potential problem in the generalisability of the work to other domains, projects or even languages.
+This procedure was also inherently inflexible, relying on human crafted templates, and specified rules. Furthermore the size of the dataset, four projects in total, indicated a potential problem in the generalisability of the work to other domains, projects or even languages.
 
-Since then, statistical approaches have become more popular in attacking the problem, often involving much larger corpora of training data.
-Iyer et al \cite{iyer_summarizing_2016} sourced a large dataset of code snippets and questions from Stack Overflow, a popular programming website, to attempt this problem statistically.
-They applied a neural attentional model, CODE-NN, to this dataset, achieving a first in learning to generate original sentences from arbitrary code sections.   
+However, the advent of the statistical approaches to code language modelling led by Hindle et al \cite{hindle_naturalness_nodate} signalled the start of similar approaches to sequence generation. The earliest is Movshovitz-Attias et al \cite{movshovitz-attias_natural_nodate}, who used both ngrams and topic models such as LDA to predict comments from JAVA source code. In this they found that modelling the lexical components of source code as coming from a mixture of topics - "code" and "text" - outperformed models that ignored this distinction.  This pointed to the strength of taking into account features of code (such as distinguishing comments from commands), even if such destinction were still purely on the lexical level.
 
-Their model combined a distributed representation of the code generated by an attention model over code token embeddings \cite{luong_effective_2015}, with an Long Short Term Memory unit CITE  that acted as an encoder of natural language tokens. Together these generated descriptions as a sequence of conditional distributions. 
+% Since then, statistical approaches have become more popular in attacking the problem, often involving much larger corpora of training data.
+% Iyer et al \cite{iyer_summarizing_2016} sourced a large dataset of code snippets and questions from Stack Overflow, a popular programming website, to attempt this problem statistically.
+Since then neural models have become popular methods of attacking sequence generation, as they capture long range dependencies in sequences, and have shown great promise in other neural translation tasks.
+
+A particularly successful example is that of Iyer et al \cite{iyer_summarizing_2016}, who applied a neural attentional model to the problem of generate code summaries, training on a large collection of snippets and questions from the Stack Overflow.   
+
+Their model combined two features: a distributed representation of the code, generated by attentional mechanism \cite{luong_effective_2015} over code token embeddings; and a Long Short Term Memory unit CITE to encoded natural language tokens. Together these generated descriptions as a sequence of conditional distributions, in an encoder-decoder model. 
+
 Specifically this model calculated the probability of generating a length $l$
 descriptive sequence through a product of conditional probabilities the previous $l-1$ tokens
 
@@ -61,29 +56,32 @@ $$\text p(n_i | n_1, ..., n_{i-1} ) \propto \mathbf{W}\text{tanh}(\mathbf{W_1h_i
 
 where $\mathbf{W} \in \mathbb{R}^{|N|\text{x} H}, \mathbf{W_1}$ and $\mathbf{W_2} \in \mathbb{R}^{H \text{x} H}$  and $ H$ is embedding dimensionality of words, $ N $ the vocabulary.\cite{iyer_summarizing_2016}
 A visual schematic of the model is preseted in Figure \ref{fig:Iyer}.
-
 Iyer et al then ran a beam search over the decoder to explore the space of likely sequences, and evaluated their generations using the BLEU-4 and METEOR metrics.
 
-This model achieved a new record in the performance of the code summarization task, and outperformed rival NLP models such as MOSES, a traditional phrase-based machine translation model \textbf{CITE \& paraphrase}, and SUM-NN, another attention based summarization model using dense layers instead of LSTMs.CITE.
+This model achieved a new record in the performance of the code summarization task, and outperformed rival NLP models such as MOSES, a traditional phrase-based machine translation model \textbf{CITE \& paraphrase}, and SUM-NN, another attention based summarization model using dense layers instead of LSTMs.CITE. It also achieved a first in learning to generate original sentences from arbitrary code sections, and has proved successful in other domains.  
 
-Indeed the use of attentional architectures in summarization has proved particularly effective at combining the different modalities of code and text.
-An very similar model to Iyer et als, is that of Loyola et al \cite{loyola_neural_2017}, who adapted the model to generate short descriptions of differnces in code. 
+Loyola et al \cite{loyola_neural_2017}, for instance, adapted a similar attention model to Iyers to generate short descriptions of differnces in code.
 This time intead of training on a single piece of source code and questions, data was sourced to present pairs of code changes, `diffs', with comments describing the change, `commit messages'. 
 In this setting, the attentional model was able to generate faesible messages, both within projects and between projects.
 
-Different forms of attentional networks have also been used, for a task known as `extreme summarization'. 
-This involves condensing section of source code into a single sequence of characters, such as function name, and is very related to tasks such as the problem of variable naming. 
-Although such tasks dont involve generation of extended natural language as output, their sequence-based nature can provide valuable insight into potentially transferrable models, since they can effectively be framed a translation problems.
+Both these attention models showed the effectiveness of being able to pickout relevant portions of code at different points in sequence generation, but failed to take into account the longer term correlations of the tokens in source code. In fact by only using this kind of attentional model to process source code, both models treat the source code as little more than bag of token embeddings.
 
-Alamanis et al \cite{allamanis_convolutional_2016} use a convolutional attention network over tokens, to predict the names of functions given their body. 
-In this model source code is split lexically in to a padded sequence of embedded tokens, over which a one dimensional convolution network is run, to create a number of attentional feature vectors $\mathbf{\{v_k\}}$.
-These feature vectors are then effectively `selected' for their relevance through point-wise multiplication with the hidden state of an rnn, $\mathbf{h_{t-1}}$,  then normalised.
-Attention weights are built by taking a softmax over a final convolution over these multiplied feature vectors with an attention kernel, where each final weight now corresponds to a token embedding. 
+In this regard, an improvement on these attentional models is that Alamanis et al \cite{allamanis_convolutional_2016}, which uses a convolutional attention network over tokens, for the task of predicting the names of functions given their body. 
+%aiming to capture long range correlations in code through spatial convolutions instead of temporal hidden state.
+
+In this model source code is split lexically in to a padded sequence of embedded tokens, over which a one dimensional convolution of fixed width is run, to create a number of attentional feature vectors $\mathbf{\{v_k\}}$.
+These feature vectors are then point-wise multiplicatied with the hidden state of an rnn, $\mathbf{h_{t-1}}$, to be effectively `selected' for their relevance to next generated token, before being normalised.
+
+This set of feature vectors is then convolved with an attention kernel, to give a set of attention weights, each corresponding to a token embedding. 
 A final attention vector $\mathbf{\alpha}$ is constructed from the convex combination of the token embeddings under the attention weights, and this vector is used to generate a distribution over the next function subtoken.
 An illustration of the algorithm with pseudo code is presented in Figure X.
 
-This model aims to capture the short range features and structure of code through the convolutional methods. Such techniques have been particularly successful in the fields of X,Y,Z and show significant promise here too. 
+The authors of this model apply it to both the narrow task of generatign function names, and that of code retrieval. In it they find that taking into account the long range features of the code in the convolutional model surpasses a baseline attentional model of the machine translation model originated by Bahdenau \cite{bahdanau_neural_2014}, and found that this performance was further improved by adding a cacheing mechanism to the model.
 
+Both these attention models show the strengths that attention can provide in combining the modalities of text and code. However, a key failing of both models remains their lack of appreciation for the syntax and semantic of the underlying code.
+Although Allamanis et al's model is more aware of the structure of lexical code tokens than Iyer et als, both models continue to ignore a fundamental channel of information communication through code - that of communication from human to computer.
+
+\section{Representations of Code}
 
 
 
