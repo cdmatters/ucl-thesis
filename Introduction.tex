@@ -11,38 +11,8 @@
 % \end{enumerate}
 
 
-This chapter presents a short introduction the thesis. 
-It outlines the central problem in question, motivates the research, and formalises the objectives of this investigation and report. 
-Finally it presents an overview of the structure of the thesis and the content within.
-
-
-% \section{The Problem} % (fold)
-% \label{sec:the_problem}
-
-% \begin{itemize}
-%     \item The quality of machine translation in natural language has seen an explosive improvement in the past decade (CITE)
-%     \item The proliferation of deep learning and availability of big datasets have changed the field.
-%     \item However there are still other areas related to translation where 
-% \end{itemize}
-
-
-\section{Code and Natural Language} % (fold)
-\label{sec:code_and_natural_language}
-
-The area of machine translation is a branch of natural language processing that has seen a dramatic improvement in recent decades. \textbf{CITE}
-The proliferation of `deep learning' techniqes and the availability of the large datasets have led to a series of models that have recently surpassed human ability on \textbf{CITE}. % ANOTHER SENTENCE
-However, most of advances have come in the field of `natural language' - that is language as spoken, read and written by humans. 
-Other modalities of communication - such as source code, as interpretted by computers - have, until recently, not been the subject of as much investigation by natual language research community.
-
-
-\begin{itemize}
-    \item Historically how was code treated in research commnuity
-    \item Nowadays how is code treated differently, and why?
-    \item Is code similar to natural language
-    \item If so how can we use machine translation techniques to help understanding of source code
-    \item How can we use nlp to help understanding of source code
-    \item How can we use source code to help understanding of source code with nlp
-\end{itemize}
+In this chapter we motivate our investigation into the summarization of fine-grained elements of code, present the central problem in question, and formalises the objectives of this investigation and report. 
+Finally we present an overview of the contributions of our research and the following structure of the thesis.
 
 
 
@@ -51,29 +21,70 @@ Other modalities of communication - such as source code, as interpretted by comp
 
 Given the prominence that computers and digital infrastructure take in modern life, it is not hard to motivate work to help humans communicate with machines, especially on their terms.
 Understanding source code is already valuable skill in industry today, and one that is likely to grow in importance, as the number of people with such a skill fails match demand. 
-Any work that either facilitates human understanding of source code, or helps humans to communicate to each other, via source code, is likely to find value in industry where such communication is vital.
+Any work that either facilitates human understanding of source code, is likely to find value in industry where such communication is vital.
 
-More specifically in the realm of documentation, and translating parts of code to natural language.
+More specifically in the realm of documentation, fine grained automatic translation of coding elements would serve a number of useful functions. 
 
-\begin{itemize}
-    \item The vast majority of code is undocumented, so immediate win for automation
-    \item Code documentation is a tedious and important part of writing and reading industrial code, and so useful to automate.
-    \item For arguments that have little type information, very hard to guess without reading source or naming so extra help. Crashes arent spotted until too late.
-    \item It can be varied and describe circuituous or irrelevant information about the function.
-    \item Furthermore documentation is rarely updated, so automated checking would be valuable
-\end{itemize}
-
-Finally, tangential benefits to research in the field (and therefore more datasets)
-
-\begin{itemize}
-    \item Work on type inference
-    \item Understanding code patterns helps code generation thats human readable
-    \item Language to code
-\end{itemize}
+* advent of dynamically typed languages, such documentation is useful for new developers to code
+* many companies require developers to manually enumerate descriptions, which is tedious, repetitive.
+* further more, prone to change
+* this is increasingly  how online documentation is generated, so important for apis.
+* such work ouldserver as a stepping stone for more difficult tasks such as type inference, and also critically will help explainability of code.
+* as work is done to automate program generation, we will increasingly need computers to generate documentation for humans to use!
 
 
 
-\section{Objectives and Problem Formulation} % (fold)
+
+
+\section{Code \& The Naturalness Hypothesis} % (fold)
+\label{sec:code_and_natural_language}
+
+% The area of machine translation is a branch of natural language processing that has seen a dramatic improvement in recent decades. \textbf{CITE}
+% The proliferation of `deep learning' techniqes and the availability of the large datasets have led to a series of models that have recently surpassed human ability on \textbf{CITE}. % ANOTHER SENTENCE
+% However, most of advances have come in the field of `natural language' - that is language as spoken, read and written by humans. 
+% Other modalities of communication - such as source code, as interpretted by computers - have, until recently, not been the subject of as much investigation by natual language research community.
+
+
+% \begin{itemize}
+%     \item Historically how was code treated in research commnuity
+%     \item Nowadays how is code treated differently, and why?
+%     \item Is code similar to natural language
+%     \item If so how can we use machine translation techniques to help understanding of source code
+%     \item How can we use nlp to help understanding of source code
+%     \item How can we use source code to help understanding of source code with nlp
+% \end{itemize}
+
+
+Traditionally, academic research surrounding programming languages has focused on formal and deductive methods in the search for useful software tools.
+For instance, in the field of bug finding and code correctness, static analysis has formed the basis of industrial products that aim to reduce runtime errors of software through explicit checks \cite{okada_combination_2007}, or even through reasoning about abstract sets of execution traces
+% by analysing syntax
+\cite{bessey_few_2010}. 
+These analyses exploit the fact that code has a structure that is logically consistent and can be reasoned about mathematically.
+Historically these methods have been attractive due to their formal nature and, in some cases, the guarantees they can offer in the worst case.
+
+ % and formally, despite ignoring potentially valuable non-semantic information such as variable name conventions, programming idioms or comments.  
+
+However, the recent proliferation of real world open-source code has provided opportunities for a more statistical approach to software tooling. 
+Instead of formalising rule-based systems, the development of tools can now be guided by the most statistically significant features of the code.
+% CITE ALLAMANIS?
+Such a transition, from rule-based approach to statistical approach, signals a different end-goal for these tools, abandoning worst case guarantees for better performance on average. %most of the time.
+% from a focus of best perfomance in the worst case (or in specific conditions), to best performance in most cases. PARAPHRASE
+This promises to be of much value to growing computing industry, while opening up tooling research to the recent advances machine learning techniques.
+ 
+A key idea supporting such a transition is the Naturalness Hypothesis, proposed by Allamanis et al \cite{allamanis_mining_nodate}. 
+This hypothesis suggests that \textit{``Software is a form of human communications; software corpora have a similar statistical properties to natural language copora; and these properties can be exploited to build better software tools''}.\cite{allamanis_mining_nodate} 
+This draws inspiration Don Knuth's idea of \textit{literate programming}\cite{knuth_literate_1984}, that the primary task of programming should be ``explaining to human beings what we want a computer to do...''\cite{knuth_literate_1984}, not simply preparing a set of commands for a machine.
+Allamanis cites the successes that recent natural language processing and statistical machine learning approaches have had when applied to `Big Code, whilst pointing tp evidence of cognitive science studies that demonstrate that brain behaviour in reading programming languages is akin to reading ``natural languages with greater expertise''\cite{floyd_decoding_2017}.
+
+While this hypothesis seems to hold true,  there are a number of key differences between code and natural language, that change the nature of the tasks and methods applied.
+
+
+% This hypothesis, and the success that natural language processing and machine learning method have had on the code as a `unnatural' language,  forms a key inspiration for the approach and methods used in this paper, while inviting a number of key comparisons between code and natural language. 
+
+% GO ON 
+
+
+\section{Problem Formulation} % (fold)
 \label{sec:problem_formulation}
 
 Research hypothesise
@@ -87,6 +98,15 @@ Research hypothesise
 \end{itemize}
 % section problem_formulation (end)
  
+\section{Our Contributions}
+\begin{itemize}
+    \item A new dataset suitable for the investigation of machine translation/summarization, a first specifically suite to the translation fine grained elements of code
+    \item 3 models that investigate different elements
+    \item We demonstrate the success of using source AST to pick out. 
+    \item We demonstrate the informativeness of AST's in sequence generation tasks, and the value they it works between projects and wihin projects
+    \item We demonstrate naturalness (repeated behaviour) and the informativeness fo variable naming
+\end{itemize}
+
 
 \section{Structure of the Thesis} % (fold)
 \label{sec:structure_of_the_thesis}
