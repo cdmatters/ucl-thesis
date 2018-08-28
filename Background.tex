@@ -64,23 +64,95 @@ Therefore, although ours is not a typical summarization task, there are similari
 
 A final task with a parallel to ours is that of captioning. 
 The distinction from summarization in this case is that captioning involves generating text from differnet modalities - such as captioning a picture, or video clip.
-There parallels are here with both summarization, and our task, though it is perhaps unfair to describe documentation of code as `caption'.
+There parallels are here with both summarization, and our task, though it is perhaps unfair to describe documentation of code as `caption' when it aims to be a succinct description of only the most important parts of the code.
 
 In summary our task falls in between a number of traditional NLP tasks and consequently related tasks blur the boundaries of translation, summarization and captioning. In the next section we present an overview of the relevant theoretical components for our model, indicating their provenance from their respective fields.
 
 \section{Neural Approaches}
 
-\subsection{Recurrent Neural Networks for Language Modelling} % (fold)
+Given the maturity and prominence of the topic \footnote{Quote someone}, we assume a basic familiarity with neural networks, including linear and sigmoidal layers, multilayer perceptrons, and the backpropagation algorithm. For those seeking a further background on this topic, we recommend a number of books \cite{nielsenneural} \cite{Goodfellow:2016:DL:3086952} 
+
+\subsection{Recurrent Neural Networks} % (fold)
 \label{sub:recurrent_neural_networks}
+
+Much of the semantic meaning of language is captured in the order of words. 
+% It is not only the lexical tokens, but the sequence of them, that carries the information of a sentence.
+This order can stretch beyond sentences, as context too can change the meaning of a sentence or phrase.
+Vanilla neural networks such as multilayer perceptrons are poorly suited to capturing such long range information, as they are unable to remember preceding tokens in a sequence. 
+Furthermore, they struggle from problems of vanishing and exploding gradient when processing long sequences \cite{bengio_learning_1994}.
+
+A recurrent neural network (RNN) is one in which a hidden state is maintained by the network, while processing a sequence.
+This hidden state allows information from previous tokens to propagate inside the network and contextualise the processing of future tokens.
+Such networks have proved highly adaptable to language tasks, and enjoy widespread use within many sequence learning settings\cite{lipton_critical_2015}.
+
+An example of an RNN used in our research is that of the Long Short Term Memory Unit (LSTM)\cite{hochreiter_long_1997}. These comprise of three gating mechanisms, ($f_t, i_t, o_t$), operating on the input $\mathbf{x_t}$ and state vectors $\mathbf{c_t}$ and $\mathbf{h_t}$
+\cite{noauthor_understanding_nodate}. Each gating mechanism has a corresponding weight matrix, $W$, and bias vector $\mathbf{b}$, and operate according to the following equations:
+
+\begin{equation}
+    \mathbf{f_t} = \sigma(W_f [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_f})
+    \label{eq:lstm1}
+\end{equation}
+\begin{equation}
+    \mathbf{i_t} = \sigma(W_i [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_i})
+    \label{eq:lstm2}
+\end{equation}
+\begin{equation}
+    \mathbf{o_t} = \sigma(W_o [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_o})
+    \label{eq:lstm3}
+\end{equation}
+\begin{equation}
+    \mathbf{\tilde{c_t}} = \text{tanh}(W_c [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_c})
+    \label{eq:lstm4}
+\end{equation}
+where [,] operator indicates concatenation and $\sigma$ indicates point-wise sigmoidal function.
+
+These gating equations then combine to update the cell state $\mathbf{c_{t-1}}$ and the hidden state $\mathbf{h_{t-1}}$ as follows: 
+\begin{equation}
+    \mathbf{c_t} = \mathbf{f_t} * \mathbf{c_{t-1}} + \mathbf{i_t} * \mathbf{\tilde{c_t}}
+    \label{eq:lstm5}
+\end{equation}
+\begin{equation}
+    \mathbf{h_t} = \mathbf{o_t} * \text{tanh}(\mathbf{c_t})
+    \label{eq:lstm6}
+\end{equation}
+
+where  $*$ indicates point-wise multiplication, and tanh indicates point-wise hyperbolic tan.
+
+Interpretting these operations gives a good insight into the success of the LSTM.  
+Equation \ref{eq:lstm1} represents the creation of a `forget' gate, where vector $\mathbf{f_t}$ represents what fraction of each dimension of $\mathbf{c_{t-1}}$ to retain. 
+Equation \ref{eq:lstm2}  creates an `input' gate, where vector $\mathbf{i_t}$ represents what fraction of each dimension of our transformed input $\mathbf{\tilde{c_{t}}}$ we want to retain.  
+$\mathbf{\tilde{c_{t}}}$ itself is created in equation \ref{eq:lstm4}. With both the `input' and `forget' gate, the  the cell state is updated in \ref{eq:lstm5}. 
+The new hidden state $\mathbf{h_{t}}$ then derives from this cell state, which is modified by the output gate $\mathbf{o_t}$. 
+Both $\mathbf{c_{t}}$ and $\mathbf{h_{t}}$ pass forward to the next time step, while $\mathbf{h_{t}}$ is also out put by the cell. 
+A diagram is presented in Figure \ref{fig:lstm_colah}
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\linewidth]{ModelPics/LSTMcolah.png}
+    \caption{A diagram of an LSTM, sourced from \cite{noauthor_understanding_nodate}}
+    \label{fig:lstm_colah}{}
+\end{figure}
+
+LSTM's have shown a remarkable versatility and strength in NLP tasks, not least in language modelling. A remarkable study of language modelling in 2017 showed that well-tuned LSTM architectures still surpass more recent and complex architecture, and can achieve state of the art results, despite their simplicity\cite{melis_state_2017}.
+
+There also exist other forms of RNN units. The Gated Recurrent unit \cite{cho_properties_2014}, is another recurrent network unit that aims to simplify the LSTM, and has shown comparable performance to the LSTM in tasks such as speech signal modelling and music modelling \cite{chung_empirical_2014}.
+However, for the purposes of our investigation, we use the LSTM for all recurrent units.
+
+%BIDIRECTIONAL LSTMS??
 
 \subsection{Sequence to Sequence Architectures} % (fold)
 \label{sub:sequence_to_sequence_architectures}
 
-\subsection{Embeddings} % (fold)
-\label{sub:embeddings}
+At each time step, RNN units accept an input $\mathbf{x_t}$ and emit and output $\mathbf{h_t}$. In the translation context, this 1-to-1 mapping of input to output is the equivalent of translating a sentence before you hear the end of it. For languages such as German, where the verb comes at the end of the sentence, this is almost impossible.
+
+Sequence-to-sequence architecture, proposed by Sutskever et al \cite{sutskever_sequence_2014}, overcomes this limitation with an encoder-decoder framework.
+
 
 \subsection{Attention} % (fold)
 
+
+\subsection{Embeddings} % (fold)
+\label{sub:embeddings}
 \blindtext
 
 

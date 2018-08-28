@@ -605,4 +605,139 @@
   file = {/Users/erichambro/Zotero/storage/JVJ4LBPM/Dyer et al. - 2013 - Boa A language and infrastructure for analyzing u.pdf}
 }
 
+@misc{noauthor_understanding_nodate,
+  title = {Understanding {{LSTM Networks}} -- Colah's Blog},
+  howpublished = {http://colah.github.io/posts/2015-08-Understanding-LSTMs/},
+  file = {/Users/erichambro/Zotero/storage/GR65W47V/2015-08-Understanding-LSTMs.html}
+}
+
+@book{Goodfellow:2016:DL:3086952,
+  title = {Deep {{Learning}}},
+  isbn = {0-262-03561-8 978-0-262-03561-3},
+  publisher = {{The MIT Press}},
+  author = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+  year = {2016}
+}
+
+@article{nielsenneural,
+  title = {Neural {{Networks}} and {{Deep Learning}}},
+  author = {Nielsen, Michael A.},
+  year = {2018},
+  keywords = {Neural and book deep learning networks},
+  type = {misc},
+  publisher = {{Determination Press}},
+  biburl = {https://www.bibsonomy.org/bibtex/274383acee84241145ff4ffede9658206/martin29},
+  interhash = {04d527cadd39f888fc3babcad3343362},
+  intrahash = {74383acee84241145ff4ffede9658206}
+}
+
+@article{bengio_neural_nodate,
+  title = {A {{Neural Probabilistic Language Model}}},
+  abstract = {A goal of statistical language modeling is to learn the joint probability function of sequences of words in a language. This is intrinsically difficult because of the curse of dimensionality: a word sequence on which the model will be tested is likely to be different from all the word sequences seen during training. Traditional but very successful approaches based on n-grams obtain generalization by concatenating very short overlapping sequences seen in the training set. We propose to fight the curse of dimensionality by learning a distributed representation for words which allows each training sentence to inform the model about an exponential number of semantically neighboring sentences. The model learns simultaneously (1) a distributed representation for each word along with (2) the probability function for word sequences, expressed in terms of these representations. Generalization is obtained because a sequence of words that has never been seen before gets high probability if it is made of words that are similar (in the sense of having a nearby representation) to words forming an already seen sentence. Training such large models (with millions of parameters) within a reasonable time is itself a significant challenge. We report on experiments using neural networks for the probability function, showing on two text corpora that the proposed approach significantly improves on state-of-the-art n-gram models, and that the proposed approach allows to take advantage of longer contexts.},
+  language = {en},
+  author = {Bengio, Yoshua and Ducharme, R\'ejean and Vincent, Pascal and Jauvin, Christian},
+  pages = {19},
+  file = {/Users/erichambro/Zotero/storage/UTZ77SZZ/Bengio et al. - A Neural Probabilistic Language Model.pdf}
+}
+
+@article{chung_empirical_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1412.3555},
+  primaryClass = {cs},
+  title = {Empirical {{Evaluation}} of {{Gated Recurrent Neural Networks}} on {{Sequence Modeling}}},
+  abstract = {In this paper we compare different types of recurrent units in recurrent neural networks (RNNs). Especially, we focus on more sophisticated units that implement a gating mechanism, such as a long short-term memory (LSTM) unit and a recently proposed gated recurrent unit (GRU). We evaluate these recurrent units on the tasks of polyphonic music modeling and speech signal modeling. Our experiments revealed that these advanced recurrent units are indeed better than more traditional recurrent units such as tanh units. Also, we found GRU to be comparable to LSTM.},
+  language = {en},
+  journal = {arXiv:1412.3555 [cs]},
+  author = {Chung, Junyoung and Gulcehre, Caglar and Cho, KyungHyun and Bengio, Yoshua},
+  month = dec,
+  year = {2014},
+  keywords = {Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  file = {/Users/erichambro/Zotero/storage/NH46RA5B/Chung et al. - 2014 - Empirical Evaluation of Gated Recurrent Neural Net.pdf},
+  annote = {Comment: Presented in NIPS 2014 Deep Learning and Representation Learning Workshop}
+}
+
+@article{cho_properties_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1409.1259},
+  primaryClass = {cs, stat},
+  title = {On the {{Properties}} of {{Neural Machine Translation}}: {{Encoder}}-{{Decoder Approaches}}},
+  shorttitle = {On the {{Properties}} of {{Neural Machine Translation}}},
+  abstract = {Neural machine translation is a relatively new approach to statistical machine translation based purely on neural networks. The neural machine translation models often consist of an encoder and a decoder. The encoder extracts a fixed-length representation from a variable-length input sentence, and the decoder generates a correct translation from this representation. In this paper, we focus on analyzing the properties of the neural machine translation using two models; RNN Encoder\textendash{}Decoder and a newly proposed gated recursive convolutional neural network. We show that the neural machine translation performs relatively well on short sentences without unknown words, but its performance degrades rapidly as the length of the sentence and the number of unknown words increase. Furthermore, we find that the proposed gated recursive convolutional network learns a grammatical structure of a sentence automatically.},
+  language = {en},
+  journal = {arXiv:1409.1259 [cs, stat]},
+  author = {Cho, Kyunghyun and {van Merrienboer}, Bart and Bahdanau, Dzmitry and Bengio, Yoshua},
+  month = sep,
+  year = {2014},
+  keywords = {Computer Science - Computation and Language,Statistics - Machine Learning},
+  file = {/Users/erichambro/Zotero/storage/2XASLWJ9/Cho et al. - 2014 - On the Properties of Neural Machine Translation E.pdf},
+  annote = {Comment: Eighth Workshop on Syntax, Semantics and Structure in Statistical Translation (SSST-8)}
+}
+
+@article{lipton_critical_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1506.00019},
+  primaryClass = {cs},
+  title = {A {{Critical Review}} of {{Recurrent Neural Networks}} for {{Sequence Learning}}},
+  abstract = {Countless learning tasks require dealing with sequential data. Image captioning, speech synthesis, and music generation all require that a model produce outputs that are sequences. In other domains, such as time series prediction, video analysis, and musical information retrieval, a model must learn from inputs that are sequences. Interactive tasks, such as translating natural language, engaging in dialogue, and controlling a robot, often demand both capabilities. Recurrent neural networks (RNNs) are connectionist models that capture the dynamics of sequences via cycles in the network of nodes. Unlike standard feedforward neural networks, recurrent networks retain a state that can represent information from an arbitrarily long context window. Although recurrent neural networks have traditionally been difficult to train, and often contain millions of parameters, recent advances in network architectures, optimization techniques, and parallel computation have enabled successful large-scale learning with them. In recent years, systems based on long short-term memory (LSTM) and bidirectional (BRNN) architectures have demonstrated ground-breaking performance on tasks as varied as image captioning, language translation, and handwriting recognition. In this survey, we review and synthesize the research that over the past three decades first yielded and then made practical these powerful learning models. When appropriate, we reconcile conflicting notation and nomenclature. Our goal is to provide a selfcontained explication of the state of the art together with a historical perspective and references to primary research.},
+  language = {en},
+  journal = {arXiv:1506.00019 [cs]},
+  author = {Lipton, Zachary C. and Berkowitz, John and Elkan, Charles},
+  month = may,
+  year = {2015},
+  keywords = {Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  file = {/Users/erichambro/Zotero/storage/ECQAQQRC/Lipton et al. - 2015 - A Critical Review of Recurrent Neural Networks for.pdf}
+}
+
+@article{bengio_learning_1994,
+  title = {Learning Long-Term Dependencies with Gradient Descent Is Difficult},
+  volume = {5},
+  issn = {1045-9227},
+  doi = {10.1109/72.279181},
+  abstract = {Recurrent neural networks can be used to map input sequences to output sequences, such as for recognition, production or prediction problems. However, practical difficulties have been reported in training recurrent neural networks to perform tasks in which the temporal contingencies present in the input/output sequences span long intervals. We show why gradient based learning algorithms face an increasingly difficult problem as the duration of the dependencies to be captured increases. These results expose a trade-off between efficient learning by gradient descent and latching on information for long periods. Based on an understanding of this problem, alternatives to standard gradient descent are considered.$<$$>$},
+  number = {2},
+  journal = {IEEE Transactions on Neural Networks},
+  author = {Bengio, Y. and Simard, P. and Frasconi, P.},
+  month = mar,
+  year = {1994},
+  keywords = {Computer networks,Cost function,Delay effects,Discrete transforms,Displays,efficient learning,gradient descent,input/output sequence mapping,Intelligent networks,learning (artificial intelligence),long-term dependencies,Neural networks,Neurofeedback,numerical analysis,prediction problems,Production,production problems,recognition,recurrent neural nets,recurrent neural network training,Recurrent neural networks,temporal contingencies},
+  pages = {157-166},
+  file = {/Users/erichambro/Zotero/storage/GHTPCLRQ/Bengio et al. - 1994 - Learning long-term dependencies with gradient desc.pdf;/Users/erichambro/Zotero/storage/STM5JKRU/279181.html}
+}
+
+@article{melis_state_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1707.05589},
+  primaryClass = {cs},
+  title = {On the {{State}} of the {{Art}} of {{Evaluation}} in {{Neural Language Models}}},
+  abstract = {Ongoing innovations in recurrent neural network architectures have provided a steady influx of apparently state-of-the-art results on language modelling benchmarks. However, these have been evaluated using differing codebases and limited computational resources, which represent uncontrolled sources of experimental variation. We reevaluate several popular architectures and regularisation methods with large-scale automatic black-box hyperparameter tuning and arrive at the somewhat surprising conclusion that standard LSTM architectures, when properly regularised, outperform more recent models. We establish a new state of the art on the Penn Treebank and Wikitext-2 corpora, as well as strong baselines on the Hutter Prize dataset.},
+  language = {en},
+  journal = {arXiv:1707.05589 [cs]},
+  author = {Melis, G\'abor and Dyer, Chris and Blunsom, Phil},
+  month = jul,
+  year = {2017},
+  keywords = {Computer Science - Computation and Language},
+  file = {/Users/erichambro/Zotero/storage/R3R3KSMW/Melis et al. - 2017 - On the State of the Art of Evaluation in Neural La.pdf}
+}
+
+@article{sutskever_sequence_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1409.3215},
+  primaryClass = {cs},
+  title = {Sequence to {{Sequence Learning}} with {{Neural Networks}}},
+  abstract = {Deep Neural Networks (DNNs) are powerful models that have achieved excellent performance on difficult learning tasks. Although DNNs work well whenever large labeled training sets are available, they cannot be used to map sequences to sequences. In this paper, we present a general end-to-end approach to sequence learning that makes minimal assumptions on the sequence structure. Our method uses a multilayered Long Short-Term Memory (LSTM) to map the input sequence to a vector of a fixed dimensionality, and then another deep LSTM to decode the target sequence from the vector. Our main result is that on an English to French translation task from the WMT'14 dataset, the translations produced by the LSTM achieve a BLEU score of 34.8 on the entire test set, where the LSTM's BLEU score was penalized on out-of-vocabulary words. Additionally, the LSTM did not have difficulty on long sentences. For comparison, a phrase-based SMT system achieves a BLEU score of 33.3 on the same dataset. When we used the LSTM to rerank the 1000 hypotheses produced by the aforementioned SMT system, its BLEU score increases to 36.5, which is close to the previous best result on this task. The LSTM also learned sensible phrase and sentence representations that are sensitive to word order and are relatively invariant to the active and the passive voice. Finally, we found that reversing the order of the words in all source sentences (but not target sentences) improved the LSTM's performance markedly, because doing so introduced many short term dependencies between the source and the target sentence which made the optimization problem easier.},
+  language = {en},
+  journal = {arXiv:1409.3215 [cs]},
+  author = {Sutskever, Ilya and Vinyals, Oriol and Le, Quoc V.},
+  month = sep,
+  year = {2014},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/erichambro/Zotero/storage/C7ZJS2U5/Sutskever et al. - 2014 - Sequence to Sequence Learning with Neural Networks.pdf},
+  annote = {Comment: 9 pages}
+}
+
 
