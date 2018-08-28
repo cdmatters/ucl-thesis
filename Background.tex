@@ -20,10 +20,10 @@ This is because the actual distribution of utterances is very sparse in  the vas
 In our task, we seek to generate sequences of natural language, $\{s_1, s_2,..., s_n\}$ from a set of features of code, $\mathcal{C}$.
 Ideally we seek to do this through maximising a probability:
 
-$$p(s_1, s_2,...,s_n | \mathcal{C}) = p(\{s_i\}| \mathcal{C}) \propto p(\mathcal{C} | (\{s_i\})  p(\{s_i\})$$
+$$p(s_1, s_2,...,s_n | \mathcal{C}) = p(\{s_i\}| \mathcal{C}) \propto p(\mathcal{C} | \{s_i\})  p(\{s_i\})$$
 
 where the last proportionality follows from Bayes' rule.
-This $p(\{s_i\})$ term in this equation represents the probability of the sequence occuring naturally in the language. This term is what language models aim to represent.
+This $p(\{s_i\})$ term in this equation represents the probability of the sequence occuring naturally in the language. This term is what typical language models aim to represent.
 
 Language models are an unsupervised means of determining the natural distribution of utterences in a language (or corpus). 
 Often these utterences are broken down into single token sequences, and the probabilities are formed as a product of conditional probabilities.
@@ -32,7 +32,7 @@ $$p(s_1, s_2,...,s_n ) = p(s_n | s_1, s_2,...s_{n-1} )  p(s_1, s_2,...s_{n-1} )$
 $$= p(s_n | s_1, s_2,...s_{n-1} ) p(s_{n-1} | s_1, s_2,...s_{n-2} )...p(s_1)$$
 $$ = \prod_{i=1}^{n} p(s_i | s_1^{i-1} ) $$ where $s_1^{i-1} =  \{s_1, s_2,...s_{i-1}\}$, the sequence of tokens from $1$ to $i-1$
 
-These probabilities can be calculated in different ways, or under different assumptions. An n-gram model assumes a Markovian conditional independence structure, where the next token is conditionally independent of all others, given the previous n: 
+These probabilities can be calculated in different ways, or under different assumptions. An n-gram model assumes a Markovian conditional independence structure, where the next token is conditionally independent of all others, given the previous $n$: 
 
 $$ s_t \CI s_1^{t-n} \mid s^{t-1}_{t-n+1} $$
 $$\therefore p(s_t | s_1, s_2,..., s_{t-1} )  = p(s_t | s_{t-n}, s_{t-n+1},..., s_{t-1}  ) $$
@@ -40,20 +40,33 @@ $$\therefore p(s_t | s_1, s_2,..., s_{t-1} )  = p(s_t | s_{t-n}, s_{t-n+1},..., 
 These then models estimate maximum likelihood probabilities from counts of occurences in models, and sometimes `smooth' these probabilities to overcome the sparsity of their training data.
 
 Other models, such as neural language models, do not make such conditional indepence assumptions and use a neural network as a function approximator, instead of taking counts.
-In our work, language models are implicitly used in our sequence generation, where we seek to generate likely natural language given our code features $\mathcal{C}$, and we draw inspiration from them for the architectures of our models.
+In our work, we effectively seek a conditional language model, which we can sample given our conditioning code features $\mathcal{C}$. As such, we draw inspiration from them for the architectures of our models.
 
-\subsection{Language Generation}
+\subsection{Conditional Generation of Language}
 
-A traditional approach to conditionally generating language, is that of machine translation.
-In machine translation, we seek to generate the most likely sequence of a target language, $\{r_1, r_2,..., r_m\}$, given an sequence in an origin language  $\{s_1, s_2,..., s_n\}$. 
-In this case, we ideally maximise the probability:
+Many tasks in natural language processing require the generation of natural language conditioned on observations.
+We draw on the work of many of these task, in our approach to our specific problem.
+In this section we briefly overview three main conditional sequence generation tasks, comparing similarities with ours.
+
+Firstly we consider machine translation. In this field, the objective is to generate the most likely sequence of a target language, $\{r_1, r_2,..., r_m\}$, given a sequence in an origin language  $\{s_1, s_2,..., s_n\}$. 
+The translation seeks to maximise the probability:
 
 $$ p(r_1, r_2,..., r_m| s_1, s_2,...,s_n )$$
+The history and context of machine translation traditionally revolves around $\{r\}$ and $\{s\}$ being languages with the same semantic meaning. 
+In this respect our task is not a typical translation task.
+However, many models pioneered in this field are highly transferrable to any task aiming to condition one sequence upon another.
 
+Secondly, the task of summarization aims to extract summaries or descriptions from a document.
+Typically this involves extraction and/or abstraction of a document in the same modality or language.
+Our task, extracting summaries about an element of a code document, naturally involves two distinct modalities - code as input, and english as output.
+However, we desire our descriptions to somehow reflect a true and relevant summary of the argument, in the best case.
+Therefore, although ours is not a typical summarization task, there are similarities that can highlight helpful potential approaches.
 
-Although the historic contexts of the machine translation revolve around two sequences of words in differnet languages, in principle such an approach extends to other settings.
+A final task with a parallel to ours is that of captioning. 
+The distinction from summarization in this case is that captioning involves generating text from differnet modalities - such as captioning a picture, or video clip.
+There parallels are here with both summarization, and our task, though it is perhaps unfair to describe documentation of code as `caption'.
 
-\subsection{Summarization}
+In summary our task falls in between a number of traditional NLP tasks and consequently related tasks blur the boundaries of translation, summarization and captioning. In the next section we present an overview of the relevant theoretical components for our model, indicating their provenance from their respective fields.
 
 \section{Neural Approaches}
 
