@@ -1,15 +1,59 @@
 \chapter{Background}
 \label{background}
 
+In this section we first present an overview of the theoretical items necessary to our task of generating natural language from code features.
+% In particular we cast our sequence generation problem in the commonly used framework of machine translation, exploring language models, translation techniques, and neural approaches to them. 
+In particular we explore the commonly used framework of machine translation, covering language models, translation techniques, and neural approaches to them. 
+We finally present an overview of the features of code that differentiate it from natural language, and conclude with a review of relevant work in the field.
 
-
-\section{Introduction to Machine Translation} % (fold)
+\section{Introduction to Language Generation} % (fold)
 \label{sec:lstm}
 
 \subsection{Language Modelling} % (fold)
 \label{sub:recurrent_neural_networks}
 
-\subsection{Machine Translation}
+% In order to accurately model sequences of words, we often require an  require an evaluation of the true probability of distribution sequence of words.
+Although natural language has the potential to be rich and complex, more often than not it is mundane and repetetive \cite{hindle_naturalness_nodate}. 
+It is such repetitiveness that makes it possible to predict in many instances. For instance, in natural English the phrase ``\textit{The music is loud, turn it ...}", is much more likely to be followed by `\textit{off}', or `\textit{down}', than the word `\textit{around}'.
+This is because the actual distribution of utterances is very sparse in  the vast space of possible utterances for a natural language.
+
+In our task, we seek to generate sequences of natural language, $\{s_1, s_2,..., s_n\}$ from a set of features of code, $\mathcal{C}$.
+Ideally we seek to do this through maximising a probability:
+
+$$p(s_1, s_2,...,s_n | \mathcal{C}) = p(\{s_i\}| \mathcal{C}) \propto p(\mathcal{C} | (\{s_i\})  p(\{s_i\})$$
+
+where the last proportionality follows from Bayes' rule.
+This $p(\{s_i\})$ term in this equation represents the probability of the sequence occuring naturally in the language. This term is what language models aim to represent.
+
+Language models are an unsupervised means of determining the natural distribution of utterences in a language (or corpus). 
+Often these utterences are broken down into single token sequences, and the probabilities are formed as a product of conditional probabilities.
+
+$$p(s_1, s_2,...,s_n ) = p(s_n | s_1, s_2,...s_{n-1} )  p(s_1, s_2,...s_{n-1} )$$
+$$= p(s_n | s_1, s_2,...s_{n-1} ) p(s_{n-1} | s_1, s_2,...s_{n-2} )...p(s_1)$$
+$$ = \prod_{i=1}^{n} p(s_i | s_1^{i-1} ) $$ where $s_1^{i-1} =  \{s_1, s_2,...s_{i-1}\}$, the sequence of tokens from $1$ to $i-1$
+
+These probabilities can be calculated in different ways, or under different assumptions. An n-gram model assumes a Markovian conditional independence structure, where the next token is conditionally independent of all others, given the previous n: 
+
+$$ s_t \CI s_1^{t-n} \mid s^{t-1}_{t-n+1} $$
+$$\therefore p(s_t | s_1, s_2,..., s_{t-1} )  = p(s_t | s_{t-n}, s_{t-n+1},..., s_{t-1}  ) $$
+
+These then models estimate maximum likelihood probabilities from counts of occurences in models, and sometimes `smooth' these probabilities to overcome the sparsity of their training data.
+
+Other models, such as neural language models, do not make such conditional indepence assumptions and use a neural network as a function approximator, instead of taking counts.
+In our work, language models are implicitly used in our sequence generation, where we seek to generate likely natural language given our code features $\mathcal{C}$, and we draw inspiration from them for the architectures of our models.
+
+\subsection{Language Generation}
+
+A traditional approach to conditionally generating language, is that of machine translation.
+In machine translation, we seek to generate the most likely sequence of a target language, $\{r_1, r_2,..., r_m\}$, given an sequence in an origin language  $\{s_1, s_2,..., s_n\}$. 
+In this case, we ideally maximise the probability:
+
+$$ p(r_1, r_2,..., r_m| s_1, s_2,...,s_n )$$
+
+
+Although the historic contexts of the machine translation revolve around two sequences of words in differnet languages, in principle such an approach extends to other settings.
+
+\subsection{Summarization}
 
 \section{Neural Approaches}
 
