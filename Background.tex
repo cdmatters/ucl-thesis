@@ -72,6 +72,7 @@ In summary our task falls in between a number of traditional NLP tasks and conse
 
 Given the maturity and prominence of the topic \footnote{Quote someone}, we assume a basic familiarity with neural networks, including linear and sigmoidal layers, multilayer perceptrons, and the backpropagation algorithm. For those seeking a further background on this topic, we recommend a number of books \cite{nielsenneural} \cite{Goodfellow:2016:DL:3086952} 
 
+
 \subsection{Recurrent Neural Networks} % (fold)
 \label{sub:recurrent_neural_networks}
 
@@ -169,13 +170,14 @@ This architecture has found great use in machine translation, though it has some
 \subsection{Attention} % (fold)
 
 As the sequences get longer, encoder-decoder architectures struggle to pass the full information required from the encoder to the decoder. 
-One way of improving this is to augment the decoder with a contextual vector at each step.
-The decoder then changes from being a function of simply the input token, $y_{t-1}$, and hidden state, $s_{t}$ at step $t$:
+One way of improving this is to augment the decoder with a contextual vector at each step (see figure \ref{fig:attention})
+As before, the decoder estimates the conditional probability for the next word $y_t$, given the input sentence $\mathbf{x}$, and previous output tokens ${y_1, ..., y_{t-1}}$.
+ However, this changes from being a function of simply the input token, $y_{t-1}$, and hidden state, $s_{t}$ at step $t$:
 \begin{equation}
 p(y_t| y_1, ..., y_{t-1}, \mathbf{x} ) = g(y_{t-1}, s_t)
 \end{equation}
 
-to now being a function of the context vector at that point $c_t$:
+to now being a function of the context vector at that point $c_t$ aswell:
 \begin{equation}
 p(y_t| y_1, ..., y_{t-1}, \mathbf{x} ) = g(y_{t-1}, s_t, c_t)
 \end{equation}
@@ -189,20 +191,42 @@ where
 \begin{equation}
 \alpha_{tj} = \dfrac{\text{exp}(a(s_{t-1}, h_j))}{\sum_k^{T_x}\text{exp}(a(s_{t-1}, h_k))}
 \end{equation}
+and $a$ is a function that maps to the reals - often a multilayer perceptron that is trained simultaneous to main training. 
 
-\begin{figure}[tb]
+This method was introduced by Bahdenau et al \cite{bahdanau_neural_2014} who demonstrated that the networks could use the attention to align words during translation.
+In this case the $\alpha$ parameter acts like a weighting indicating the most important word used in each token generation - which word the decoder should pay attention to.
+
+Variations on attention have found great use in the field of machine translation  \cite{luong_effective_2015}, and have even demononstrated their use independently of RNNs\cite{}. However they also have demonstrated their effectiveness in fields such as captioning, where they prove an effectve way of working with different modalities.
+
+% [Xu et al.2015] Kelvin Xu, Jimmy Ba, Ryan Kiros, Kyunghyun Cho, Aaron C. Courville, Ruslan Salakhutdinov, Richard S. Zemel, and Yoshua Ben- gio. 2015. Show, attend and tell: Neural image cap- tion generation with visual attention. In ICML
+
+In our models we use attention mechanisms extensively, both as a means of dealing with particularly long sequences (in our case of characters), and also as a means of dealing with the difficult modality of code.
+
+
+\subsection{Distributed Representations} % (fold)
+\label{sub:embeddings}
+
+The vocabulary of natural language is vast and nuanced. 
+Some words may appear very different lexically yet have similar semantic meaning - for instance `big' and `large'.
+Others may appear lexically similar, but have different meanings - `large' and `largesse'. 
+In our language generation tasks we wish to generate words that have the correct semantics.
+As such it would be helpful to find numerical representations of words that reflect their semantic meaning.
+
+One way of doing this is to distribute the semantic meaning over various components of a vector in a high dimensional space. Although such an idea is old 
+%\cite HINTON 1984
+
+
+% WHERE DO I CITE LUONG
+
+\begin{figure}[tb]{}
     \centering
-    \includegraphics[width=\linewidth]{ModelPics/attention2.png}
+    \includegraphics[width=\linewidth]{ModelPics/attention3.png}
     \caption{An example of sequence to sequence architecture with attention}
     \label{fig:attention}
 \end{figure}
 
 
-\subsection{Embeddings} % (fold)
-\label{sub:embeddings}
 
-why are distributed representations important
-how have they been used and calculated in 
 
 \section{Introduction to Source Code Structure} % (fold)
 \label{sec:translating_code}
