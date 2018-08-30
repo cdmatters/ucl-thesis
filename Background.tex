@@ -395,16 +395,20 @@ Although Allamanis et al's model is more aware of the structure of lexical code 
 
 As of writing no published work has been applied to generating documentation of source code using the syntactical structure of source code.  However, a number of pieces of work have recently started to examine such structure in other tasks. These are the topics of the next section of review.
 
-\subsection{Representations of Code}
+\subsection{Syntactic Representations of Code}
 
-In order to engage with the syntactical structure of code, it 
+In order to engage with the syntactical structure of code, it needs to be transformed into a numerically interpretable representation. 
+These representations need to also capture the semantics of the code, in much the same way as code vectors catch those of words.
+% Although there have been a number of attempts to generate non-syntactic distributed representations of code or elements of code, relatively
 
-As mentioned previously, most work in the field of statistical analysis of code has focused on the lexical tokens of code. 
-* These can be different, same meanining, miss the underlying AST
-* Recently a number of of tasks have aimed to make use of different aspects of code flow:
-* Program embeddings 1, 2, 
-* Graphs
-* Code2Vec
+
+One way of capturing the syntax of code is to parameterise the AST.
+Since a tree can be fully specified by the collection of paths of shortest distance between leaf nodes, an AST can now be treated as bag of paths. This was the model proposed by Alon et al \cite{alon_general_2018}, and has since been applied  in a function name classification context\cite{alon_code2vec_2018}.
+
+In this model, codepaths are parameterised into `path-contexts' - triples of the two terminal node names and the specific joining-path connecting them.
+Each node has a vocabulary with an embedding matrix, as does each joining-path. Each path-context is then concatenated and passes through a layer of a neural network, to produce a single combined context vector. Finally an attentional mechanism is run over the whole group of context vector to select the most important codepaths for the classification.
+
+Alon et al are able to demonstrate a performance in their task that surpasses other Allamanis et als' \cite{allamanis_convolutional_2016} and Iyer et als \cite{iyer_summarizing_2016}, and so demonstrate an appealing approach to dealing with ASTs.
 
 \section{Existing Datasets}
 
