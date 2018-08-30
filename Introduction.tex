@@ -11,7 +11,7 @@
 % \end{enumerate}
 
 
-In this chapter we motivate our investigation into the summarization of fine-grained elements of code, present the central problem in question, and formalise the objectives of this investigation and report. 
+In this chapter we motivate our investigation into the documentation generation of fine-grained elements of code, present the central problem in question, and formalise the objectives of this investigation and report. 
 Finally we present an overview of the contributions of our research and the following structure of the thesis.
 
 
@@ -29,10 +29,10 @@ Work that facilitates human understanding of source code is therefore highly lik
 Source code documentation is the textual component of code, designed to provide clear communication to human readers.
 It is often an abstract summary of the purpose or function of the code, though sometimes an overview of the underlying subroutine.
 Such summaries prove valuable in their own right, but are only one aid in understanding the source code they relate to.
-Often a fine-grained understanding of the elements of the source code requires investigation by the reader, or an explicit mention by the documentation writer.
+Often an understanding of the individual, fine-grained elements of the source code requires investigation by the reader, or an explicit mention by the documentation writer.
 
 With the advent of dynamically-typed languages, which do not make explicit information such as `integer', or `string', explanations of individual elements of source code, such as arguments, have renewed importance.
-In fact, a number of open-source projects  \cite{noauthor_numpydoc_nodate} and industrial company guidelines \cite{noauthor_style_2018} now require an explicit description of the arguments of each function in contributions to their projects.
+In fact, a number of open-source projects \cite{noauthor_numpydoc_nodate} and industrial company guidelines \cite{noauthor_style_2018} now require an explicit description of the arguments of each function in contributions to their projects.
 The constant enumeration of these is manual, tedious, and prone to error, inaccuracy (through code churn) or even neglect.
 % Furthermore, these descriptions are increasingly used to generate static websites that officially document code, so an outdated description 
 
@@ -86,19 +86,19 @@ The hypothesis draws inspiration from Don Knuth's idea of \textit{literate progr
 Allamanis cites the successes that recent statistical natural language processing approaches have had when applied to `Big Code', dating back to Hindle et al \cite{hindle_naturalness_nodate}, to defending his hypothesis. He also points to evidence in cognitive science studies, that demonstrate that brain behaviour in reading programming languages is akin to reading ``natural languages with greater expertise''\cite{floyd_decoding_2017}.
 
 We mention the Naturalness Hypothesis because it is a fundamental inspiration for the approach and methods of our research.
-We believe that it is only in looking at the statistical `naturalness' properties of both source code and the language accompanying it, that the generalisable, extenisble progress will be made in human-centric tasks such as code summarization, or code explanation.
+We believe that it is only in looking at the statistical `naturalness' properties of both source code and the language accompanying it, that the generalisable, extenisble progress will be made in human-centric tasks such as code summarization, code explanation, and documentation generation.
 
 %%% DIFFERENCES BETWEEN CODE & NL
 
 \section{Problem Formulation} % (fold)
 \label{sec:problem_formulation}
 
-As the field of statistical research into code and its `naturalness' properties is relatively new, we feel there are opportunities to investigate the field of code summarization, as it relates to specific elements of code. 
-To this end, we examine the summarization of Python function arguments and their contextual data, into their descriptions found in docstrings.
+As the field of statistical research into code and its `naturalness' properties is relatively new, we feel there are opportunities to investigate the field of documentation generation, as it relates to specific elements of code. 
+To this end, we examine the automatic generation of brief descriptions or summaries of Python function arguments, by examining their code, contextual data, and descriptions found in docstrings.
 
 In particular we wish to investigate:
 \begin{itemize}
-    \item whether reasonable summaries can be generated from just lexical names the function signature?
+    \item whether reasonable summaries can be generated from just lexical names in the function signature?
     \item whether reasonable summaries can be generated from the functions abstract syntax tree, without the lexical data?
     \item whether these models, can be combined in a way that surpasses each individually?
     \item whether such models can work both in an `in-project' setting and an `out-project setting'?
