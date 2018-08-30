@@ -397,29 +397,29 @@ As of writing no published work has been applied to generating documentation of 
 
 \subsection{Syntactic Representations of Code}
 
-In order to engage with the syntactical structure of code, it needs to be transformed into a numerically interpretable representation. 
-These representations need to also capture the semantics of the code, in much the same way as code vectors catch those of words.
-% Although there have been a number of attempts to generate non-syntactic distributed representations of code or elements of code, relatively
+A number of probablistic models have attempted to capture the the syntax of code, outside of the field of documentation generation.
+Raychev et al \cite{raychev_probabilistic_nodate} use decision trees to develop the probabilistic model of code from the syntax tree, in a code-completion setting. 
+Maddison and Tarlow \cite{maddison_structured_2014} use probabilistic context free grammars to model the AST, for a generative model. 
+Neither of these approaches provides us with the natural structure we can easily use for sequence generation. 
+
+Allamanis et al models the AST as explicitly as a graph, adding extra edges such as "guarded by", or "last lexical use", to capture additional semantic information\cite{allamanis_learning_2017}. These graphs are then processed with a Gated Graph Neural Network in a variable naming and variable misuse classification task. 
+This last method proves remarkably effective, though it appears highly complex to implement, the additional semantic annotations added can appear particularly arbitrary. As a result of both of these, we avoid using these representations as inputs for our task.
+
+A simpler way to capture the syntax of the code is to reparameterise the AST.
+Since a tree can be fully specified by the set of shortest paths between all leaf nodes, an AST can now be treated as bag of these paths. This was the parameterisation was proposed by Alon et al in 2018 \cite{alon_general_2018}, and has since been applied successfully in a function name classification context\cite{alon_code2vec_2018}.
+
+In this model, codepaths are parameterised into `path-contexts' - triples of the two terminal node names and the specific paths connecting them.
+Each path and terminal node has a respective embedding (learnt alongside the main task), and for each path-context, the repective two terminals and path are concatenated and fed through a neural-network layer to combine into a single path-context vector.
+A general code vector is then produced from a simple attention mechanism over the every path-context vector in the tree. 
 
 
-One way of capturing the syntax of code is to parameterise the AST.
-Since a tree can be fully specified by the collection of paths of shortest distance between leaf nodes, an AST can now be treated as bag of paths. This was the model proposed by Alon et al \cite{alon_general_2018}, and has since been applied  in a function name classification context\cite{alon_code2vec_2018}.
-
-In this model, codepaths are parameterised into `path-contexts' - triples of the two terminal node names and the specific joining-path connecting them.
-Each node has a vocabulary with an embedding matrix, as does each joining-path. Each path-context is then concatenated and passes through a layer of a neural network, to produce a single combined context vector. Finally an attentional mechanism is run over the whole group of context vector to select the most important codepaths for the classification.
-
-Alon et al are able to demonstrate a performance in their task that surpasses other Allamanis et als' \cite{allamanis_convolutional_2016} and Iyer et als \cite{iyer_summarizing_2016}, and so demonstrate an appealing approach to dealing with ASTs.
+Alon et al are able to demonstrate a performance in a function name classification task that surpasses both Allamanis et als' \cite{allamanis_convolutional_2016} and Iyer et als \cite{iyer_summarizing_2016}. This simplicity and proven effectiveness demonstrate an appealing approach to capturing semantics within the structure of with AST.
 
 \section{Existing Datasets}
 
 The scope of the tasks available to challenge researchers is naturally limited by the set of available datasets.
 % Given the relative novelty of the field, there still a limitation in the number of datasets that have been collected, cleaned and are suitable for certain tasks.
-In this section we outline the current state of the available datasets for researchers looking to generate sequences from source code. In doing so we indicate why none so far is suitable our task of generating documentation or summaries of fine-grained elements of source code.
-
-\subsection{Language Modelling Corpora}
-An early, prominent corpus of data is the GitHub Java Corpus, by Allamanis and Sutton\cite{allamanis_mining_2013}. This corpus is composed of 14,800 open source Java projects, with over 350 million lines of code (LOC), and is approximately two orders of magnitude larger than the original dataset of Hindle et al. This dataset is rich and a good example of a dataset highly suited to language modelling, but is of little use for natural language problems, given how poorly documented much open source code is.
-Similar language modelling corpora exist in other languages, and run in to the same problem. Bhoopchand et al \cite{bhoopchand_learning_2016} focus on high quality code, by pulling large sections of Python code from projects with more than 100 stars from GitHub, finally collecting 40 million LOC. 
-Despite the quality and scale of this corpus, the lack of structured language surrounding the code makes it unsuitable to our translation tasks, let alone anything as fine grained as we would wish.
+In this section we outline the current state of the available datasets for researchers looking to generate sequences from source code. In doing so we indicate why none so far is suitable our task of generating documentation or summaries from fine-grained elements of source code.
 
 \subsection{Stack Overflow Dataset}
 
@@ -444,23 +444,33 @@ A recent corpus specifically tailored to code-to-text generation, is one of Pyth
 This is a set of 109,000 triplets of function declarations, bodies, and documentation strings (docstrings), scraped from the most popular projects in GitHub, using the same methodology as Bhoopchand et al. 
 
 In this dataset, the authors focus on finding real world code, and extracting the string, written by code authors, providing a description of each function.
-Although these source code sections and natural language strings are more `natural', than their Stack Overflow counterparts, they still don't suit our needs, mainly in the form of the language they provide. 
+Although these source code sections and natural language strings are more `natural' than their Stack Overflow counterparts, they still don't suit our needs, mainly in the form of the language they provide. 
 
-Python's documentation strings are designed to be an explicit guide as to how to use the function. 
-For any method in python, calling the built-in \mintinline[]{python}{help} function will display this string to the user, with the function declaration. 
-Therefore this string often presents an overall view of the function, with very little reference to the inner workings of the code. 
-This follows from abstraction principles of keeping library api's as a black box.
-In fact from a code-readers perspective (instead of a code-users perspective), the most informative section of the docstring is where the arguments are described. 
-Such a segment is not always present, but if so, would be perfect for our fine grained summarization task, as it links direct elements used in the code, to their natural-language descriptions. 
+The Python language enforces no constraints on the content or format of the a class or function docstring.
+As a result, unless they follow the conventions laid out by numpy or Google, authors are not required to document arguments with a specific description, or even at all.
+Instead the docstring (if it exists) will likely just present an overall view of the function, with very little reference to the inner workings or details of the code. 
+Without a section describing either arguments or specific elements in the code with their own natural language descriptions, it is impossible for us to attempt our close comparison task.
+% Sometimes the arguments 
 
-Only part of the Edinburgh corpus functions contain such such descriptions, and these are mixed in with the docstring as a whole, and therefore difficult to parse in whatever numbers they exist.
+
+% This follows from principles of keeping abstraction and implementations separate -  as a black box.
+% In fact from a code-readers perspective (instead of a code-users perspective), the most informative section of the docstring is where the arguments are described. 
+% Such a segment is not always present, but if so, would be perfect for our fine grained summarization task, as it links direct elements used in the code, to their natural-language descriptions. 
+
+The major failing of the Edinburgh corpus is that it does not contain enough of such sections, and where they do, they are difficult to extract from the rest of the docstring as a whole.
 As such this makes the Edinburgh corpus limited to our needs.
 
 
 \subsection{Other Datasets}
-% edinburgh
-% django
-% stack overflow
+A range of other datasets also exist in the code modelling field, often with specific tasks in mind. These are often utterly unsuitable from a natural language perspective.
+
+For instance, a prominent corpus of data is the GitHub Java Corpus, by Allamanis and Sutton\cite{allamanis_mining_2013}. This corpus is composed of 14,800 open source Java projects, with over 350 million lines of code (LOC), and is approximately two orders of magnitude larger than the original dataset of Hindle et al. This dataset is rich and suited to its task of language modelling, but is of little use for natural language problems, given how poorly documented much open source code is.
+
+Similarly Bhoopchand et al's \cite{bhoopchand_learning_2016} dataset focuses on high quality code, by pulling large sections of Python from projects with more than 100 stars from GitHub, collecting 40 million LOC. 
+Despite the quality and scale of this corpus, again the lack of appropriate documentation surrounding the code makes it unsuitable to our generation tasks, let alone anything as fine-grained as we would wish.
+
+As a final example, Oda et al\cite{oda_learning_nodate} source a particularly interesting dataset of individual lines of Python code from the Django open source project, with a corresponding line of human-written pseudocode. Although such datasets present interesting opportunities to look at close relations between code and language, the pseudo-code is far too close to actual code to help us in this task, and is highly artificial. 
+
 
 
 % These attentional style models have shown great success at combining the different modalities of text and code, and this particular model
