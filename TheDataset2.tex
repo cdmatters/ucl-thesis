@@ -16,7 +16,7 @@ Therefore we set out to collect our own dataset, according to a number of criter
     \item The data should comparable in size to existing datasets
 \end{enumerate}
 
-These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 186 of the most popular libaries in `PyPI', the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
+These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 112 of the most popular libaries in `PyPI', the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
 Finally we present the different partitions of the dataset, we used in our experiments.
 
 
@@ -40,4 +40,80 @@ This fulfilled our objective of obtaining a large number of arguments, descripti
 
 \section{Structure of Data}
 
+The dataset comprises of a list of Python function arguments, their natural language descriptions and surrounding metadata. 
+This metadata is extensive, containing numerous fields including the source code of the function, function name and filename, among others. 
+An example datapoint is presented in Listing \ref{lst:single_point_short}. The full structure of the data fields is also present in the appendix, Table \ref{table:metadata}. 
 
+\begin{listing}[ht!]
+\begin{minted}[fontsize=\footnotesize]{yaml}
+-   argument_name: 'tensors'                                 
+    argument_description: ' a list of variable or op tensors.'  
+    function_name: 'add_zero_fraction_summaries'                
+    function_args: ['tensors', 'prefix']                         
+    function_signature: '(tensors, prefix=None)'                    
+    library: 'tensorflow'                                
+    filename: '/tensorflow/contrib/slim/python/slim/summaries.py'  
+    other_argument_info:             
+        'prefix': {desc: ' An optional prefix for the summary names.' }
+    docstring: |
+      Adds a scalar zero-fraction summary for each of the given tensors.
+
+      :param tensors: a list of variable or op tensors.
+      :param prefix: An optional prefix for the summary names.
+
+      :returns: A list of scalar `Tensors` of type `string` whose contents are the
+                 serialized `Summary` protocol buffer.
+    src: |
+      def add_zero_fraction_summaries(tensors, prefix=None):
+        """<docstring>"""
+        summary_ops = []
+        for tensor in tensors:
+          summary_ops.append(add_zero_fraction_summary(tensor, prefix=prefix))
+        return summary_ops
+\end{minted}
+     \caption{An illustrative example of a single data point. The docstring in the source has been elided for brevity and replaced with the $<$docstring$>$ tag. A full table of the field names and types is presented in Appendix Table \ref{table:metadata}}
+     \label{lst:single_point_short}
+\end{listing}
+
+
+\section{Analysis of Data} % (fold)
+\label{sec:analysis_of_data}
+
+\subsection{Statistical Analysis of Libraries}
+
+We first analysed our dataset by looking at the libraries included within it.
+We found that although the criteria for choice of library was based solely on frequency of downloads from the PyPI, there was a clear bias towards scientific libraries in the composition of the data.
+
+Of the 112 libraries that eventually contributed data to the dataset, only 21 are labelled with the `Scientific/Engineering' tag on PYPI, yet these libraries contribute 68.3\% of arguments to the overall dataset, and 61.6\% of the functions. 
+Even more surprisingly one library, \mintinline{python}{tensorflow}, contributes 41\% of the arguments to the data - vastly more than any other library.
+In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contributes almost six times as many arguments as the second placed library - coincidentally also developed by Google. 
+
+This outsize contribution from relatively few libraries is largely the result of the design of these libraries and their use cases. 
+Scientific libraries have vast APIs, and users of the libraries often require different interfaces for potentially similar functions. 
+As an example, two library methods such as \mintinline{python}{conv2D} and \mintinline{python}{conv3D} may in an abstract sense perform very similar functions - a mathematical convolution - yet are critically distinct in a scientific setting.
+The necessity of these kinds of distinctions, and the precision of their use case, leads these libraries to have large numbers of exposed functions, requiring clear documentation.
+
+\subsection{Statistical Analysis of Arguments}
+
+Corresponding to our findings on a library level, we found that a large number of function and variable names were very scientific in nature. Table \ref{table:popular_variable_names} illustrates this with a list of the most popular variable names and argument function names in the dataset.
+
+Furthermore we found a lot of repetition of the same variable name within the dataset, as can be seen from the histogram in Table \ref{table:variable_histogram}.
+Reassuringly we found that, aside from having different source code, these duplicates would also often have different descriptions and came from different packages.  A histogram of counts of unique (name, description) pairs illustrates this in Table \ref{table:name_desc_histogram}, while some helpful examples of the different descriptions and packages for the most popular names are presented in Appendix Tables \ref{table:packages_for_names} and \ref{table:descriptions_for_names}. 
+
+We notice at this point that our distributions are heavily outweighed by one repeated variable and description, which accounts for 3.4\% of the whole data. This variable is from tensorflow: \mintinline[]{python}{name} - \textit{"a name for the operation (optional)"}. 
+This outlier is visible too in our histogram of description lengths, (figure X), which otherwise shows a reasonable distribution of short descriptions. We note this outlier to inform our final preparations.  
+
+Apart from this we note no major irregularities the arguments. The distribution of length of names is presented in figure Y, which appear fairly regular.  We also note that the average number of arguments per function is a $3.836 \pm 2.96$, indicating that most most functions supply a modest number of arguments to the dataset.
+
+
+\subsection{Statistical Analysis of Code} % (fold)
+\label{sub:statistical_analysis_of_code}
+
+\begin{enumerate}
+    \item The source code covers a broad range of functions. Lines of code (generated histogram), are a (30.27 +/- 99) lines. 
+    \item Although technically not in part of the dataset, by comparing code paths, we also see good diversity. 
+    \item Very few paths are unique, which is unsurprising given the abstractness and simplicity of the Python syntax tree
+    \item However, each point has many many paths.  about half are between 50 and 500 paths.
+    \item  Some functions have preposterous large numbers of paths due to the fact that the variable is is referred to multiple times in the code, and large class definitions. This indicates real bit of code like class definitions.
+    \item This is very much like a real word dataset, where syntax trees are significant and varried
+\end{enumerate}
