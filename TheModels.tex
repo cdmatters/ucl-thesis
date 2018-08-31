@@ -4,20 +4,36 @@
 \section{Rote Learner Model} % (fold)
 \label{sec:rote_learner_model}
 
+In our investigation we focus on two things: the lexical names of the function signature and the abstract syntax tree. In both cases we require a baseline model. We devised the rote learner. The rote learner memorises all descriptions and datapoints and randomly selects. it doesn this according to ngram overlap of characters, backing off (cite later).
+
 % section rote_learner_model (end)
 
 \section{Character Level Sequence to Sequence Model} % (fold)
 \label{sec:character_level_sequence_to_sequence}
+
+* What is the motivation of the seq to seq model.
+* Since so much effort goes into naming of variables, shouldnt there be recognisable clues? Especially since,in many languages, function signature is all thats presented in documentation.
+* \_ctx => context? conv2d in the function implies somethings?
+* We therefore employ a sequence to sequence model to investigate the informativeness of function signatures
+
+
 
 % section character_level_sequence_to_sequence (end)
 
 \section{Code2Vec to Sequence Model} % (fold)
 \label{sec:code2vec_to_sequence_model}
 
+* We then want to investigate purely without lexical names (overlap etc)
+* We decide to present a modification on Code2Vec, that is argument specific.
+* The motivtion is that this hsould be able to point out only some local parts of the model, the bits of the code that are near or important might get upweighted.
+
+
 % section code2vec_to_sequence_model (end)
 
 \section{Code2Vec + LSTM Encoder} % (fold)
 \label{sub:code2vec_sequence_to_sequence}
+
+Aim to combine these models together.Natural through 
 
 % subsection code2vec_sequence_to_sequence (end)
 % section combined_encoder_models (end)
