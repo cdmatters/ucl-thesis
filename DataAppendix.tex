@@ -3,48 +3,36 @@
 \label{example_datapoint}
 % Figure \ref{lst:single_point} shows a real example of a datapoint in YAML markup. 
 % Different parts of the data were used in the investigation.
-\begin{listing}[h!]
-\begin{minted}[fontsize=\small]{yaml}
--   arg_name: tensors                                 # argument name: STRING
-    arg_desc: ' a list of variable or op tensors.'    # argument description: STRING
-    arg_type: null                                    # argument type: STRING or NULL
-    args: [tensors, prefix]                           # list of arguments: LIST of STRING
-    arg_info:                                         # info on other arguments: DICT of DICT
-        prefix: 
-            desc: ' An optional prefix for the summary names.' 
-            type: null
-    filename: /tensorflow/contrib/slim/python/slim/summaries.py  # filename: STRING
-    name: add_zero_fraction_summaries                 # function name: STRING 
-    sig: (tensors, prefix=None)                       # function signature: STRING
-    pkg: tensorflow                                   # library: STRING  
-    src: |                                            # source code: STRING 
-      def add_zero_fraction_summaries(tensors, prefix=None):
-        """Adds a scalar zero-fraction summary for each of the given tensors.
-  
-        Args:
-          tensors: a list of variable or op tensors.
-          prefix: An optional prefix for the summary names.
-  
-        Returns:
-          A list of scalar `Tensors` of type `string` whose contents are the
-          serialized `Summary` protocol buffer.
-        """
-        summary_ops = []
-        for tensor in tensors:
-          summary_ops.append(add_zero_fraction_summary(tensor, prefix=prefix))
-        return summary_ops
-    docstring: |                                      # sphinx annotated docstring: STRING 
-      Adds a scalar zero-fraction summary for each of the given tensors.
 
-      :param tensors: a list of variable or op tensors.
-      :param prefix: An optional prefix for the summary names.
+\begin{table}[h!]
+    \begin{center}
+    \begin{tabular}{| c | c | c | c |}
+        \hline
+        Name &  Description     &    Field    & Type  \\
+        \hline
+        Argument Name & the name of the argument  & arg\_name & string \\
+        Argument Description & the description of the argument & arg\_desc & string \\
+        Argument Type & the annotated type for the argument & arg\_type & string or null \\
+        All Arguments & all arguments used in the function & args & list of strings \\
+        Other Argument Info & name, desc. and type for all other arguments & arg\_info & dict of dicts\\
+        Function Name & the name of the function & name & string\\
+        Signature & the function signature & sig & string\\
+        Path & the full path to the file & filename & string \\
+        Library & the library of the function & pkg & string\\
+        Source & the source code of the function & src & string\\
+        Docstring & the sphinx annotated docstring & docstring & string\\
 
-      :returns: A list of scalar `Tensors` of type `string` whose contents are the
-                 serialized `Summary` protocol buffer.
-\end{minted}
-     \caption{Real example of a single data point, with all metadata. The docstring in the source has been elided for brevity}
-     \label{lst:single_point}
-\end{listing}
+        \hline
+
+
+    \end{tabular}
+    \caption {Fields collected for each single datapoint. Field refers to the actual key used in YAML file, and Type indicates the type of the data as stored in the file.}
+    \label{table:metadata}
+    \end{center}
+\end{table}
+
+
+
 
 \begin{table}[h]
     \begin{center}
