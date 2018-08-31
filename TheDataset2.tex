@@ -1,0 +1,43 @@
+\chapter{The Dataset}
+\label{the_dataset}
+
+\section{Motivation}
+
+We have already motivated in Section \ref{sec:motivation} our desire to automatically generate documentation for individual elements of code: this would find great use as an IDE plugin for developers, whilst serving as a stepping stone for related tasks in code comprehension and type inference.
+However, in order to examine the automatic documentation of individual elements of code, we require an appropriate dataset that, as demonstrated in Section \ref{sec:existing_datasets}, does not currently exist.
+
+Therefore we set out to collect our own dataset, according to a number of criteria:
+
+\begin{enumerate}
+    \item The data should be `real-world', ideally from open source code
+    \item The data should have a close alignment between natural language and the code described. Ideally the natural language \textit{explicitly} describes the source code.
+    \item The code used must be high quality and parsable, so that syntactic structure can be extracted.
+    \item The data should require \textit{minimal} preprocessing and cleaning, to avoid mistakes and errors.
+    \item The data should comparable in size to existing datasets
+\end{enumerate}
+
+These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 186 of the most popular libaries in `PyPI', the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
+Finally we present the different partitions of the dataset, we used in our experiments.
+
+
+\section{Method of Collection} % (fold)
+\label{sec:method_of_collection}
+
+As mentioned in Section \ref{sub:python}, a number of conventions exist for the formatting of docstrings, the two most prominent ones being `numpy'-style and `Google'-style.
+Not all codebases use such styles, (as seen in the Edinburgh Corpus \cite{barone_parallel_2017}), but they are popular with large open source projects. 
+
+Sphinx is the industry standard for generating static HTML pages of documentation from source code. It contains a plugin - \textit{napoleon} - especially designed for Python docstrings, formatted according to the numpy or Google conventions. 
+This plugin loads the source into memory and obtains the docstring from the AST itself.
+Then \textit{napoleon} uses its custom parser to parse out different features, such as argument names and their descriptions, from the docstring.
+
+In order to make use of \textit{napoleon} docstring parsing facilities, we wrote plugin \textit{bonaparte}\footnote{https://github.com/condnsdmatters/bonaparte}, forking the \textit{napoleon}'s source. 
+Instead of generating HTML, this plugin generated a series of yaml files with the associated data we required, including argument names, descriptions, docstrings, function code and filenames.
+ 
+Having established a method of obtaining close alignment between code and natural langugae, along with the source code of the function, we now required a number of large scale projects that documented their code according to these conventions. 
+As a result we decided to run the bonaparte plugin on the 300 most popular libraries in PyPI, as of April 2018 \footnote{https://python3wos.appspot.com/}.
+After collecting these, we processed the data by removing arguments without descriptions (such as \mintinline[]{python}{self}) or without code bodies (from abstract base classes).
+This fulfilled our objective of obtaining a large number of arguments, descriptions and source code from popular high quality code-in-the-wild sources, with minimal processing to extract the relevant data.
+
+\section{Structure of Data}
+
+
