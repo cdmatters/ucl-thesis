@@ -1,0 +1,234 @@
+\chapter{Rote Learner Algorithms}
+
+
+\begin{algorithm}
+    \caption{The NGram Overlap Matching algorithm }
+    \label{alg:ngram_overlap}
+    \begin{algorithmic}
+        \Procedure{BestMatchingSet}{$test, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+       
+        % \State $n \gets \text{characterLength}(s)$
+        % \While {$n > 0$}  \Comment{Start with longest overlap}
+        %     \State ${M} = \textbf{[ ]}$
+        %     \State ${S} \gets \text{getNCharacterGrams}(s, n)$
+        %     \For {$t \textbf{ in } training\_points$}
+        %         % \State $d \gets \text{getCharSequence}(t) $
+        %         \State ${T} \gets \text{getNCharacterGrams}(t, n)$
+        %         \For {$\textbf{each in }  {S} \cap {T}$}
+        %             \State $ {M} \gets  {M} + \text{[ }t\text{ ]}$
+        %              \Comment{There may be more than one overlap}
+        %         \EndFor
+        %     \EndFor
+        %     \If {${M} \ne \textbf{[ ]}$}
+        %         \State $\textbf{return } {M}$
+        %     % \Else
+        %     \EndIf
+        %     \State $n \gets n - 1$
+        % \EndWhile \Comment{If no overlap, choose from all training points}
+
+        \State \text{toCharSequence} $\gets$ lambda(x)\{x[`character\_sequence']\}
+        \State $M \gets \text{LargestOverlappingSubsequence}(test, training\_points, \text{toCharSequence})$
+        \State $\textbf{return } M$
+
+        \EndProcedure
+
+    \end{algorithmic}
+\hrulefill
+
+    \begin{algorithmic}
+        \Procedure{LargestOverlappingSubsequence}{$y\_data, X\_data$, toSequence} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        
+        \State $y \gets \text{toSequence}(y\_data)$
+        \State $l \gets \text{length}(y)$
+        \For {$n \text{ in } \{l, l-1 ..., 1\}$}  \Comment{Start with longest overlap}
+            \State ${C} = \textbf{[ ]}$
+            \State ${N} \gets \text{getSubSequences}(y, n)$
+            \For {$x\_data \textbf{ in } X$}
+                \State $x \gets \text{toSequence}(x\_data)$
+                % \State $d \gets \text{getCharSequence}(t) $
+                \State ${M} \gets \text{getSubSequences}(x, n)$
+                \For {$\textbf{each in }  {S} \cap {T}$}
+                    \State $ {C} \gets  {C} + \text{[ } x\_data \text{ ]}$
+                     \Comment{There may be more than one overlap}
+                \EndFor
+            \EndFor
+            \If {${C} \ne \textbf{[ ]}$}
+                \State $\textbf{return } {M}$
+            \EndIf
+        \EndFor \Comment{If no overlap, return all}
+        \State $\textbf{return } X\_data$
+        \EndProcedure
+    \end{algorithmic}
+\hrulefill
+
+    \begin{algorithmic}
+        \Procedure{getSubSequences}{$x, n$} \Comment{Get all subsequences from x, length n} 
+        \State l = \text{length}($x$)
+        \State $\textbf{return } [x[i:i+n] \text{ for i in } \{0,...,l-n+1\} ]$
+
+        \EndProcedure
+    \end{algorithmic}
+
+
+\end{algorithm}
+
+
+
+\begin{algorithm}
+    \caption{The Path-Context Matching algorithms (Max and Proportional) }
+    \label{alg:context_algorithm}
+    \begin{algorithmic}
+        \Procedure{BestMatchingSetProportional}{$test, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} = \text{getPathContextOverlap}(test, training\_points)$
+        \State $\textbf{return } M$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+    \begin{algorithmic}
+        \Procedure{BestMatchingSetMax}{$test, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} = \text{getPathContextOverlap}(test, training\_points)$
+        \State $\textbf{return } \text{mostFrequent}(M)$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+    \begin{algorithmic}
+        \Procedure{getPathContextOverlap}{$s, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} = \textbf{[ ]}$
+        \State ${S} \gets \text{getPathContexts}(s)$
+        \For {$t \textbf{ in } training\_points$}
+            \State ${T} \gets \text{getPathContexts}(t)$
+                \For {$\textbf{each in }  {S} \cap {T}$}
+                    \State $ {M} \gets  {M} + \text{[ }t\text{ ]}$
+                     
+                \EndFor
+        \EndFor
+        \State $\textbf{return } M$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+    \begin{algorithmic}
+        \Procedure{getPathContexts}{$x$} %\Comment{Find best  
+        \State $\textbf{return } x$[`path\_contexts']
+        \EndProcedure
+    \end{algorithmic}
+
+\end{algorithm}
+
+
+
+\begin{algorithm}
+    \caption{The SubContext Matching algorithms (Max and Proportional)}
+
+
+
+    \label{alg:sub_context_algorithm}
+    \begin{algorithmic}
+        \Procedure{BestMatchingSetProportional}{$test, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} = \text{getSubPathContextOverlap}(test, training\_points)$
+        \State $\textbf{return } M$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+    \begin{algorithmic}
+        \Procedure{BestMatchingSetMax}{$test, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} = \text{getSubPathContextOverlap}(test, training\_points)$
+        \State $\textbf{return } \text{mostFrequent}(M)$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+
+    \begin{algorithmic}
+        \Procedure{getSubPathContextOverlap}{$s, training\_points$} %\Comment{Find best matching set for test argument $t$ }
+        % \State $c \gets \text{getCharSequence}(test\_point) $
+        \State ${M} \gets \textbf{[ ]}$
+        \State ${S} \gets \text{getPathContexts}(s)$
+        \State \text{toPathContextSequence} $\gets$ lambda(x)\{split(x[`path\_context'])\}
+
+        \State ${X\_data} \gets \text{flattenPathContexts}(training\_points)$
+
+        \For {$s \textbf{ in } S$}
+            \State $m \gets \text{LargestOverlappingSubsequence}(s, X\_data$, toPathContextSequence) 
+            \State $M \gets M + m$
+
+        \EndFor
+        \State $\textbf{return } M$
+        \EndProcedure
+    \end{algorithmic}
+    \hrulefill
+    \begin{algorithmic}
+        \Procedure{flattenPathContexts}{$all\_xs$} %\Comment{Find best ma
+        \State {$flat \gets \text{[ ]}$}
+        \For {$x \textbf{ in } all\_xs$}
+            \For {$p \textbf{ in } x\text{[`path\_contexts']}$} 
+                \State $y \gets x$
+                \State $y[`path\_contexts'] \gets [p]$
+                \State $flat \gets flat + [y]$
+            \EndFor
+        \EndFor
+
+        % \State $\textbf{return } x$[`path\_contexts']
+        \State $\textbf{return }flat$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+    % \begin{algorithmic}
+    %     \Procedure{BestMatchingSet}{$s, training\_points$, mode} %\Comment{Find best matching set for test argument $t$ }
+    %     % \State $c \gets \text{getCharSequence}(test\_point) $
+    %     \State ${M} = \textbf{[ ]}$
+    %     \State ${S} \gets \text{getPathContextsAsSequence}(s)$
+    %     \For {$t \textbf{ in } training\_points$}
+    %         \State ${T} \gets \text{getPathContextsAsSquence}(t)$
+    %             \For {$\textbf{each in }  {S} \cap {T}$}
+    %                 \State $ {M} \gets  {M} + \text{[ }t\text{ ]}$
+                     
+    %             \EndFor
+    %     \EndFor
+    %     \If {{mode} = \text{`prop'}}
+    %         \State $\textbf{return } M$
+    %     \ElsIf {{mode} = \text{`max'}}
+    %         \State $\textbf{return } \text{mostFrequent}(M)$
+    %     \EndIf
+    %     \EndProcedure
+    % \end{algorithmic}
+
+
+
+
+
+    % \begin{algorithmic}
+    %     \Procedure{BestMatchingSet}{$s, training\_points$} 
+    %     \State $n \gets \text{characterLength}(s)$
+    %     \While {$n > 0$}  \Comment{Start with longest overlap}
+    %         \State ${M} = \textbf{[ ]}$
+    %         \State ${S} \gets \text{getPathContextsAsSequence}(s, n)$
+    %         \For {$t \textbf{ in } training\_points$}
+    %             \State ${T} \gets \text{getPathContextsAsSequence}(t, n)$
+    %             \For {$\textbf{each in }  {S} \cap {T}$}
+    %                 \State $ {M} \gets  {M} + \text{[ }t\text{ ]}$
+    %                  \Comment{There may be more than one overlap}
+    %             \EndFor
+    %         \EndFor
+    %         \If {${M} \ne \textbf{[ ]}$}
+    %             \State $\textbf{return } {M}$
+    %         % \Else
+    %         \EndIf
+    %         \State $n \gets n - 1$
+    %     \EndWhile \Comment{If no overlap, choose from all training points}
+    %     \State $\textbf{return } training\_points$
+
+    %     \EndProcedure
+    % \end{algorithmic}
+
+

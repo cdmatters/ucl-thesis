@@ -1,5 +1,7 @@
-\chapter{The Models}
+\chapter{Method}
 \label{the_models}
+
+\section{Overview}
 
 In our investigations we focus on two main aspects of the code to generate a description for our arguments. 
 These are the names in the function's signature, and the AST of the accompanying code. 
@@ -9,25 +11,27 @@ In langugages such as C++, the signature of function may be all that is presente
 Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
 This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
 
-Variable and function names can often be composite, perhaps separated by an underscore: e.g. \mintinline[]{python}{web_ctx}. 
+In our experiments, we model the names of the signature as sequences of characters. Variable and function names can often be composite, perhaps separated by an underscore: e.g. \mintinline[]{python}{web_ctx}. 
 In this case the both parts of the name might indicate a different clue to the argument:  the  \mintinline[]{python}{web} prefix may indicate a use in the internet domain; the \mintinline[]{python}{ctx} suffix may indicate a context object. 
-In our experiments, we aim to pick up these patterns and conventions by looking at the elements of the signature as sequences of characters.
+In our experiments, we aim to pick up these patterns and conventions on the character-level.
 
-We also focused on drawing information about the variable solely from the AST. We feel that the most robust way of drawing inferences from the code is to examine the instructions given directly to the computer. 
+We also focused on generating descriptions solely from the AST. We feel that the most robust way of drawing inferences from the code is to examine the instructions given directly to the computer. 
 These inferences would be invariant under transformations such as renaming of variable. 
 
-Since we only sought the relevant sections of code pertintent to our chosen argument, we needed to extract this information from the AST. 
-In our experiments we did this by reparameterisng the AST in a similar way to Alon et al \cite{alon_general_2018}, which allowed us to select only the `path-contexts' that use our chosen argument. 
-We hoped our models would then be able to learn which `path-contexts' are most informative, picking out the most relevant sections of code.
+We chose to model this information as bag of modified `path-contexts' \cite{alon_general_2018} relevant to each variable. This would allow us to extract only the relevant sections of code pertintent to our chosen argument from the AST. 
+We hoped our models would then be able to learn which modified `path-contexts' are most informative, picking out the most relevant sections of code.
 
-In the rest of this section we present the models that we ran on these data, as well as the means of preparing these data in the rest of this section. First we present our Rote Learner model, which acted as our strong baseline for these experiments. Then we present our Seq2Seq model, which operated solely on names in the signature. We then present our Code2Vec Decoder, which, conversely, only operated on the AST. Finally we present our combined Code2Vec + Seq2Seq Decoder model, that aimed to combine both investigations. A summary of these models is presented in Table \ref{tab:our_models_capability}.
+We prepared four models to investigate these data: A Rote Learner to act as baseline for our investigations; a character-level Seq2Seq Model to investigate the signature names; an original Code2Vec Decoder model to investigate the the AST; and a Code2Vec + Seq2Seq Model to investigate both inputs combined.
+
+The rest of this section is dedicated to presenting each of these models, summarised in Table \ref{tab:our_models_capability}, along with the preparations tokenizations of the data they required.
+
 
 
 \begin{table}[tb]
     \centering
 
     \begin{tabular}{c  c  c}
-          Model & Can Use Signature Data & Can Use AST Data \\ 
+          Model & Uses Signature Data & Uses AST Data \\ 
     \hline
     Rote Learner & \checkmark & \checkmark \\
     Seq2Seq Decoder & \checkmark & \\
@@ -39,15 +43,234 @@ In the rest of this section we present the models that we ran on these data, as 
     \label{tab:our_models_capability}
 \end{table}
 
+\section{Tokenizations} % (fold)
+\label{sec:tokenizations}
 
-\section{Rote Learner Model} % (fold)
+\subsection{Function Signature Data}
+
+Tokenizations of the function signature data
+
+\subsection{Abstract Syntax Trees Data }
+
+
+\subsection{Argument Description}
+
+
+
+
+
+
+
+
+
+% subsection evaluation_procedure (end)
+
+% subsection tokenizing_code_features (end)
+
+% subsubsection tokenizing_argument_descriptions (end)
+
+% subsection tokenizing_textual_input (end)
+
+% \subsubsection{Preparing the Data} % (fold)
+% \label{ssub:Preparing the Data}
+
+% \begin{enumerate}
+%     \item All our data would come from one of the partitions of the dataset described in section \ref{sec:final_preparations}.
+
+%     \item To tokenize variable names, function names and other arguments:
+%     \begin{enumerate}
+%         \item we generated a vocabulary of all possible tokens in valid python
+%         \item We added separator tokens to the vocabulary, \mintinline{python}{"<SEPARATOR_1>"}
+%         \item We then tokenizer as sequences of characters and adding an \mintinline{python}{"<END_OF_ARG>"} token to the end.
+%     \end{enumerate}
+    
+%     \item To tokenize the argument descriptions:
+%     \begin{enumerate}
+%         \item We then generated a vocabulary for our training data by:
+%         \begin{enumerate}
+%             \item first generating a provisional vocabulary of tokens used more than 4 times in the training data.
+%             \item if these words existed in our Glove embedding vocabulary they were added to our the final vocabulary. We used the  \mintinline{python}{glove.6B.200d.txt} file of 200d embeddings trained on 6 billion tokens for our Glove embeddings, (CITE). 
+%             \item when this provisional list was exhausted we took the remaining most popular words, as defined by the Glove embedding file, to fill our final vocabulary to our designated "vocab-size"
+%         \end{enumerate}
+%         \item We then tokenized the descriptions by moving to lower case, removing new lines, and  tokenizing them using the nltk punkt tokenizer (\mintinline{python}{nltk.word_tokenize})
+%         \item We then replaced out of vocabulary tokens with an \mintinline{python}{"<UNK>"} token, and finally bookending our descriptions with \mintinline{python}{"<START>"} and \mintinline{python}{"<END>"} tokens.
+%         \item Path - seq?
+
+%     \end{enumerate}
+
+
+
+%     \item In cases of tokenized code: 
+%      \begin{enumerate}
+%          \item  In the case of tokenizing code paths, we first extracted the syntax tree from the source code, and traversed it exploring all paths between two nodes.
+%          \item CONTINUE
+%      \end{enumerate}
+
+% \end{enumerate}
+
+% Once these tokenizations were complete we were ready to train our models.
+
+% \subsubsection{Training} % (fold)
+% \label{ssub:training}
+
+
+%     Our models were trained in the standard way:
+%     \begin{enumerate}
+%         \item The Rote Learner was trained determininstically, in this case using `ngram overlap' feature, as mentioned in\ref{sec:rote_learner_model}. It was evaluated with different random seeds 50 times on the hold out dataset.
+%         \item The Seq-to-Seq model was trained using the backpropagation algorithm and adaptive momentum optimisation. The hyperparameters are presented in table X. 80 Epochs were evaluated, and the best and average scores were taken \textbf{EDIT}
+%     \end{enumerate}
+
+
+
+
+% \subsubsection{Evaluation} % (fold)
+% \label{ssub:evaluation}
+
+% % subsection training (end
+% \begin{enumerate}
+
+
+
+%     \item Finally when it came to evaluating our models on held-out datasets, we would ran translations on the dataset and calculated the BLEU score using the BLEU method found in \textbf{HERE}.
+%     In particular BLEU scores were calculated over the whole corpus and \textbf{WHAT SMOOTHING HYPERPARAMTERS}.
+%     \item It should be stressed that if a hyperparameter had to be tuned, it was always done on the validation set, with the test set untouched, until final evaluation. In the case of all neural models, the results presented are using the best hyperparameters under the validation set.
+
+% \end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{The Models}
+
+\subsection{Rote Learner Model} % (fold)
 \label{sec:rote_learner_model}
 
-In our investigation we focus on two particular aspects of the code, in attempting to generate our argument descriptions: these are the function signat the lexical names of the function signature and the abstract syntax tree. In both cases we require a baseline model. We devised the rote learner. The rote learner memorises all descriptions and datapoints and randomly selects. it doesn this according to ngram overlap of characters, backing off (cite later).
+Our Rote Learner model was designed to act as a strong benchmark in all our investigations. 
+It was designed according to a simple principle: \textit{the Rote Learner generates a description from a test point, by returning a random full description from the set of best-matching training point.}
+This algorithm is defined in Algorithm \ref{alg:rote_learner_general}. 
 
-% section rote_learner_model (end)
+\begin{algorithm}
+    \caption{The general Rote Learner algorithm }
+    \label{alg:rote_learner_general}
+    \begin{algorithmic}
+        \Procedure{GenerateDescription}{$t$}\Comment{Generate a description for test argument $t$ }
+        \State $\mathcal{M} \gets \text{BestMatchingSet}(t, training\_points)$
+        \State $x \gets \text{RandomChooseOne}(\mathcal{M})$
+        \State $d \gets \text{GetDescription}(x)$
+        \State \textbf{return} $d$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
 
-\section{Character Level Sequence to Sequence Model} % (fold)
+The benefit of this model is that the definition of `best-matching' can then be changed according to the modality of the input data. In the sections below we present a brief description of these matching algorithms, with an appendix displaying each algorithm in pseudocode. A summary of the matching algorithms in Table \ref{tab:matching_summary}, 
+
+\subsubsection{NCharacter-Gram Overlap}
+
+This matching criterion was used for function signature data, and so operates on sequences of characters. The matching criterion finds the training points which have the longest n character overlap with the test data point (or longest overlapping substring). If the same point has two of such overlaps, it is included twice, and so forth. This pseudo code is presented in Algorithm \ref{alg:ngram_overlap}.
+
+\subsubsection{Proportional Context}
+
+This criterion matches the path-contexts of the data, taking each each path-context as an atomic unit. 
+For each path-context within the test point, the criterion finds all the training points with the same path-context. It combines these into one list, returns this list. Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping path-context with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
+
+
+\subsubsection{Max Context}
+
+This criterion takes the list output by the Proportional Context criterion, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
+
+
+
+\subsubsection{Proportional SubContext}
+
+This criterion also match the path-contexts of the data, but treats each path-context as sequence of nodes of the AST, allowing it to match subpaths.
+The matching criterion takes the test point, and for each path-context within it, finds the training path-contexts with longest subsequences that match it. It collects the corresponding datapoint to theses paths and combines them into one list. It then returns this list. This is equivalent to choosing the training points that best match each path in the test point, proportionally to how often they are the best match. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
+
+
+\subsubsection{Max SubContext}
+
+
+The matching criterion takes the list output by the Proportional SubContext, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
+
+
+
+\subsubsection{Combinations}
+
+Naturally these criteria can be combined across modalities, to examine the combination of the function signature and AST. This can be done by simply adding the two lists that are returned by the combined criteria. 
+
+\begin{table}[h!]
+\makebox[\linewidth][c]{
+    \centering
+
+    \begin{tabular}{l c c p{9cm}}
+    \hline
+    BestMatchingSet & Use Sig. & Use AST & Description: \textit{choose list of training points...} \\
+    \hline
+    \hline
+    NGram Overlap     & \checkmark & & 
+         with the longest n-character gram overlap with test \\
+    \hline
+    \hline
+    % Max Context  & & \checkmark &
+    %     with most overlap of full `path-contexts' in test \\
+    % Max SubContext  & & \checkmark & 
+    %     with most overlap of longest sub-`path-contexts' in test \\
+    % Proportional Context  & & \checkmark & 
+    %     proportional to the number of overlapping `path-contexts' in test \\
+    % Proportional SubContext  & & \checkmark &
+    %     proportional to the number of overlapping longest sub-`path-contexts' in test  \\    
+    Proportional Context  & & \checkmark & 
+        that match each path-context in test \\
+    Max Context  & & \checkmark &
+        that most often match each path-context in test \\
+    Proportional SubContext  & & \checkmark &
+        that best-effort match each path-context in test  \\
+    Max SubContext  & & \checkmark & 
+        that most often best-effort match path-contexts in test \\
+    \hline
+
+    \hline
+    \end{tabular}
+}
+
+    \caption{An Summary of the BestMatchingSet algorithms we use in the experiments. For sake of simplicity, a `best-effort' match here refers to the match with longest subpath of nodes, treating a path context as a sequence}
+    \label{tab:matching_summary}
+\end{table}
+
+
+
+
+
+% These chose a description from a set of training samples by:
+%     \begin{itemize}
+%         \item combining samples with largest subpath overlap for each path in test, and chosing from that list. (Sub Path Proportional)
+%         \item combining samples with largest subpath overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Sub Path Max)
+%         \item combining samples full overlap for each path in test, and chosing from that list (Full Path Proportional)
+%         \item combining samples full overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Full Path Max)
+%     \end{itemize}
+
+
+
+
+
+
+
+
+% subsection rote_learner_model (end)
+
+\subsection{Character Level Sequence to Sequence Model} % (fold)
 \label{sec:character_level_sequence_to_sequence}
 
 The character level sequence model follows the standard formulation as found in \cite{bahdanau_neural_2014}
@@ -59,9 +282,9 @@ The character level sequence model follows the standard formulation as found in 
 
 
 
-% section character_level_sequence_to_sequence (end)
+% subsection character_level_sequence_to_sequence (end)
 
-\section{Code2Vec Decoder Model} % (fold)
+\subsection{Code2Vec Decoder Model} % (fold)
 \label{sec:code2vec_decoder_model}
 
 * We then want to investigate purely without lexical names (overlap etc)
@@ -69,12 +292,12 @@ The character level sequence model follows the standard formulation as found in 
 * The motivtion is that this hsould be able to point out only some local parts of the model, the bits of the code that are near or important might get upweighted.
 
 
-% section code2vec_to_sequence_model (end)
+% subsection code2vec_to_sequence_model (end)
 
-\section{Code2Vec + LSTM Encoder} % (fold)
+\subsection{Code2Vec + LSTM Encoder} % (fold)
 \label{sub:code2vec_sequence_to_sequence}
 
 Aim to combine these models together.Natural through 
 
-% subsection code2vec_sequence_to_sequence (end)
+% subsubsection code2vec_sequence_to_sequence (end)
 % section combined_encoder_models (end)
