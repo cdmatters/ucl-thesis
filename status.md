@@ -1,7 +1,17 @@
+
+## Remaining Hours of Updates (12hrs per day)
+Intro - 2hrs
+Backhground - 4hr
+
+
+
+
 Back prop first
 Mention non neural network models for background
 Evaluate
 Differnet tokenizations of code not straightforward, look at other tokenizations papers
+
+
 
 
 ### Introduction
