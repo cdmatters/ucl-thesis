@@ -1,15 +1,56 @@
 \chapter{The Models}
 \label{the_models}
 
+In our investigations we focus on two main aspects of the code to generate a description for our arguments. 
+These are the names in the function's signature, and the AST of the accompanying code. 
+
+We focused on the signature because we felt that this is one of the most infomative sections of the code. 
+In langugages such as C++, the signature of function may be all that is presented to the user of a third-party library, when using that library. 
+Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
+This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
+
+Variable and function names can often be composite, perhaps separated by an underscore: e.g. \mintinline[]{python}{web_ctx}. 
+In this case the both parts of the name might indicate a different clue to the argument:  the  \mintinline[]{python}{web} prefix may indicate a use in the internet domain; the \mintinline[]{python}{ctx} suffix may indicate a context object. 
+In our experiments, we aim to pick up these patterns and conventions by looking at the elements of the signature as sequences of characters.
+
+We also focused on drawing information about the variable solely from the AST. We feel that the most robust way of drawing inferences from the code is to examine the instructions given directly to the computer. 
+These inferences would be invariant under transformations such as renaming of variable. 
+
+Since we only sought the relevant sections of code pertintent to our chosen argument, we needed to extract this information from the AST. 
+In our experiments we did this by reparameterisng the AST in a similar way to Alon et al \cite{alon_general_2018}, which allowed us to select only the `path-contexts' that use our chosen argument. 
+We hoped our models would then be able to learn which `path-contexts' are most informative, picking out the most relevant sections of code.
+
+In the rest of this section we present the models that we ran on these data, as well as the means of preparing these data in the rest of this section. First we present our Rote Learner model, which acted as our strong baseline for these experiments. Then we present our Seq2Seq model, which operated solely on names in the signature. We then present our Code2Vec Decoder, which, conversely, only operated on the AST. Finally we present our combined Code2Vec + Seq2Seq Decoder model, that aimed to combine both investigations. A summary of these models is presented in Table \ref{tab:our_models_capability}.
+
+
+\begin{table}[tb]
+    \centering
+
+    \begin{tabular}{c  c  c}
+          Model & Can Use Signature Data & Can Use AST Data \\ 
+    \hline
+    Rote Learner & \checkmark & \checkmark \\
+    Seq2Seq Decoder & \checkmark & \\
+    Code2Vec Decoder &    &  \checkmark \\
+    Code2Vec + Seq2Seq Decoder& \checkmark & \checkmark \\
+    \hline
+    \end{tabular}
+    \caption{Overview of Our Models}
+    \label{tab:our_models_capability}
+\end{table}
+
+
 \section{Rote Learner Model} % (fold)
 \label{sec:rote_learner_model}
 
-In our investigation we focus on two things: the lexical names of the function signature and the abstract syntax tree. In both cases we require a baseline model. We devised the rote learner. The rote learner memorises all descriptions and datapoints and randomly selects. it doesn this according to ngram overlap of characters, backing off (cite later).
+In our investigation we focus on two particular aspects of the code, in attempting to generate our argument descriptions: these are the function signat the lexical names of the function signature and the abstract syntax tree. In both cases we require a baseline model. We devised the rote learner. The rote learner memorises all descriptions and datapoints and randomly selects. it doesn this according to ngram overlap of characters, backing off (cite later).
 
 % section rote_learner_model (end)
 
 \section{Character Level Sequence to Sequence Model} % (fold)
 \label{sec:character_level_sequence_to_sequence}
+
+The character level sequence model follows the standard formulation as found in \cite{bahdanau_neural_2014}
 
 * What is the motivation of the seq to seq model.
 * Since so much effort goes into naming of variables, shouldnt there be recognisable clues? Especially since,in many languages, function signature is all thats presented in documentation.
@@ -20,8 +61,8 @@ In our investigation we focus on two things: the lexical names of the function s
 
 % section character_level_sequence_to_sequence (end)
 
-\section{Code2Vec to Sequence Model} % (fold)
-\label{sec:code2vec_to_sequence_model}
+\section{Code2Vec Decoder Model} % (fold)
+\label{sec:code2vec_decoder_model}
 
 * We then want to investigate purely without lexical names (overlap etc)
 * We decide to present a modification on Code2Vec, that is argument specific.
