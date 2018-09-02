@@ -1,0 +1,338 @@
+<svg height="594pt" viewBox="0.00 0.00 2656.00 594.00" width="2656pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="graph1" transform="scale(1 1) rotate(0) translate(4 590)">
+<title>_anonymous_0</title>
+<polygon fill="white" points="-4,5 -4,-590 2653,-590 2653,5 -4,5" stroke="white"/>
+<!-- 0 -->
+<g class="node" id="node1"><title>0</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="462.5" y="-552.167">FunctionDef</text>
+</g>
+<!-- 1 -->
+<g class="node" id="node2"><title>1</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="176" y="-459.5">&quot;xkcd_palette&quot;</text>
+</g>
+<!-- 0&#45;&#45;1 -->
+<g class="edge" id="edge2"><title>0--1</title>
+<path d="M595,-536C595,-536 466.763,-516.719 352.176,-499.489" fill="none" stroke="black"/>
+</g>
+<!-- 2 -->
+<g class="node" id="node4"><title>2</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="378.5" y="-464.167">arguments</text>
+</g>
+<!-- 0&#45;&#45;2 -->
+<g class="edge" id="edge4"><title>0--2</title>
+<path d="M595,-536C595,-536 559.389,-515.227 529.065,-497.538" fill="none" stroke="black"/>
+</g>
+<!-- 5 -->
+<g class="node" id="node10"><title>5</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="630.5" y="-464.167">Assign</text>
+</g>
+<!-- 0&#45;&#45;5 -->
+<g class="edge" id="edge10"><title>0--5</title>
+<path d="M595,-536C595,-536 630.611,-515.227 660.935,-497.538" fill="none" stroke="black"/>
+</g>
+<!-- 27 -->
+<g class="node" id="node54"><title>27</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="1219.5" y="-464.167">Return</text>
+</g>
+<!-- 0&#45;&#45;27 -->
+<g class="edge" id="edge54"><title>0--27</title>
+<path d="M595,-536C595,-536 1026.82,-496.969 1210.68,-480.35" fill="none" stroke="black"/>
+</g>
+<!-- 3 -->
+<g class="node" id="node6"><title>3</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="284.5" y="-376.167">arg</text>
+</g>
+<!-- 2&#45;&#45;3 -->
+<g class="edge" id="edge6"><title>2--3</title>
+<path d="M440.76,-448.487C417.448,-436.129 389.288,-421.201 366.132,-408.926" fill="none" stroke="black"/>
+</g>
+<!-- 4 -->
+<g class="node" id="node8"><title>4</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="161" y="-283.5">&quot;colors&quot;</text>
+</g>
+<!-- 3&#45;&#45;4 -->
+<g class="edge" id="edge8"><title>3--4</title>
+<path d="M276.431,-360.487C255.534,-348.994 230.594,-335.277 209.253,-323.539" fill="none" stroke="black"/>
+</g>
+<!-- 6 -->
+<g class="node" id="node12"><title>6</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="552.5" y="-376.167">Name</text>
+</g>
+<!-- 5&#45;&#45;6 -->
+<g class="edge" id="edge12"><title>5--6</title>
+<path d="M703,-448C703,-448 669.368,-427.227 640.728,-409.538" fill="none" stroke="black"/>
+</g>
+<!-- 9 -->
+<g class="node" id="node18"><title>9</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="707.5" y="-376.167">ListComp</text>
+</g>
+<!-- 5&#45;&#45;9 -->
+<g class="edge" id="edge18"><title>5--9</title>
+<path d="M703,-448C703,-448 736.302,-427.227 764.662,-409.538" fill="none" stroke="black"/>
+</g>
+<!-- 7 -->
+<g class="node" id="node14"><title>7</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="399" y="-283.5">&quot;palette&quot;</text>
+</g>
+<!-- 6&#45;&#45;7 -->
+<g class="edge" id="edge14"><title>6--7</title>
+<path d="M585,-360C585,-360 528.174,-340.753 477.342,-323.535" fill="none" stroke="black"/>
+</g>
+<!-- 8 -->
+<g class="node" id="node16"><title>8</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="601" y="-283.5">Store</text>
+</g>
+<!-- 6&#45;&#45;8 -->
+<g class="edge" id="edge16"><title>6--8</title>
+<path d="M585,-360C585,-360 589.854,-340.888 594.215,-323.718" fill="none" stroke="black"/>
+</g>
+<!-- 10 -->
+<g class="node" id="node20"><title>10</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="695.5" y="-288.167">Subscript</text>
+</g>
+<!-- 9&#45;&#45;10 -->
+<g class="edge" id="edge20"><title>9--10</title>
+<path d="M822,-360C822,-360 816.065,-339.227 811.011,-321.538" fill="none" stroke="black"/>
+</g>
+<!-- 19 -->
+<g class="node" id="node38"><title>19</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="947.5" y="-288.167">comprehension</text>
+</g>
+<!-- 9&#45;&#45;19 -->
+<g class="edge" id="edge38"><title>9--19</title>
+<path d="M822,-360C822,-360 914.983,-339.227 994.164,-321.538" fill="none" stroke="black"/>
+</g>
+<!-- 11 -->
+<g class="node" id="node22"><title>11</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="468.5" y="-198.167">Name</text>
+</g>
+<!-- 10&#45;&#45;11 -->
+<g class="edge" id="edge22"><title>10--11</title>
+<path d="M780,-272C780,-272 668.461,-259.45 583,-234 580.152,-233.152 577.259,-232.226 574.352,-231.243" fill="none" stroke="black"/>
+</g>
+<!-- 14 -->
+<g class="node" id="node28"><title>14</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="600.5" y="-198.167">Index</text>
+</g>
+<!-- 10&#45;&#45;14 -->
+<g class="edge" id="edge28"><title>10--14</title>
+<path d="M780,-272C780,-272 739.688,-249.981 705.989,-231.574" fill="none" stroke="black"/>
+</g>
+<!-- 18 -->
+<g class="node" id="node36"><title>18</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="804" y="-193.5">Load</text>
+</g>
+<!-- 10&#45;&#45;18 -->
+<g class="edge" id="edge36"><title>10--18</title>
+<path d="M780,-272C780,-272 787.489,-251.718 794.1,-233.813" fill="none" stroke="black"/>
+</g>
+<!-- 12 -->
+<g class="node" id="node24"><title>12</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="316" y="-103.5">&quot;xkcd_rgb&quot;</text>
+</g>
+<!-- 11&#45;&#45;12 -->
+<g class="edge" id="edge24"><title>11--12</title>
+<path d="M501,-182C501,-182 442.668,-161.505 391.513,-143.532" fill="none" stroke="black"/>
+</g>
+<!-- 13 -->
+<g class="node" id="node26"><title>13</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="518" y="-103.5">Load</text>
+</g>
+<!-- 11&#45;&#45;13 -->
+<g class="edge" id="edge26"><title>11--13</title>
+<path d="M501,-182C501,-182 506.304,-161.718 510.987,-143.813" fill="none" stroke="black"/>
+</g>
+<!-- 15 -->
+<g class="node" id="node30"><title>15</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="601.5" y="-108.167">Name</text>
+</g>
+<!-- 14&#45;&#45;15 -->
+<g class="edge" id="edge30"><title>14--15</title>
+<path d="M657.994,-182.407C656.442,-169.708 654.554,-154.258 653.002,-141.563" fill="none" stroke="black"/>
+</g>
+<!-- 16 -->
+<g class="node" id="node32"><title>16</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="573" y="-13.5">&quot;name&quot;</text>
+</g>
+<!-- 15&#45;&#45;16 -->
+<g class="edge" id="edge32"><title>15--16</title>
+<path d="M650,-92C650,-92 625.974,-71.7182 604.763,-53.8133" fill="none" stroke="black"/>
+</g>
+<!-- 17 -->
+<g class="node" id="node34"><title>17</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="727" y="-13.5">Load</text>
+</g>
+<!-- 15&#45;&#45;17 -->
+<g class="edge" id="edge34"><title>15--17</title>
+<path d="M650,-92C650,-92 674.026,-71.7182 695.237,-53.8133" fill="none" stroke="black"/>
+</g>
+<!-- 20 -->
+<g class="node" id="node40"><title>20</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="922.5" y="-198.167">Name</text>
+</g>
+<!-- 19&#45;&#45;20 -->
+<g class="edge" id="edge40"><title>19--20</title>
+<path d="M1103,-272C1103,-272 1058.28,-249.981 1020.9,-231.574" fill="none" stroke="black"/>
+</g>
+<!-- 23 -->
+<g class="node" id="node46"><title>23</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="1055.5" y="-198.167">Name</text>
+</g>
+<!-- 19&#45;&#45;23 -->
+<g class="edge" id="edge46"><title>19--23</title>
+<path d="M1103,-272C1103,-272 1103.34,-249.981 1103.62,-231.574" fill="none" stroke="black"/>
+</g>
+<!-- 26 -->
+<g class="node" id="node52"><title>26</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1206" y="-193.5">0</text>
+</g>
+<!-- 19&#45;&#45;26 -->
+<g class="edge" id="edge52"><title>19--26</title>
+<path d="M1103,-272C1103,-272 1141.36,-252.753 1170,-234 1172.88,-232.117 1175.83,-230.084 1178.74,-228.007" fill="none" stroke="black"/>
+</g>
+<!-- 21 -->
+<g class="node" id="node42"><title>21</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="805" y="-103.5">&quot;name&quot;</text>
+</g>
+<!-- 20&#45;&#45;21 -->
+<g class="edge" id="edge42"><title>20--21</title>
+<path d="M956,-182C956,-182 908.554,-161.576 866.853,-143.626" fill="none" stroke="black"/>
+</g>
+<!-- 22 -->
+<g class="node" id="node44"><title>22</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="971" y="-103.5">Store</text>
+</g>
+<!-- 20&#45;&#45;22 -->
+<g class="edge" id="edge44"><title>20--22</title>
+<path d="M956,-182C956,-182 960.68,-161.718 964.812,-143.813" fill="none" stroke="black"/>
+</g>
+<!-- 24 -->
+<g class="node" id="node48"><title>24</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1161" y="-103.5">&quot;colors&quot;</text>
+</g>
+<!-- 23&#45;&#45;24 -->
+<g class="edge" id="edge48"><title>23--24</title>
+<path d="M1134,-182C1134,-182 1142.42,-161.718 1149.86,-143.813" fill="none" stroke="black"/>
+</g>
+<!-- 25 -->
+<g class="node" id="node50"><title>25</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1339" y="-103.5">Load</text>
+</g>
+<!-- 23&#45;&#45;25 -->
+<g class="edge" id="edge50"><title>23--25</title>
+<path d="M1134,-182C1134,-182 1212.99,-164.854 1274,-144 1276.89,-143.012 1279.84,-141.959 1282.8,-140.864" fill="none" stroke="black"/>
+</g>
+<!-- 28 -->
+<g class="node" id="node56"><title>28</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="1747.5" y="-376.167">Call</text>
+</g>
+<!-- 27&#45;&#45;28 -->
+<g class="edge" id="edge56"><title>27--28</title>
+<path d="M1373.26,-458.812C1475.72,-440.922 1649.28,-410.618 1738.81,-394.986" fill="none" stroke="black"/>
+</g>
+<!-- 29 -->
+<g class="node" id="node58"><title>29</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="1652.5" y="-288.167">Name</text>
+</g>
+<!-- 28&#45;&#45;29 -->
+<g class="edge" id="edge58"><title>28--29</title>
+<path d="M1811,-360C1811,-360 1774.73,-339.227 1743.84,-321.538" fill="none" stroke="black"/>
+</g>
+<!-- 32 -->
+<g class="node" id="node64"><title>32</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="1842.5" y="-288.167">Name</text>
+</g>
+<!-- 28&#45;&#45;32 -->
+<g class="edge" id="edge64"><title>28--32</title>
+<path d="M1811,-360C1811,-360 1837.38,-339.227 1859.84,-321.538" fill="none" stroke="black"/>
+</g>
+<!-- 35 -->
+<g class="node" id="node70"><title>35</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="2163.5" y="-288.167">Call</text>
+</g>
+<!-- 28&#45;&#45;35 -->
+<g class="edge" id="edge70"><title>28--35</title>
+<path d="M1811,-360C1811,-360 2044.26,-323.353 2154.97,-305.959" fill="none" stroke="black"/>
+</g>
+<!-- 30 -->
+<g class="node" id="node60"><title>30</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1439" y="-193.5">&quot;color_palette&quot;</text>
+</g>
+<!-- 29&#45;&#45;30 -->
+<g class="edge" id="edge60"><title>29--30</title>
+<path d="M1683,-272C1683,-272 1606.06,-251.505 1538.6,-233.532" fill="none" stroke="black"/>
+</g>
+<!-- 31 -->
+<g class="node" id="node62"><title>31</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1701" y="-193.5">Load</text>
+</g>
+<!-- 29&#45;&#45;31 -->
+<g class="edge" id="edge62"><title>29--31</title>
+<path d="M1683,-272C1683,-272 1688.62,-251.718 1693.57,-233.813" fill="none" stroke="black"/>
+</g>
+<!-- 33 -->
+<g class="node" id="node66"><title>33</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="1891" y="-193.5">&quot;palette&quot;</text>
+</g>
+<!-- 32&#45;&#45;33 -->
+<g class="edge" id="edge66"><title>32--33</title>
+<path d="M1907,-272C1907,-272 1902.01,-251.718 1897.6,-233.813" fill="none" stroke="black"/>
+</g>
+<!-- 34 -->
+<g class="node" id="node68"><title>34</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="2081" y="-193.5">Load</text>
+</g>
+<!-- 32&#45;&#45;34 -->
+<g class="edge" id="edge68"><title>32--34</title>
+<path d="M1907,-272C1907,-272 1968.07,-252.292 2016,-234 2018.85,-232.911 2021.77,-231.777 2024.71,-230.617" fill="none" stroke="black"/>
+</g>
+<!-- 36 -->
+<g class="node" id="node72"><title>36</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="2163.5" y="-198.167">Name</text>
+</g>
+<!-- 35&#45;&#45;36 -->
+<g class="edge" id="edge72"><title>35--36</title>
+<path d="M2228,-272C2228,-272 2222.58,-249.981 2218.05,-231.574" fill="none" stroke="black"/>
+</g>
+<!-- 39 -->
+<g class="node" id="node78"><title>39</title>
+<text fill="#004080" font-family="Courier,monospace" font-size="40.00" text-anchor="start" x="2353.5" y="-198.167">Name</text>
+</g>
+<!-- 35&#45;&#45;39 -->
+<g class="edge" id="edge78"><title>35--39</title>
+<path d="M2228,-272C2228,-272 2293.86,-247.397 2344.54,-228.464" fill="none" stroke="black"/>
+</g>
+<!-- 37 -->
+<g class="node" id="node74"><title>37</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="2070" y="-103.5">&quot;len&quot;</text>
+</g>
+<!-- 36&#45;&#45;37 -->
+<g class="edge" id="edge74"><title>36--37</title>
+<path d="M2198,-182C2198,-182 2157.78,-161.576 2122.43,-143.626" fill="none" stroke="black"/>
+</g>
+<!-- 38 -->
+<g class="node" id="node76"><title>38</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="2212" y="-103.5">Load</text>
+</g>
+<!-- 36&#45;&#45;38 -->
+<g class="edge" id="edge76"><title>36--38</title>
+<path d="M2198,-182C2198,-182 2202.37,-161.718 2206.22,-143.813" fill="none" stroke="black"/>
+</g>
+<!-- 40 -->
+<g class="node" id="node80"><title>40</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="2402" y="-103.5">&quot;palette&quot;</text>
+</g>
+<!-- 39&#45;&#45;40 -->
+<g class="edge" id="edge80"><title>39--40</title>
+<path d="M2418,-182C2418,-182 2413.01,-161.718 2408.6,-143.813" fill="none" stroke="black"/>
+</g>
+<!-- 41 -->
+<g class="node" id="node82"><title>41</title>
+<text fill="#008040" font-family="Courier,monospace" font-size="40.00" text-anchor="middle" x="2592" y="-103.5">Load</text>
+</g>
+<!-- 39&#45;&#45;41 -->
+<g class="edge" id="edge82"><title>39--41</title>
+<path d="M2418,-182C2418,-182 2479.07,-162.292 2527,-144 2529.85,-142.911 2532.77,-141.777 2535.71,-140.617" fill="none" stroke="black"/>
+</g>
+</g>
+</svg>

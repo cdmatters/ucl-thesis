@@ -300,16 +300,16 @@ However, we also note from this table that some outliers have a preposterous lar
            & Most Popular Paths  &  \% of Data \\  
         \hline
                 
-        1.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword &  0.679 \\ 
-        2.  & Name $\leftarrow$ Call $\rightarrow$ Name &  0.672 \\ 
-        3.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\rightarrow$ keyword $\rightarrow$ Name &  0.647 \\ 
-        4.  & Name $\leftarrow$ Call $\rightarrow$ Attribute &  0.296 \\ 
-        5.  & Name $\leftarrow$ Call $\rightarrow$ Attribute $\rightarrow$ Name &  0.241 \\ 
-        6.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.229 \\ 
-        7.  & Name $\leftarrow$ AugAssign $\leftarrow$ For $\leftarrow$ FunctionDef $\rightarrow$ Assign $\rightarrow$ List $\rightarrow$ List $\rightarrow$ Num &  0.210 \\ 
-        8.  & Name $\leftarrow$ keyword $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ If $\rightarrow$ Try $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ Name &  0.192 \\ 
-        9.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Name &  0.189 \\ 
-        10.  & Name $\leftarrow$ Call $\leftarrow$ Assign $\leftarrow$ Try $\leftarrow$ If $\rightarrow$ Assign $\rightarrow$ Call $\rightarrow$ keyword &  0.184 \\ 
+        1.  & Name $\uparrow$ keyword $\uparrow$ Call $\downarrow$ keyword &  0.679 \\ 
+        2.  & Name $\uparrow$ Call $\downarrow$ Name &  0.672 \\ 
+        3.  & Name $\uparrow$ keyword $\uparrow$ Call $\downarrow$ keyword $\downarrow$ Name &  0.647 \\ 
+        4.  & Name $\uparrow$ Call $\downarrow$ Attribute &  0.296 \\ 
+        5.  & Name $\uparrow$ Call $\downarrow$ Attribute $\downarrow$ Name &  0.241 \\ 
+        6.  & Name $\uparrow$ keyword $\uparrow$ Call $\uparrow$ Assign $\uparrow$ If $\downarrow$ Assign $\downarrow$ Name &  0.229 \\ 
+        7.  & Name $\uparrow$ AugAssign $\uparrow$ For $\uparrow$ FunctionDef $\downarrow$ Assign $\downarrow$ List $\downarrow$ List $\downarrow$ Num &  0.210 \\ 
+        8.  & Name $\uparrow$ keyword $\uparrow$ Call $\uparrow$ Assign $\uparrow$ If $\downarrow$ Try $\downarrow$ Assign $\downarrow$ Call $\downarrow$ Name &  0.192 \\ 
+        9.  & Name $\uparrow$ Call $\uparrow$ Assign $\uparrow$ Try $\uparrow$ If $\downarrow$ Assign $\downarrow$ Name &  0.189 \\ 
+        10.  & Name $\uparrow$ Call $\uparrow$ Assign $\uparrow$ Try $\uparrow$ If $\downarrow$ Assign $\downarrow$ Call $\downarrow$ keyword &  0.184 \\ 
   
     \end{tabular}
     \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }

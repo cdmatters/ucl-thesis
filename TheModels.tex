@@ -1,29 +1,32 @@
 \chapter{Method}
 \label{the_models}
 
+% We focused on the signature because of the important nature of this section of the code. 
+% In langugages such as C++, the signature of function may be all that is presented to the user of a third-party library, when using that library. 
+% Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
+% This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
+
+
 \section{Overview}
 
-In our investigations we focus on two main aspects of the code to generate a description for our arguments. 
-These are the names in the function's signature, and the AST of the accompanying code. 
+In our investigations we focus on two main aspects of the code to generate descriptions for our arguments. 
+These are the names in the function's signature, and the \textit{variable path-contexts} (VPCs) in the function's AST. 
 
-We focused on the signature because we felt that this is one of the most infomative sections of the code. 
-In langugages such as C++, the signature of function may be all that is presented to the user of a third-party library, when using that library. 
-Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
-This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
 
-In our experiments, we model the names of the signature as sequences of characters. Variable and function names can often be composite, perhaps separated by an underscore: e.g. \mintinline[]{python}{web_ctx}. 
-In this case the both parts of the name might indicate a different clue to the argument:  the  \mintinline[]{python}{web} prefix may indicate a use in the internet domain; the \mintinline[]{python}{ctx} suffix may indicate a context object. 
-In our experiments, we aim to pick up these patterns and conventions on the character-level.
+In our experiments, we model the names of the signature as sequences of characters. We do this to capture the fact that variable and function names can often be composite and abbreviated - e.g. \mintinline[]{python}{web_ctx}. 
+In this case both parts of the name might indicate a different clue to the argument:  the  \mintinline[]{python}{web} prefix may indicate a use in the internet domain; the \mintinline[]{python}{ctx} suffix may indicate a context object. 
+In designing our models, we aim to pick up these patterns and conventions on the character-level.
 
-We also focused on generating descriptions solely from the AST. We feel that the most robust way of drawing inferences from the code is to examine the instructions given directly to the computer. 
-These inferences would be invariant under transformations such as renaming of variable. 
+We also focused on generating descriptions solely from the argument's VPCs. We feel that this most robust way of drawing inferences from the code, as it only examines instructions given directly to the computer. 
+Any inferences here would be invariant under transformations such as renaming of variable. 
+We hoped that by examining all the VPCs present for an argument, the model would learn representation for variables that indicate common usage (such as which methods are called on it), or perhaps even type.
 
-We chose to model this information as bag of modified `path-contexts' \cite{alon_general_2018} relevant to each variable. This would allow us to extract only the relevant sections of code pertintent to our chosen argument from the AST. 
-We hoped our models would then be able to learn which modified `path-contexts' are most informative, picking out the most relevant sections of code.
+% We chose to model this information as bag of modified `path-contexts' \cite{alon_general_2018} relevant to each variable. This would allow us to extract only the relevant sections of code pertintent to our chosen argument from the AST. 
+% We hoped our models would then be able to learn which modified `path-contexts' are most informative, picking out the most relevant sections of code.
 
-We prepared four models to investigate these data: A Rote Learner to act as baseline for our investigations; a character-level Seq2Seq Model to investigate the signature names; an original Code2Vec Decoder model to investigate the the AST; and a Code2Vec + Seq2Seq Model to investigate both inputs combined.
+We prepared four models to investigate these data: A Rote Learner to act as baseline for our investigations; a character-level Seq2Seq Model to investigate the signature names; an original Code2Vec Decoder model to investigate the VPCs; and a Code2Vec + Seq2Seq Model to investigate both inputs combined.
 
-The rest of this section is dedicated to presenting each of these models, summarised in Table \ref{tab:our_models_capability}, along with the preparations tokenizations of the data they required.
+The rest of this section is dedicated to presenting each of these models, summarised in Table \ref{tab:our_models_capability}, along with the  tokenization methods to obtain our data.
 
 
 
@@ -31,7 +34,7 @@ The rest of this section is dedicated to presenting each of these models, summar
     \centering
 
     \begin{tabular}{c  c  c}
-          Model & Uses Signature Data & Uses AST Data \\ 
+          Model & Uses Signature Data & Uses VPC Data \\ 
     \hline
     Rote Learner & \checkmark & \checkmark \\
     Seq2Seq Decoder & \checkmark & \\
@@ -42,6 +45,152 @@ The rest of this section is dedicated to presenting each of these models, summar
     \caption{Overview of Our Models}
     \label{tab:our_models_capability}
 \end{table}
+
+
+
+
+
+
+
+
+
+
+
+\section{The Models}
+
+\subsection{Rote Learner Model} % (fold)
+\label{sec:rote_learner_model}
+
+Our Rote Learner model was designed to act as a strong benchmark in all our investigations. 
+It was designed according to a simple principle: \textit{the Rote Learner generates a description from a test point by returning in full a random description from a list of best-matching training point.}
+It is defined formally in Algorithm \ref{alg:rote_learner_general}. 
+
+The benefit of this model is that the definition of `best-matching' can then be changed according to the modality of the input data. In the sections below we present a brief description of these matching algorithms, with an appendix displaying each algorithm in pseudocode. A summary of these matching algorithms is presented in Table \ref{tab:matching_summary}, 
+
+\begin{algorithm}
+    \caption{The general Rote Learner algorithm }
+    \label{alg:rote_learner_general}
+    \begin{algorithmic}
+        \Procedure{GenerateDescription}{$t$}\Comment{Generate a description for test argument $t$ }
+        \State $\mathcal{M} \gets \text{BestMatchingSet}(t, training\_points)$
+        \State $x \gets \text{RandomChooseOne}(\mathcal{M})$
+        \State $d \gets \text{GetDescription}(x)$
+        \State \textbf{return} $d$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{enumerate}
+    \item \textbf{NCharacter-Gram Overlap} \textit{(Sig. Data)} \\This matching criterion was used for function signature data, and so operates on sequences of characters. It compiles a list of the training points which have the longest n character overlap with the test data point (or the longest common substring). If the same point has two of such overlaps, it is included twice, and so forth. This pseudo code is presented in Algorithm \ref{alg:ngram_overlap}.
+    \item \textbf{Proportional Contexts} \textit{(VPC Data)}\\This criterion matches VPCs by treating each VPC as an atomic unit. For each VPC within the test point, the criterion finds all the training points with the same VPC. It combines these into one list, returns this list. Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping VPC with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
+    \item \textbf{Max Contexts} \textit{(VPC Data)}\\This criterion takes the list output by the \textbf{Proportional Context} criterion, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. The pseudocode is also presented in Algorithm \ref{alg:context_algorithm} 
+    \item \textbf{Proportional SubContexts} \textit{(VPC Data)}\\This criterion also match VPCs of the data, but treats each VPC as sequence of nodes. Specifically, as it creates $q = p{downarrow}x_f$ and treats the new path, $q$, as the sequence of nodes and arrows that compose it. This allows it to match subpaths. The matching criterion takes the test point, and for each VPC within it, finds the training VPC with the longest subsequences that matches it. It collects the corresponding datapoints to these paths and combines them into one list. It then returns this list. This is equivalent to choosing the training points that best match each VPC in the test point, proportionally to how often they are the best match. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
+    \item\textbf{Max SubContexts} \textit{(VPC Data)}\\The matching criterion takes the list output by the Proportional SubContext, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
+    \item\textbf{[Combinations]}\textit{(Sig. Data + VPC Data)} \\ Naturally these criteria can be combined across modalities to act upon combinations of the function signature and AST. In cases where this is done, the new list is simply the combination of the lists from the combined individual criteria. 
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+\begin{table}[h!]
+\makebox[\linewidth][c]{
+    \centering
+
+    \begin{tabular}{l c c p{9cm}}
+    \hline
+    BestMatchingSet & Use Sig. & Use AST & Description: \textit{choose list of training points...} \\
+    \hline
+    \hline
+    NCharacter-Gram Overlap     & \checkmark & & 
+         which have the longest n-character gram overlap with test \\
+    % \hline
+    % \hline
+  
+    Proportional Context  & & \checkmark & 
+        which match each VPC in test, and combine\\
+    Max Context  & & \checkmark &
+        which match each VPC in test, combine, and take most frequent\\
+
+    Proportional SubContext  & & \checkmark &
+        which \textit{best-effort} match each VPC in test, and combine\\
+    Max SubContext  & & \checkmark & 
+        which \textit{best-effort} each VPC in test, combine, and take most frequent\\
+    \hline
+
+    \hline
+    \end{tabular}
+}
+
+    \caption{An Summary of the BestMatchingSet algorithms we use in the experiments. For sake of simplicity, a \textit{best-effort} match here refers to the match with longest matching subsequence, when treating a VPC as one long sequence}
+    \label{tab:matching_summary}
+\end{table}
+
+
+
+
+
+% These chose a description from a set of training samples by:
+%     \begin{itemize}
+%         \item combining samples with largest subpath overlap for each path in test, and chosing from that list. (Sub Path Proportional)
+%         \item combining samples with largest subpath overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Sub Path Max)
+%         \item combining samples full overlap for each path in test, and chosing from that list (Full Path Proportional)
+%         \item combining samples full overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Full Path Max)
+%     \end{itemize}
+
+
+
+
+
+
+
+
+% subsection rote_learner_model (end)
+
+\subsection{Character Level Sequence to Sequence Model} % (fold)
+\label{sec:character_level_sequence_to_sequence}
+
+The character level sequence model follows the standard formulation as found in \cite{bahdanau_neural_2014}
+
+* What is the motivation of the seq to seq model.
+* Since so much effort goes into naming of variables, shouldnt there be recognisable clues? Especially since,in many languages, function signature is all thats presented in documentation.
+* \_ctx => context? conv2d in the function implies somethings?
+* We therefore employ a sequence to sequence model to investigate the informativeness of function signatures
+
+
+
+% subsection character_level_sequence_to_sequence (end)
+
+\subsection{Code2Vec Decoder Model} % (fold)
+\label{sec:code2vec_decoder_model}
+
+* We then want to investigate purely without lexical names (overlap etc)
+* We decide to present a modification on Code2Vec, that is argument specific.
+* The motivtion is that this hsould be able to point out only some local parts of the model, the bits of the code that are near or important might get upweighted.
+
+
+% subsection code2vec_to_sequence_model (end)
+
+\subsection{Code2Vec + LSTM Encoder} % (fold)
+\label{sub:code2vec_sequence_to_sequence}
+
+Aim to combine these models together.Natural through 
+
+% subsubsection code2vec_sequence_to_sequence (end)
+% section combined_encoder_models (end)
+
+
+
+
+
+
+
+
+
 
 \section{Tokenizations} % (fold)
 \label{sec:tokenizations}
@@ -54,10 +203,6 @@ Tokenizations of the function signature data
 
 
 \subsection{Argument Description}
-
-
-
-
 
 
 
@@ -144,160 +289,3 @@ Tokenizations of the function signature data
 
 
 
-
-
-
-
-
-
-
-
-
-\section{The Models}
-
-\subsection{Rote Learner Model} % (fold)
-\label{sec:rote_learner_model}
-
-Our Rote Learner model was designed to act as a strong benchmark in all our investigations. 
-It was designed according to a simple principle: \textit{the Rote Learner generates a description from a test point, by returning a random full description from the set of best-matching training point.}
-This algorithm is defined in Algorithm \ref{alg:rote_learner_general}. 
-
-\begin{algorithm}
-    \caption{The general Rote Learner algorithm }
-    \label{alg:rote_learner_general}
-    \begin{algorithmic}
-        \Procedure{GenerateDescription}{$t$}\Comment{Generate a description for test argument $t$ }
-        \State $\mathcal{M} \gets \text{BestMatchingSet}(t, training\_points)$
-        \State $x \gets \text{RandomChooseOne}(\mathcal{M})$
-        \State $d \gets \text{GetDescription}(x)$
-        \State \textbf{return} $d$
-        \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-The benefit of this model is that the definition of `best-matching' can then be changed according to the modality of the input data. In the sections below we present a brief description of these matching algorithms, with an appendix displaying each algorithm in pseudocode. A summary of the matching algorithms in Table \ref{tab:matching_summary}, 
-
-\subsubsection{NCharacter-Gram Overlap}
-
-This matching criterion was used for function signature data, and so operates on sequences of characters. The matching criterion finds the training points which have the longest n character overlap with the test data point (or longest overlapping substring). If the same point has two of such overlaps, it is included twice, and so forth. This pseudo code is presented in Algorithm \ref{alg:ngram_overlap}.
-
-\subsubsection{Proportional Context}
-
-This criterion matches the path-contexts of the data, taking each each path-context as an atomic unit. 
-For each path-context within the test point, the criterion finds all the training points with the same path-context. It combines these into one list, returns this list. Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping path-context with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
-
-
-\subsubsection{Max Context}
-
-This criterion takes the list output by the Proportional Context criterion, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
-
-
-
-\subsubsection{Proportional SubContext}
-
-This criterion also match the path-contexts of the data, but treats each path-context as sequence of nodes of the AST, allowing it to match subpaths.
-The matching criterion takes the test point, and for each path-context within it, finds the training path-contexts with longest subsequences that match it. It collects the corresponding datapoint to theses paths and combines them into one list. It then returns this list. This is equivalent to choosing the training points that best match each path in the test point, proportionally to how often they are the best match. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
-
-
-\subsubsection{Max SubContext}
-
-
-The matching criterion takes the list output by the Proportional SubContext, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
-
-
-
-\subsubsection{Combinations}
-
-Naturally these criteria can be combined across modalities, to examine the combination of the function signature and AST. This can be done by simply adding the two lists that are returned by the combined criteria. 
-
-\begin{table}[h!]
-\makebox[\linewidth][c]{
-    \centering
-
-    \begin{tabular}{l c c p{9cm}}
-    \hline
-    BestMatchingSet & Use Sig. & Use AST & Description: \textit{choose list of training points...} \\
-    \hline
-    \hline
-    NGram Overlap     & \checkmark & & 
-         with the longest n-character gram overlap with test \\
-    \hline
-    \hline
-    % Max Context  & & \checkmark &
-    %     with most overlap of full `path-contexts' in test \\
-    % Max SubContext  & & \checkmark & 
-    %     with most overlap of longest sub-`path-contexts' in test \\
-    % Proportional Context  & & \checkmark & 
-    %     proportional to the number of overlapping `path-contexts' in test \\
-    % Proportional SubContext  & & \checkmark &
-    %     proportional to the number of overlapping longest sub-`path-contexts' in test  \\    
-    Proportional Context  & & \checkmark & 
-        that match each path-context in test \\
-    Max Context  & & \checkmark &
-        that most often match each path-context in test \\
-    Proportional SubContext  & & \checkmark &
-        that best-effort match each path-context in test  \\
-    Max SubContext  & & \checkmark & 
-        that most often best-effort match path-contexts in test \\
-    \hline
-
-    \hline
-    \end{tabular}
-}
-
-    \caption{An Summary of the BestMatchingSet algorithms we use in the experiments. For sake of simplicity, a `best-effort' match here refers to the match with longest subpath of nodes, treating a path context as a sequence}
-    \label{tab:matching_summary}
-\end{table}
-
-
-
-
-
-% These chose a description from a set of training samples by:
-%     \begin{itemize}
-%         \item combining samples with largest subpath overlap for each path in test, and chosing from that list. (Sub Path Proportional)
-%         \item combining samples with largest subpath overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Sub Path Max)
-%         \item combining samples full overlap for each path in test, and chosing from that list (Full Path Proportional)
-%         \item combining samples full overlap for each path in test, and chosing from the most frequent training point(s) in that list. (Full Path Max)
-%     \end{itemize}
-
-
-
-
-
-
-
-
-% subsection rote_learner_model (end)
-
-\subsection{Character Level Sequence to Sequence Model} % (fold)
-\label{sec:character_level_sequence_to_sequence}
-
-The character level sequence model follows the standard formulation as found in \cite{bahdanau_neural_2014}
-
-* What is the motivation of the seq to seq model.
-* Since so much effort goes into naming of variables, shouldnt there be recognisable clues? Especially since,in many languages, function signature is all thats presented in documentation.
-* \_ctx => context? conv2d in the function implies somethings?
-* We therefore employ a sequence to sequence model to investigate the informativeness of function signatures
-
-
-
-% subsection character_level_sequence_to_sequence (end)
-
-\subsection{Code2Vec Decoder Model} % (fold)
-\label{sec:code2vec_decoder_model}
-
-* We then want to investigate purely without lexical names (overlap etc)
-* We decide to present a modification on Code2Vec, that is argument specific.
-* The motivtion is that this hsould be able to point out only some local parts of the model, the bits of the code that are near or important might get upweighted.
-
-
-% subsection code2vec_to_sequence_model (end)
-
-\subsection{Code2Vec + LSTM Encoder} % (fold)
-\label{sub:code2vec_sequence_to_sequence}
-
-Aim to combine these models together.Natural through 
-
-% subsubsection code2vec_sequence_to_sequence (end)
-% section combined_encoder_models (end)

@@ -611,10 +611,10 @@ This indicates both an improvement that may be down to some form of overfitting 
 \begin{tabular}{c l}
     & \textbf{Paths} \\
     \\
-    \textbf{Path A} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\leftarrow$ Assign $\rightarrow$ Name : \mintinline[]{yaml}{palette} \\
-    \textbf{Path B} & Name $\leftarrow$ comprehension $\leftarrow$ ListComp $\rightarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+    \textbf{Path A} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\uparrow$ Assign $\downarrow$ Name : \mintinline[]{yaml}{palette} \\
+    \textbf{Path B} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\downarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
     \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
-    \textbf{Path D} & Name $\leftarrow$ comprehension $\rightarrow$ Name : \mintinline[]{yaml}{name} \\
+    \textbf{Path D} & Name $\uparrow$ comprehension $\downarrow$ Name : \mintinline[]{yaml}{name} \\
     \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
     \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
     \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
