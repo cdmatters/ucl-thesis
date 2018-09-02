@@ -280,11 +280,13 @@ where $g$ is our old gradient, $x \in \mathbb{R}^{+}$, and $g'$ our clipped grad
 \subsection{Code2Vec Decoder Model} % (fold)
 \label{sec:code2vec_decoder_model}
 
-Our Code2Vec Decoder model centered around creating a modified version of Alon et al's \cite{alon_code2vec_2018} code vector, except built from the \textit{variable path-contexts} to our argument, instead of all \textit{path-contexts} from the AST.
-This vector forms the basis of our intermediate representation, which was then decoded by a decoder, identical to the Seq2Seq (without attention.).
+\subsubsection{Overview}
+
+Our Code2Vec Decoder model creates a modified version of Alon et al's \cite{alon_code2vec_2018} Code2Vec code-vector, and uses that as intermediate representation for decoding. We differ from Alon et al's paper by building our vector from the our argument's \textit{variable path-contexts}, instead whole AST's \textit{path-contexts}.
+We use the same decoder model as the Seq2Seq (without attention).
 
 We encode our VPCs using a 300-dimensional vector for the path, and 300-dimensional vector for the terminal node, and produce a final code vector of size 300.
-This is used as both components of our intermediate state, to be decoded, and we use an identical decoding arrangement to the Seq2Seq model.
+This is used as both components of our intermediate state, to be decoded our LSTM decoder, which is the same as the Seq2Seq model.
 We apply a dropout around the intermediate context vectors, and also the inputs, outputs and hidden states of the decoder. 
 We use the same objective function, gradient clipping and optimizer as the Seq2Seq model.
 
@@ -331,12 +333,14 @@ where our dropout fraction was tuned as a hyperparameter.
 
 % subsection code2vec_to_sequence_model (end)
 
-\subsection{Code2Vec + LSTM Encoder} % (fold)
+\subsection{Code2Vec + Seq2Seq Decoder} % (fold)
 \label{sub:code2vec_sequence_to_sequence}
+
+\subsubsection{Overview}
 
 In this model we used both sources of information for our decoder, by concatenating two separate encoded vectors, and passing this through a linear layer. 
 This enabled the model to choose which sections of information were most important.
-We use the identical set up as the Code2Vec Decoder to generate out code vector, and the identical set up to Seq2Seq for the encoder and decoder, and we used the same dropouts, objective function, gradient clipping and optimiser.
+We use the identical set up as the Code2Vec Decoder to generate our code vector, and the identical set up to Seq2Seq for the character encoder and word decoder, and we used the same dropouts, objective function, gradient clipping and optimiser as both.
 
 \subsubsection{Encoder}
 
@@ -347,8 +351,8 @@ In this model we consider the two encoders above as operators that return tuples
     (\mathbf{s}_1^{comb})^T = [ (\mathbf{s}^{s2s}_1)^T , (\mathbf{s}^{c2v}_1)^T ] \\
     (\mathbf{s}_2^{comb})^T  =  [ (\mathbf{s}^{s2s}_2)^T , (\mathbf{s}^{c2v}_2)^T ]  
 \end{align}
-where $\mathcal{SEQ}$ indicates the encoder component of the Seq2Seq model,
-$\mathcal{COD}$ indicates the component of the Code2Vec Decoder, 
+where $\mathcal{SEQ}$ returns the encoder component of the Seq2Seq model,
+$\mathcal{COD}$ returns the component of the Code2Vec Decoder, 
 $s^\mathcal{X}$ indicates the a tuple of vectors from encoder operation $\mathcal{X}$.
 
 Then each component is fed through a linear layer before combining into the final encoded state to be decoded:
@@ -358,10 +362,10 @@ Then each component is fed through a linear layer before combining into the fina
     % \mathbf{W}_d + \mathbf{b}_d
     s = (\mathbf{s_1}, \mathbf{s_2})
 \end{align}
-where $\mathbf{W}_d \in \mathbb{R}^{L\text{x}L_comb}$, 
+where $\mathbf{W}_d \in \mathbb{R}^{L\text{x}L_{comb}}$, 
 $\mathbf{b}_d \in \mathbb{R}^{L}$,
-$L$ is the decoder RNN size,
-$L$ is the size of the combined concatenated vector.
+$L$ is the decoder size,
+$L_{comb}$ is the size of the combined concatenated vector.
 
 
 \subsubsection{Decoder, Attention, Dropout, Optimisation}
@@ -373,13 +377,38 @@ We used dropout any variables specified in either the Seq2Seq Model dropout sect
 \section{Tokenizations} % (fold)
 \label{sec:tokenizations}
 
-This section outlines how we tokenized our data.
-
 \subsection{Tokenizing Signature Data}
 
-Tokenizations of the function signature data
+Since signature data was being investigated character-wise, our encoding vocabulary was short and complete - constrained to 70 characters in all.
 
-\subsection{Tokenizing VPC Data }
+If our investigations required just one name, we encoded it as is, and appended a end-of-sequence ($<$EOS$>$) token to the list of characters.
+If we required multiple names, we concatenated the strings, using separator tokens ($<$S$>$) in between, which would indicate the type of the previous name. Separators tokens could then be replaced by single characters invalid in a python name, for representation as a string.
+
+\begin{figure}[h!]
+
+\hrulefill\\
+    \textbf{signature:} \mintinline[]{python}{def funcA(foo, barA, barB):}\\
+    \textbf{argument:} \mintinline[]{python}{foo} \\
+    \textbf{tokenization type:} variable name $+$ function name $+$ all coarguments \\
+    \textbf{tokenized (sequence):} \mintinline[]{python}{f,o,o,<S1>,f,u,n,c,A,<S2>,b,a,r,A,<S3>,b,a,r,B,<S3>,<EOS>}\\
+    \textbf{tokenized (string):} \mintinline[]{python}{"foo|funcA-barA+barB+?"}\\
+\hrulefill\\ 
+    \caption{An example of a tokenization of the signature data}
+    \label{fig:tokenizatio}
+\end{figure}
+
+\subsection{Extracting \& Tokenizing VPC Data }
+Although in principle, the VPCs could be taken directly from the entire AST of the accompanying source, a few small modifications were made to facilitate training, and reduce the redundant VPCs in the model. 
+First the AST was pruned to remove terminal nodes that not variables, such as \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} nodes, as visible in Figure \ref{fig:fullAST}. 
+
+Although these nodes carry useful information as to whether the target name was being loaded or stored, they almost doubled the number of terminal nodes, and therefore quadratically increase the number of \textit{pathcontexts} in the AST. Given our memory and time considerations in both training and preparation we pruned these nodes, noting that the path $p$ for any VPCs eliminated would still be present in the corresponding variable node to which \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} refers. 
+Although the loading and storing information had been removed, the tree still contained much information about the closeness and type of relationships between variables.
+
+* by doing this we can run quickly
+* we dont lose any paths
+
+
+
 
 
 \subsection{Tokenizing Descriptions}
