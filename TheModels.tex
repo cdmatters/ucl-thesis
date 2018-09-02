@@ -178,9 +178,14 @@ First we define an LSTM with functions $f$ and $g$, which takes input vector $\t
 
 We then iteratively embed each sequence of tokens $\{x_1,...x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
 \begin{align}
-    \textbf{x}_t = \mathbf{H}_{x_t:}
+    \textbf{x}^T_t = \mathbf{H}^C_{x_t,:}
 \end{align}
-where $\textbf{H} \in \mathbb{R}^{V_c\text{x}D_c}$ is our charcter embedding matrix, $V_c$ is our character vocabulary, and $D_c$ our encoding dimension.
+where 
+$\textbf{H}^C \in \mathbb{R}^{V_c\text{x}D_c}$ is our character embedding matrix, 
+$V_c$ is our character vocabulary, 
+$D_c$ is our encoding dimension, 
+and $\textbf{X}_{i,:}$ indicates selection of row $i$ from a matrix \textbf{X}.
+
 With these sequences of vectors we then encode each vector with the LSTM until we have generated outputs $\{\textbf{h}_1,...,\textbf{h}_k\}$ and a intermediate fixed length representation, $s$ of the sequence: 
 \begin{align}
      s = (\textbf{h}_k, \textbf{c}_k) \label{eq:s2s_state}
@@ -205,9 +210,14 @@ We then iteratively generate $\textbf{y}_t = d(\mathbf{y}_{t-1}, \mathbf{h}'_{t-
     \textbf{c}'_t = g(\textbf{y}_t, \textbf{h}'_{t-1}, \textbf{c}'_{t-1}) \label{eq:s2syc} \\
     \textbf{w}_{t+1} = softmax(\textbf{W}_p\textbf{h}'_t) \label{eq:s2syw}  \\
     w_{t+1} = argmax(\textbf{w}_{t+1})  \\
-    \textbf{y}_{t+1} = \textbf{H}_{w_{t+1}:}  
+    \textbf{y}^T_{t+1} = \textbf{H}^W_{w_{t+1}:}  
 \end{align}
-where $\textbf{H} \in \mathbb{R}^{V_w\text{x}D_w}$ is our word embedding matrix, $\textbf{W}_p \in \mathbb{R}^{V_w\text{x}L}$ is a projection matrix, $V_w$ is our word vocabulary size, $D_w$ is our word embedding dimension, $L$ is the dimension of our decoding LSTM.
+where $\textbf{H}^W \in \mathbb{R}^{V_w\text{x}D_w}$ is our word embedding matrix, 
+$\textbf{W}_p \in \mathbb{R}^{V_w\text{x}L}$ is a projection matrix, $V_w$ is our word vocabulary size, 
+$D_w$ is our word embedding dimension, 
+$\mathbf{h_i} \in \mathbb{R}^L$,
+$L$ is the dimension of our decoding LSTM,
+and $\textbf{X}_{i,:}$ indicates selection of row $i$ from a matrix \textbf{X}.
 
 \subsubsection{Bidirectional LSTM}
 
@@ -215,8 +225,8 @@ The above framework is modified when dealing with a bidirectional LSTM encoder. 
 
 Following Bahdanau's example we concatenate these vectors to make a new vector of twice the length. Otherwise, the model is identical:
 \begin{align}
-\textbf{h}^b_i = [\overrightarrow{\textbf{h}}_i,\overleftarrow{\textbf{h}}_i ] \\
-\textbf{c}^b_i = [\overrightarrow{\textbf{c}}_i,\overleftarrow{\textbf{c}}_i ] \\
+(\textbf{h}^b_i)^T = [\overrightarrow{\textbf{h}}^T_i,\overleftarrow{\textbf{h}}^T_i ] \\
+(\textbf{c}^b_i)^T = [\overrightarrow{\textbf{c}}^T_i,\overleftarrow{\textbf{c}}^T_i ] \\
 s = (\textbf{h}^b_k, \textbf{c}^b_k)
 \end{align}
 
@@ -224,18 +234,26 @@ s = (\textbf{h}^b_k, \textbf{c}^b_k)
 
 To make the adjustment of adding attention, we define a modification to the above decoding sequence. Since we use Luong\cite{luong_effective_2015} style global attention, we add a incorporate a contextualising vector, $\textbf{z}_t$, to the output of our LSTM at each step, before feeding through our final softmax:
 \begin{align}
-    \tilde{\textbf{h}}^a_t =  \text{tanh}(\textbf{W}_a[\textbf{z}_t, \textbf{h}_t])\\
-    \textbf{w}_{t+1} = softmax(\textbf{W}_p\tilde{\textbf{h}}^a_t) \label{eq:s2syw}  
+    \tilde{\textbf{h}}'^a_t =  \text{tanh}(\textbf{W}_a[\textbf{z}_t, \textbf{h}'_t])\\
+    \textbf{w}_{t+1} = softmax(\textbf{W}_p\tilde{\textbf{h}}'^a_t) \label{eq:s2syw}  
 \end{align}
-where $\textbf{W}_a \in \mathbb{R}^{(A+L)\text{x}L} $ is our attention matrix, and $A$ is our attention vector size.
+where $\textbf{W}_a \in \mathbb{R}^{(L)\text{x}(A+L)} $ is our attention matrix, and 
+$A$ is our attention vector size.
 
 This attention vector $\textbf{z}_t$ is calculated as the weighted average over  $\{\textbf{h}_1,...,\textbf{h}_k\}$ corresponding to their scores in vector $\textbf{a}_t = [a_t^1,...,a_t^k]$ where:
-
-
 
 \begin{align}
     a_t^i = \dfrac{exp(\mathbf{h}'^{T}_t\mathbf{h}_i)}{\sum_{j=1}^kexp(\mathbf{h}'^{T}_t\mathbf{h}_i)} \\
 \end{align}
+
+\subsubsection{Dropout}
+
+We added random dropout layer to the three encoder and three decoder variables during training:
+$\{\textbf{x}_j, \textbf{y}_j, \textbf{h}_j, \textbf{h}'_j, \textbf{c}_j, \textbf{c}'_j\}$ where with a our dropout fraction, which was a tuned hyperparameter. 
+
+\subsubsection{Optimiser}
+
+We defined our optimisation using
 
 
 \subsection{Code2Vec Decoder Model} % (fold)
@@ -249,43 +267,70 @@ Clipping
 
 \subsubsection{Encoder}
 
-First we define an LSTM with functions $f$ and $g$, which takes input vector $\textbf{x}_t$ and generates an output, $\textbf{h}_t$, and updates its own state $\textbf{c}_t$ according to the equations in Equations \ref{eq:lstm1} to \ref{eq:lstm6}.
+In this model our input for each argument is a set of \textit{variable path-contexts}, $\{v_1,...v_k\}$, where each $v_i = (p_i, n_i)$ and  $p_i$ is a path, and $n_i$ is a terminal node. These paths and nodes are encoded simply as integers, indicating items in a vocabulary.
+
+For each $v_i$ we then prepare an embedded context vector $\mathbf{c_i}$ as follows:
 \begin{align}
-    \textbf{h}_t = f(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sh}\\
-    \textbf{c}_t = g(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sc}
+\textbf{p}_i = \mathbf{H}^P_{p_i,:}\\
+\textbf{n}_i = \mathbf{H}^N_{n_i,:}\\
+\tilde{\textbf{c}_i} = ([\textbf{p}_i , \textbf{n}_i])^T \\
+\textbf{c}_i = \text{tanh}(\mathbf{W_c}\tilde{\textbf{c}_i}  + \mathbf{b_c})
+\end{align}
+Where  $\textbf{H}^P \in \mathbb{R}^{V_p\text{x}D_p}$ is our path embedding matrix, 
+$\textbf{H}^N \in \mathbb{R}^{V_n\text{x}D_n}$ is our terminal node embedding matrix, 
+$\textbf{W}_c \in \mathbb{R}^{D_c\text{x}(D_p+D_n)}$,
+$\textbf{b}_c \in \mathbb{R}^{D_c}$,
+$D_c$ is the size of our context vector,
+$D_p$ is the size of our path embedding vector,
+$D_n$ is the size of our terminal node embedding vector, and
+and $\textbf{X}_{i,:}$ indicates selection of row $i$ from a matrix \textbf{X}.
+
+The final code2vec-style vector $\textbf{v}$ is calculated as the weighted sum over  $\{\textbf{c}_1,...,\textbf{c}_k\}$ corresponding to their scores in vector $\textbf{a} = [a^1,...,a^k]$ where:
+\begin{align}
+    a^i = \dfrac{exp(\mathbf{\alpha}^{T}\mathbf{c}_i)}{\sum_{j=1}^kexp(\mathbf{\alpha}^{T}\mathbf{c}_i)}
+\end{align}
+and $\mathbf{\alpha} \in \mathbb{R}^D_c$ is a global attention parameter that is learnt.
+We use this vector $\mathbf{v}$ to present our final intermediate encoding as :
+\begin{align}
+     s = (\mathbf{v}, \mathbf{v}) 
 \end{align}
 
-We then iteratively embed each sequence of tokens $\{x_1,...x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
-\begin{align}
-    \textbf{x}_t = \mathbf{H}_{x_t:}
-\end{align}
-where $\textbf{H} \in \mathbb{R}^{V_c\text{x}D_c}$ is our charcter embedding matrix, $V_c$ is our character vocabulary, and $D_c$ our encoding dimension.
-With these sequences of vectors we then encode each vector with the LSTM until we have generated outputs $\{\textbf{h}_1,...,\textbf{h}_k\}$ and a intermediate fixed length representation, $s$ of the sequence: 
-\begin{align}
-     s = (\textbf{h}_k, \textbf{c}_k) \label{eq:s2s_state}
-\end{align}
+\subsubsection{Decoder, Optimiser}
 
-\subsubsection{Decoder}
+We use the same decoder as presented in the Seq2Seq model.
+We also use the same optimiser, objective function, and gradient clipping was presented in the Seq2Seq model.
 
-We used the identical decoder, to the Seq2Seq model.
+\subsubsection{Dropout}
+
+Throughout the network, we added random dropout layers to concatenated context vector and the three decoder variables during training:
+$\{\tilde{\textbf{c}_i}, \textbf{y}_j, \textbf{h}'_j,  \textbf{c}'_j,\}$
+where our dropout fraction was tuned as a hyperparameter. 
 
 % subsection code2vec_to_sequence_model (end)
 
 \subsection{Code2Vec + LSTM Encoder} % (fold)
 \label{sub:code2vec_sequence_to_sequence}
 
-Aim to combine these models together.Natural through 
+In this model we used both sources of information for our decoder, by concatenating two separate encoded vectors, and passing this through a linear layer. 
+This enabled the model to choose which sections of information were most important.
 
-% subsubsection code2vec_sequence_to_sequence (end)
-% section combined_encoder_models (end)
+\subsubsection{Encoder}
+
+In this model we consider the two encoders above as operators that return tuples. We simply return the concatenation of each component of tuple:
+\begin{align}
+    s^{s2s}  \gets \mathcal{SEQ}(\mathbf{x}) \\
+    s^{c2v} \gets \mathcal{COD}(\mathbf{x}) \\
+    \mathbf{s}_1^T = [ (\mathbf{s}^{s2s}_1)^T , (\mathbf{s}^{c2v}_1)^T ] \\
+    \mathbf{s}_2^T = [ (\mathbf{s}^{s2s}_2)^T , (\mathbf{s}^{c2v}_2)^T ] \\
+    s = (\mathbf{s_1}, \mathbf{s_2})
+\end{align}
+where $\mathcal{SEQ}$ indicates the encoder component of the Seq2Seq model and the  $\mathcal{COD}$ indicates the component of the Code2Vec Decoder, and $s^\mathcal{X}$ indicates the a tuple of vectors from encoder operation $\mathcal{X}$.
 
 
-
-
-
-
-
-
+\subsubsection{Decoder, Attention, Dropout, Optimiser}
+We use the same decoder as presented in the Seq2Seq model, and use Luong Attention in the identical manner.
+We also use the same optimiser, objective function, and gradient clipping was presented in the Seq2Seq model.
+We used dropout any variables specified in either the Seq2Seq Model dropout section or the Code2Vec Decoder model dropout section.
 
 
 \section{Tokenizations} % (fold)
