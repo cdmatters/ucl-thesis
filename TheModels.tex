@@ -85,7 +85,7 @@ The benefit of this model is that the definition of `best-matching' can then be 
     \item \textbf{Proportional Contexts} \textit{(VPC Data)}\\This criterion matches VPCs by treating each VPC as an atomic unit. For each VPC within the test point, the criterion finds all the training points with the same VPC. It combines these into one list, returns this list. Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping VPC with the test point. The pseudocode is presented in Algorithm \ref{alg:context_algorithm} 
     \item \textbf{Max Contexts} \textit{(VPC Data)}\\This criterion takes the list output by the \textbf{Proportional Context} criterion, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. The pseudocode is also presented in Algorithm \ref{alg:context_algorithm} 
     \item \textbf{Proportional SubContexts} \textit{(VPC Data)}\\This criterion also match VPCs of the data, but treats each VPC as sequence of nodes. Specifically, as it creates $q = p{downarrow}x_f$ and treats the new path, $q$, as the sequence of nodes and arrows that compose it. This allows it to match subpaths. The matching criterion takes the test point, and for each VPC within it, finds the training VPC with the longest subsequences that matches it. It collects the corresponding datapoints to these paths and combines them into one list. It then returns this list. This is equivalent to choosing the training points that best match each VPC in the test point, proportionally to how often they are the best match. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
-    \item\textbf{Max SubContexts} \textit{(VPC Data)}\\The matching criterion takes the list output by the Proportional SubContext, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
+    \item\textbf{Max SubContexts} \textit{(VPC Data)}\\The matching criterion takes the list output by the \textbf{Proportional SubContext}, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is presented in Algorithm \ref{alg:sub_context_algorithm} 
     \item\textbf{[Combinations]}\textit{(Sig. Data + VPC Data)} \\ Naturally these criteria can be combined across modalities to act upon combinations of the function signature and AST. In cases where this is done, the new list is simply the combination of the lists from the combined individual criteria. 
 \end{enumerate}
 
@@ -120,6 +120,8 @@ The benefit of this model is that the definition of `best-matching' can then be 
         which \textit{best-effort} match each VPC in test, and combine\\
     Max SubContext  & & \checkmark & 
         which \textit{best-effort} each VPC in test, combine, and take most frequent\\
+    Combinations  &\checkmark  & \checkmark & 
+        combine the lists from any two BestMatchingSets\\
     \hline
 
     \hline
