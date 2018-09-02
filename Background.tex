@@ -114,33 +114,19 @@ Such networks have proved highly adaptable to language tasks, and enjoy widespre
 An example of an RNN used in our research is that of the Long Short Term Memory Unit (LSTM)\cite{hochreiter_long_1997}. These comprise of four gating mechanisms, ($f_t, i_t,\tilde{c_t}, o_t$), operating on the input $\mathbf{x_t}$ and state vectors $\mathbf{c_t}$ and $\mathbf{h_t}$
 \cite{noauthor_understanding_nodate}. Each gating mechanism has a corresponding weight matrix, $W$, and bias vector $\mathbf{b}$, and operate according to the following equations:
 
-\begin{equation}
-    \mathbf{f_t} = \sigma(W_f [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_f})
-    \label{eq:lstm1}
-\end{equation}
-\begin{equation}
-    \mathbf{i_t} = \sigma(W_i [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_i})
-    \label{eq:lstm2}
-\end{equation}
-\begin{equation}
-    \mathbf{o_t} = \sigma(W_o [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_o})
-    \label{eq:lstm3}
-\end{equation}
-\begin{equation}
-    \mathbf{\tilde{c_t}} = \text{tanh}(W_c [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_c})
-    \label{eq:lstm4}
-\end{equation}
+\begin{align}
+    \mathbf{f_t} = \sigma(W_f [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_f})\label{eq:lstm1}\\
+    \mathbf{i_t} = \sigma(W_i [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_i}) \label{eq:lstm2}\\
+    \mathbf{o_t} = \sigma(W_o [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_o}) \label{eq:lstm3}\\
+    \mathbf{\tilde{c_t}} = \text{tanh}(W_c [\mathbf{h_{t-1}}, \mathbf{x_t}] + \mathbf{b_c}) \label{eq:lstm4}
+\end{align}
 where [,] operator indicates concatenation and $\sigma$ indicates point-wise sigmoidal function.
 
 These gating equations then combine to update the cell state $\mathbf{c_{t-1}}$ and the hidden state $\mathbf{h_{t-1}}$ as follows: 
-\begin{equation}
-    \mathbf{c_t} = \mathbf{f_t} * \mathbf{c_{t-1}} + \mathbf{i_t} * \mathbf{\tilde{c_t}}
-    \label{eq:lstm5}
-\end{equation}
-\begin{equation}
-    \mathbf{h_t} = \mathbf{o_t} * \text{tanh}(\mathbf{c_t})
-    \label{eq:lstm6}
-\end{equation}
+\begin{align}
+    \mathbf{c_t} = \mathbf{f_t} * \mathbf{c_{t-1}} + \mathbf{i_t} * \mathbf{\tilde{c_t}} \label{eq:lstm5}\\
+    \mathbf{h_t} = \mathbf{o_t} * \text{tanh}(\mathbf{c_t}) \label{eq:lstm6}
+\end{align}
 
 where  $*$ indicates point-wise multiplication, and tanh indicates point-wise hyperbolic tan.
 

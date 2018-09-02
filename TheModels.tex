@@ -121,7 +121,7 @@ The benefit of this model is that the definition of `best-matching' can then be 
     Max SubContext  & & \checkmark & 
         which \textit{best-effort} each VPC in test, combine, and take most frequent\\
     Combinations  &\checkmark  & \checkmark & 
-        combine the lists from any two BestMatchingSets\\
+        from the combined the lists of any two BestMatchingSets\\
     \hline
 
     \hline
@@ -153,27 +153,121 @@ The benefit of this model is that the definition of `best-matching' can then be 
 
 % subsection rote_learner_model (end)
 
-\subsection{Character Level Sequence to Sequence Model} % (fold)
+\subsection{Seq2Seq Model} % (fold)
 \label{sec:character_level_sequence_to_sequence}
 
-The character level sequence model follows the standard formulation as found in \cite{bahdanau_neural_2014}
+\subsubsection{Overview}
 
-* What is the motivation of the seq to seq model.
-* Since so much effort goes into naming of variables, shouldnt there be recognisable clues? Especially since,in many languages, function signature is all thats presented in documentation.
-* \_ctx => context? conv2d in the function implies somethings?
-* We therefore employ a sequence to sequence model to investigate the informativeness of function signatures
+The our character level sequence-to-sequence model follows the standard formulation as found in \cite{sutskever_sequence_2014} \cite{bahdanau_neural_2014}, encoding a sequences of characters, and decoding a sequence words. 
+We use a Bidirectional LSTM as our encoder and concatenate outputs, and use another LSTM as a decoder.
+We use an attentional mechanism over our sequence our sequence, similar to Luong et al \cite{luong_effective_2015}, over outputs.
+Since our vocabulary of characters is size 70, we embed our input into 70-dimensional space, with trainable embeddings. We initialising these with a one-hot encoding.
+Our characters are embedded into a 200 dimensional space use Glove embeddings for our decoder. 
+These are not made trainable, due to concerns that the model may overfit. 
+We apply dropout
+We apply gradient clippin
+We measure our loss.
+
+\subsubsection{Encoder}
+
+First we define an LSTM with functions $f$ and $g$, which takes input vector $\textbf{x}_t$ and generates an output, $\textbf{h}_t$, and updates its own state $\textbf{c}_t$ according to the equations in Equations \ref{eq:lstm1} to \ref{eq:lstm6}.
+\begin{align}
+    \textbf{h}_t = f(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sh}\\
+    \textbf{c}_t = g(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sc}
+\end{align}
+
+We then iteratively embed each sequence of tokens $\{x_1,...x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
+\begin{align}
+    \textbf{x}_t = \mathbf{H}_{x_t:}
+\end{align}
+where $\textbf{H} \in \mathbb{R}^{V_c\text{x}D_c}$ is our charcter embedding matrix, $V_c$ is our character vocabulary, and $D_c$ our encoding dimension.
+With these sequences of vectors we then encode each vector with the LSTM until we have generated outputs $\{\textbf{h}_1,...,\textbf{h}_k\}$ and a intermediate fixed length representation, $s$ of the sequence: 
+\begin{align}
+     s = (\textbf{h}_k, \textbf{c}_k) \label{eq:s2s_state}
+\end{align}
+
+\subsubsection{Decoder}
+
+We then seek to iteratively decode the our sequence of word vectors $\{\textbf{y}_1,..., \textbf{y}_l\}$ given this state $s$ such that:
+\begin{align}
+    P(\textbf{y}_1,...,\textbf{y}_l) = \prod_{i=1}^l p(\textbf{y}_i| \{\textbf{y}_1,...,\textbf{y}_{i-1}\}, s)  = \prod_{i=1}^ld(\mathbf{y}_{i-1}, \mathbf{h}'_{i-1},\mathbf{c}'_{i-1} )
+\end{align}
+where $\mathbf{h}'_{i},\mathbf{c}'_{i} $ are the hidden states of the decoder LSTM at step $i$, $\mathbf{y}_0$ is start-of-sentence vector, and $d$ is a general decoding method using the LSTM, which we illustrate below.
+
+First we initialise our decoders hidden state ($\textbf{h}'_0$,$\textbf{c}'_0$) with the our intermediate state $s$:
+\begin{align}
+    (\textbf{h}'_0, \textbf{c}'_0) = s = (\textbf{h}_k, \textbf{c}_k) \label{eq:s2s_assign}
+\end{align}
+We then iteratively generate $\textbf{y}_t = d(\mathbf{y}_{t-1}, \mathbf{h}'_{t-1},\mathbf{c}'_{t-1} ) $ by 
+
+\begin{align}
+    \textbf{h}'_t = f(\textbf{y}_t, \textbf{h}'_{t-1}, \textbf{c}'_{t-1}) \label{eq:s2syh}\\
+    \textbf{c}'_t = g(\textbf{y}_t, \textbf{h}'_{t-1}, \textbf{c}'_{t-1}) \label{eq:s2syc} \\
+    \textbf{w}_{t+1} = softmax(\textbf{W}_p\textbf{h}'_t) \label{eq:s2syw}  \\
+    w_{t+1} = argmax(\textbf{w}_{t+1})  \\
+    \textbf{y}_{t+1} = \textbf{H}_{w_{t+1}:}  
+\end{align}
+where $\textbf{H} \in \mathbb{R}^{V_w\text{x}D_w}$ is our word embedding matrix, $\textbf{W}_p \in \mathbb{R}^{V_w\text{x}L}$ is a projection matrix, $V_w$ is our word vocabulary size, $D_w$ is our word embedding dimension, $L$ is the dimension of our decoding LSTM.
+
+\subsubsection{Bidirectional LSTM}
+
+The above framework is modified when dealing with a bidirectional LSTM encoder. The bidirectional LSTM consists of two LSTMs, one which processes the vectors forward $\{\textbf{x}_1,...\textbf{x}_k\}$, producing  $\{\overrightarrow{\textbf{h}}_1,...\overrightarrow{\textbf{h}}_k\}$, and one which processes the vectors in reverse order  $\{\textbf{x}_k,...\textbf{x}_1\}$, producing  $\{\overleftarrow{\textbf{h}}_1,...\overleftarrow{\textbf{h}}_k\}$.
+
+Following Bahdanau's example we concatenate these vectors to make a new vector of twice the length. Otherwise, the model is identical:
+\begin{align}
+\textbf{h}^b_i = [\overrightarrow{\textbf{h}}_i,\overleftarrow{\textbf{h}}_i ] \\
+\textbf{c}^b_i = [\overrightarrow{\textbf{c}}_i,\overleftarrow{\textbf{c}}_i ] \\
+s = (\textbf{h}^b_k, \textbf{c}^b_k)
+\end{align}
+
+\subsubsection{Attention}
+
+To make the adjustment of adding attention, we define a modification to the above decoding sequence. Since we use Luong\cite{luong_effective_2015} style global attention, we add a incorporate a contextualising vector, $\textbf{z}_t$, to the output of our LSTM at each step, before feeding through our final softmax:
+\begin{align}
+    \tilde{\textbf{h}}^a_t =  \text{tanh}(\textbf{W}_a[\textbf{z}_t, \textbf{h}_t])\\
+    \textbf{w}_{t+1} = softmax(\textbf{W}_p\tilde{\textbf{h}}^a_t) \label{eq:s2syw}  
+\end{align}
+where $\textbf{W}_a \in \mathbb{R}^{(A+L)\text{x}L} $ is our attention matrix, and $A$ is our attention vector size.
+
+This attention vector $\textbf{z}_t$ is calculated as the weighted average over  $\{\textbf{h}_1,...,\textbf{h}_k\}$ corresponding to their scores in vector $\textbf{a}_t = [a_t^1,...,a_t^k]$ where:
 
 
 
-% subsection character_level_sequence_to_sequence (end)
+\begin{align}
+    a_t^i = \dfrac{exp(\mathbf{h}'^{T}_t\mathbf{h}_i)}{\sum_{j=1}^kexp(\mathbf{h}'^{T}_t\mathbf{h}_i)} \\
+\end{align}
+
 
 \subsection{Code2Vec Decoder Model} % (fold)
 \label{sec:code2vec_decoder_model}
 
-* We then want to investigate purely without lexical names (overlap etc)
-* We decide to present a modification on Code2Vec, that is argument specific.
-* The motivtion is that this hsould be able to point out only some local parts of the model, the bits of the code that are near or important might get upweighted.
+Our Code2Vec Decoder model centered around creating a modified version of Alon et al's \cite{alon_code2vec_2018} code vector, except built from the \textit{variable path-contexts} corresponding to our argument, instead of all \textit{path-contexts} from the AST.
+This vector formed the basis of our intermediate representation, which was decoded by a decoder, identical to the Seq2Seq (without attention.).
+We used dropout, 
+Clipping
 
+
+\subsubsection{Encoder}
+
+First we define an LSTM with functions $f$ and $g$, which takes input vector $\textbf{x}_t$ and generates an output, $\textbf{h}_t$, and updates its own state $\textbf{c}_t$ according to the equations in Equations \ref{eq:lstm1} to \ref{eq:lstm6}.
+\begin{align}
+    \textbf{h}_t = f(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sh}\\
+    \textbf{c}_t = g(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sc}
+\end{align}
+
+We then iteratively embed each sequence of tokens $\{x_1,...x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
+\begin{align}
+    \textbf{x}_t = \mathbf{H}_{x_t:}
+\end{align}
+where $\textbf{H} \in \mathbb{R}^{V_c\text{x}D_c}$ is our charcter embedding matrix, $V_c$ is our character vocabulary, and $D_c$ our encoding dimension.
+With these sequences of vectors we then encode each vector with the LSTM until we have generated outputs $\{\textbf{h}_1,...,\textbf{h}_k\}$ and a intermediate fixed length representation, $s$ of the sequence: 
+\begin{align}
+     s = (\textbf{h}_k, \textbf{c}_k) \label{eq:s2s_state}
+\end{align}
+
+\subsubsection{Decoder}
+
+We used the identical decoder, to the Seq2Seq model.
 
 % subsection code2vec_to_sequence_model (end)
 
