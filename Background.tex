@@ -184,14 +184,19 @@ This architecture, though effective, has some drawbacks. It has been shown that 
 
 \begin{figure}[tb]{}
     \centering
-    \includegraphics[width=\linewidth]{ModelPics/attention3.png}
-    \caption{An example of sequence to sequence architecture with attention}
-    \label{fig:attention}
+
+    \includegraphics[width=.7\linewidth]{ModelPics/bahd_diag.png}
+    \includegraphics[width=.7\linewidth]{ModelPics/luong_diag2.png}
+    \caption{Two example of sequence to sequence architecture with attentional models: Badanau Attention (above), Luong Attention(below)}
+    \label{fig:attention} 
+    % \label{fig:luongattention}
+    % \caption{An example of sequence to sequence architecture with Badanau attention}
+
 \end{figure}
 
 
 As the sequences get longer, encoder-decoder architectures struggle to pass the full information required from the encoder to the decoder. 
-One way of improving this is to augment the decoder with a contextual vector at each step (see figure \ref{fig:attention})
+One way of improving this is to augment the decoding process with a contextual vector at each step.  
 As before, the decoder estimates the conditional probability for the next word $y_t$, given the input sentence $\mathbf{x}$, and previous output tokens ${y_1, ..., y_{t-1}}$.
  However, this changes from being a function of simply the input token, $y_{t-1}$, and hidden state, $s_{t}$ at step $t$:
 \begin{equation}
@@ -221,7 +226,7 @@ and $a$ is a function that maps to the reals - often a multilayer perceptron tha
 This method was introduced by Bahdenau et al \cite{bahdanau_neural_2014} who demonstrated that the networks could use the attention to align words during translation.
 In this case the $\alpha$ parameter acts like a weighting indicating the most important word used in each token generation - which word the decoder should pay attention to.
 
-Variations on attention have found great use in the field of machine translation  \cite{luong_effective_2015}, and have even demononstrated their use independently of RNNs\cite{vaswani_attention_2017}. However they also have demonstrated their effectiveness in fields such as captioning, where they prove an effectve way of working with different modalities \cite{xu_show_2015}.
+Variations on attention (as demonstrated in Figure \ref{fig:attention})) have found great use in the field of machine translation  \cite{luong_effective_2015}, and have even demononstrated their use independently of RNNs\cite{vaswani_attention_2017}.  However they also have demonstrated their effectiveness in fields such as captioning, where they prove an effectve way of working with different modalities \cite{xu_show_2015}.
 
 In our models we use attention mechanisms extensively, both as a means of dealing with particularly long sequences (in our case of characters), and also as a means of dealing with the difficult modality of code.
 
