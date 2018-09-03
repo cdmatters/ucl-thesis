@@ -183,3 +183,10 @@
 \usepackage[ruled]{algorithm}
 \usepackage{algpseudocode}
 % \usepackage{algorithmic}
+
+% Create a new environment
+\newenvironment{tight_enumerate}{
+\begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+}{\end{enumerate}}

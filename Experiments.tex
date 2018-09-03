@@ -27,16 +27,16 @@ We wanted to use this opportunity to investigate the relative performance of dif
 
 Since this experiment would only use the variable name to predict the descrption, we used the \textbf{Reduced Random-Split Dataset} listed in Table \ref{tab:final_datasets}.
 This prevented inflation of BLEU scores due to exact matches being both in the train and validation set.
-% TODO: As comparisond, 
+% TODO: As comparison, see how much BLEU score increases & decreases 
 
-We ran our Rote Model as described in section \ref{sec:general_procedure}. We then ran our on the basic Seq2Seq architectures in an reverse ablation study: we started from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
+We ran our Rote Learner model as described in Section \ref{sec:general_procedure}. We then ran our on the basic Seq2Seq architectures in an reverse ablation study: we started from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
 These models were trained for a maximum of 150 epochs, in the manner as outline in section \ref{sec:general_procedure}, with our best model on validation set selected. 
 The hyperparameters for these models are found in Appendix Table \ref{table:hyperparams_name_baseline}.
  % WHY 150
 
 We report our corpus-level BLEU-4 scores in Table \ref{table:name_baseline}, and confirm our hypothesis that just argument name is a valuable indicator for generating descriptions. We note a strong BLEU-4 score from the Rote Learner of $9.03 \pm 0.32$ on validation and $10.60 \pm  0.30$ on test, which demonstrates the informativeness of simple n-character subsequences. 
-This is surpassed by the bidirectional Seq2Seq with attention and dropout,  which achieves a BLEU-4 score of $12.46 $ and $12.72$ on validation and test set respectively.
-In our ablation study we note the improvement that each new feature adds, noting that the pure Seq2Seq model underperforms the Rote Learner, scoring $7.76 $ and $  7.63$ on the validation and test set. 
+This is surpassed by the bidirectional Seq2Seq with attention and dropout,  which achieves a BLEU-4 score of $12.68 $ and $12.72$ on validation and test set respectively.
+In our ablation study we note the improvement that each new feature adds, noting that the pure Seq2Seq model underperforms the Rote Learner, scoring $8.97$ and $ 8.18 $ on the validation and test set. 
 
 % ALL STOPPED at 150 EPOCHS. No improvement on best for 20 epochs, except original 146
 
@@ -77,32 +77,39 @@ In our ablation study we note the improvement that each new feature adds, noting
 
 
 \subsubsection{Analysis} % (fold)
+We were most surprised by the strength of Rote Learner on this dataset. Given there are no exact matches of (name, description) pairs in this dataset, we were curious to see where the performance had come from.
+We examined the predictions of the Rote Learner on the validation set by taking their sentence-level BLEU-4 scores, and reading the predictions.
+We found that although the vast majority evaluate to zero, a number of examples have a coincidental overlap in descriptions, resulting in a non negligible BLEU score. 
+A number of examples also have the same name and almost identical, giving some predictions very high BLEU scores.
+A random sample of these non-zero sentence-level BLEU translations are presented in Figure \ref{tab:rotelearner_nameonly}.
 
-Most surprising of this result is the strength of the Rote Learner, despite there being no `exact matches' in the training and development sets. 
-This is largely the result of there are arguments in the corpus with very similar descriptions, which may vary by only a few words. 
 
-To investigate this we examined the predictions from the Rote Learner on the validation set. 
-We evaluated the sentence level BLEU score on these, and found that although the vast majority evaluate to zero, a number of examples have a coincidental overlap in descriptions, resulting in a non negligible BLEU score. 
-A random sample of these non-zero scored translations are presented in Figure \ref{tab:rotelearner_nameonly}.
+% This is largely the result of there are arguments in the corpus with very similar descriptions, which may vary by only a few words. 
 
-With regard to the Seq-to-Seq, it is not surprising these standard additions to the seq-to-seq architecture improve the model. 
-The addition of a bidirectional model adds capacity to the model by increasing the size of the hidden vector, and attention allows the model to condition sentence generation on the input, further adding complexity to the model.
+% To investigate this we examined the predictions from the Rote Learner on the validation set. 
+% We evaluated the sentence level BLEU score on these, and found that although the vast majority evaluate to zero, a number of examples have a coincidental overlap in descriptions, resulting in a non negligible BLEU score. 
+% A random sample of these non-zero scored translations are presented in Figure \ref{tab:rotelearner_nameonly}.
+
+
+With then examined the Seq2Seq model and ablation study. We were not surprised that the additions each improved the performance of the model in some way. The bidirectionality adds capacity to the model by increasing the size of the hidden vector, and prevents the model forgetting elements at the start of long sequences. The attention allows the model to condition each generated word on the encoder outputs, adding complexity to the model.
 The dropout also adds a regularizing effect.
+Each of these should improve the performance of the model.
 
-It is perhaps surprising that the vanilla Seq-to-Seq struggles to outperform the Rote Learner. 
-It is possible that the lack of contextualising information from attention results in an inability to learn from long description sequences that the Rote Learner can regurgitate immediately. 
+% With regard to the Seq-to-Seq, it is not surprising these standard additions to the seq-to-seq architecture improve the model. 
+% The addition of a bidirectional model adds capacity to the model by increasing the size of the hidden vector, and attention allows the model to condition sentence generation on the input, further adding complexity to the model.
+% The dropout also adds a regularizing effect.
 
-However, once the attention and capacity are increased the results are explanatory.
-The model synthesises similar (or even the same!) sequences of characters with their different descriptions, into a single description, which may fit better than randomly guessing from a bag of seen sequences. 
+We were interested to note that the basic Seq2Seq narrowly underperforms the Rote Learner. 
+It is possible that without the contextualising information from attention, the model struggles to learn from long description sequences. In contrast, the Rote Learner can regurgitate these immediately. 
+
+Once the attention is added, and the capacity increased, the Seq2Seq's outperformance of the Rote Learner is explanatory.
+The model synthesises similar (or even the same!) sequences of characters, with different descriptions, into a single description, which may fit better than randomly guessing from a bag of seen sequences. 
 
 For instance, the most frequent argument, \mintinline[]{yaml}{name}, occurs in the train set 318 times with different descriptions. 
 It also occurs 52 times in the validation set, again, with different descriptions. 
-For each of these point the Rote Learner predicts a different description from the train set, on average scoring $0.00646 \pm 0.006$, whereas the Seq-to-Seq makes the same prediction each time, and scores $0.4029$, almost two orders of magnitude better, with the sensible average: ``name of the variable to return." 
+For each of these points the Rote Learner predicts a different description from the train set, due to its inherent randomness. On average it scores $0.00646 \pm 0.006$ in sentence BLEU. The Seq-to-Seq, by contrast, makes the \textit{same} prediction each time, and scores $0.4029$, almost two orders of magnitude better. Examining the predicted description of this argument confirms a sensible guess: \mintinline[]{yaml}{name} - \textit{``name of the variable to return."} 
 
-In these cases the Seq-to-Seq model is interpolating in an overdetermined problem, and this highlights one of the advantages of neural networks in machine translation problems. 
-
-
-
+In these cases the Seq2Seq model is interpolating in an overdetermined problem, and this highlights one of the advantages of neural networks in machine translation problems. 
 
 \begin{table}
 \begin{center}
@@ -110,10 +117,10 @@ In these cases the Seq-to-Seq model is interpolating in an overdetermined proble
 \begin{tabular}{l}
 \hline\\
 
-\textbf{A Random Sample of Bleu Scores $>0$ from Rote Learner on Random Split }\\\\ 
+\textbf{A Random Sample of Sentence BLEU-4 Scores $>0$ from Rote Learner on Random Split }\\\\ 
 
 
-\textbf{Bleu Score}: 0.364
+\textbf{BLEU Score}: 0.364
 \textbf{Confidence}: 100.0\%  \\
 \textbf{Argument}: \mintinline[]{python}{e d g e _ m a t c h}\\
 \textbf{Description}: a function that returns true if the edge attribute dictionary for \\
@@ -143,42 +150,40 @@ undefined , but may exhibit less contention .\\
 \end{tabular}
 }
 \end{center}
-\caption{This is a random sample of sentence level BLEU scores that are non-zero fon the validation set for a Rote Learner}
+\caption{A random sample of sentence level BLEU-4 scores that are non-zero on the validation set for a Rote Learner}
 \label{tab:rotelearner_nameonly}
 \end{table}
 
 
 % INVESTIGATION DIFFERENT TOKENIZATIONS
-\subsection{Investigating Different Tokenizations} % (fold)
+\subsection{Investigating Different Parts of the Signature} % (fold)
 \label{sub:investigating_different_tokenizations}
 
 \subsubsection{Experiment Objective} % (fold)
 
-Having established a naive baseline and the validity of our neural approaches, we decided to investigate how other human names could help our translation problem.
-We hypothesised that the names in the function signature could play an important role in contextualising an overdetermined or underdetermined variable name, further improving the performance of the LSTM relative to the Rote Learner.
+Having established a naive baseline and the validity of our neural approaches, we decided to investigate how function signature features could be used generate the argument description.
+We hypothesised that the names in the function signature could play an important role in contextualising an overdetermined or underdetermined variable name, further improving the performance of the Seq2Seq relative to the Rote Learner.
 
 \subsubsection{Method \& Results} % (fold)
 
-We investigated how four different arrangements of input data would affect translation behaviour. 
-These were:
-just the argument name; the argument name with the function name; the argument name with co-argument names; and the argument name with both function name and co-argument names.
+We investigated how four different tokenizations of function signature data would affect translation behaviour for both our Rote Learner, and our strongest Seq2Seq. 
+These tokenizations were:
+\begin{tight_enumerate}
+    \item just the argument name
+    \item the argument name with the function name
+    \item the argument name with co-argument names 
+    \item the argument name with both function name and co-argument names
+\end{tight_enumerate}
 
-Once again we used the Reduced Random-Split Dataset, to prevent advantages due to duplicates, and ran the standard tokenization procedures outline in Sections X. 
+Once again we used the \textbf{Reduced Random-Split Dataset}, to prevent advantages due to duplicates, ran tokenization procedures outlined in Section \ref{sub:tokenize_descriptions}, and followed the general procedure outlined in Section \ref{sec:general_procedure}. For our Seq2Seq, we used the best arrangement from our first experiment, including a bidirectional encoder, attention and dropout. We ran these for 150 epochs, and selected the best, just as in Section \ref{sub:comparing_baseline_models}. The hyperparameters for our trainng are presented in Appendix Table \ref{table:hyperparams_different_tokenizations}.
 
-As in section \ref{sub:comparing_baseline_models}, we ran 50 repetitions of the Rote Learner on these new tokenizations, to overcome the stochasiticity in their evaluations, once again using N-character-gram overlap as the matching criterion.
+We report our corpus level BLEU-4 results in Table \ref{table:tokenization}. 
+We note that in all cases the Rote Learner's performance improved with added information, confirming that character overlap in the function signature can be an indicative feature in generating argument description.
+In it's best case the Rote Learner improved over three points to $12.22 \pm 0.23$ on validation and $14.34 \pm 0.21$ on test, thanks to the addition of the function name. 
 
-Then we ran four models of the Seq-to-Seq architectures, with attention, dropout and bidirectional encoders - just as the final model of section \ref{sub:comparing_baseline_models}. These ran for a maximum of 150 epochs, and the model with best BLEU score was selected. 
+The Seq2Seq model on the other hand benefitted less than the Rote Learner, if at all. In both tokenizations using co-arguments, the model improved by approximately one point. However the tokenization of argument name and function name saw a performance reduction of about 1.5 points, across both validation and test.
 
-We report the results in Table \ref{table:tokenization}. 
-In particular we note that in all cases the Rote Learner's performance improved with added information, in the best case, over three points to $12.22 \pm 0.23$ on validation and $14.34 \pm 0.21$ on test, thanks to the addition of the function name. 
-
-The Seq-to-Seq model on the other hand benefitted less than the Rote Learner, if at all. In both tokenizations using other arguments, the model improved by approximately one point. However the tokenization involving the addition of just function name, saw a performance reduction of about 1.5 points, across both validation and test.
-
-Although this agreed with out hypothesis that there is value in extra naming of variables, the under performance of the Seq-to-Seq model was surprising and is examined more fully in the analysis section.
-
-
-The hyperparameters of these models are presented in Appendix Table \ref{table:hyperparams_different_tokenizations}
-
+Although this agreed with out hypothesis that there is value in extra naming of variables, the underperformance of the Seq2Seq model was surprising and is examined in detail in the analysis section.
 
 \begin{table}[!ht]
 \begin{center}
@@ -187,17 +192,17 @@ The hyperparameters of these models are presented in Appendix Table \ref{table:h
     \hline
     \hline
     Rote Learner                        &                  & \\    
-    - \textit{name only}                & $ 9.03  \pm  0.32 $ & $ 10.60 \pm 0.27 $  \\
-    - \textit{name + function name}     & $ 12.23 \pm  0.23 $ & $ 14.34 \pm 0.22 $  \\
-    - \textit{name + co-argument names}        & $ 12.06 \pm  0.16 $ & $ 14.22 \pm 0.16 $  \\
-    - \textit{name + function name + co-argument names}  & $ 11.36 \pm  0.14 $ & $ 13.51 \pm 0.13 $ \\
+     \textit{name only}                & $ 9.03  \pm  0.32 $ & $ 10.60 \pm 0.27 $  \\
+     \textit{name + function name}     & $ 12.23 \pm  0.23 $ & $ 14.34 \pm 0.22 $  \\
+     \textit{name + co-argument names}        & $ 12.06 \pm  0.16 $ & $ 14.22 \pm 0.16 $  \\
+     \textit{name + function name + co-argument names}  & $ 11.36 \pm  0.14 $ & $ 13.51 \pm 0.13 $ \\
     \hline
     \hline
     Seq to Seq                          &                  & \\
-    - \textit{name only}                & $ 12.46441 $ & $ 12.72522 $  \\
-    - \textit{name + function name}     & $ 10.77699 $ & $ 11.24894 $ \\
-    - \textit{name + co-argument names}      & $ 13.69964 $ & $ 13.73890 $  \\
-    - \textit{name + function name + co-argument names} & $ 14.13267 $ & $ 13.63351 $ \\
+     \textit{name only}                & $ 12.46441 $ & $ 12.72522 $  \\
+     \textit{name + function name}     & $ 10.77699 $ & $ 11.24894 $ \\
+     \textit{name + co-argument names}      & $ 13.69964 $ & $ 13.73890 $  \\
+     \textit{name + function name + co-argument names} & $ 14.13267 $ & $ 13.63351 $ \\
     % Model                               & BLEU Validation            & BLEU Test  \\
     % \hline
     % \hline
@@ -231,7 +236,7 @@ The hyperparameters of these models are presented in Appendix Table \ref{table:h
 \subsubsection{Analysis} % (fold)
 \label{ssub:analysis}
 
-In order to probe the Seq-to-Seq model, we first investigated some of the typical setences generated by the model on the validation set.
+In order to probe the Seq2Seq model, we first investigated some of the typical setences generated by the model on the validation set.
 We found that in general a number of different failings fell into either categories of overfitting or nonsense. 
 Some typical examples of the model on the \textit{name + co-argument name} model are presented in Table \ref{table:typicalvarotherargs}, along with an example of a `plausible' translation. 
 

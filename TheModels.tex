@@ -411,6 +411,7 @@ Finally, in extracting VPCs we also removed the paths that led to the \mintinlin
 Finally we had our VPCs and could prepare to tokenize them. To do this we took the $V_p$ most common paths and the $V_n$ most common terminal nodes in the training set, and used these our respective vocabularies.  All other paths and nodes were given an $<$UNK$>$ token in encoding. $V_p$ and $V_n$ were hyperparameters we tuned given the resources of the models.
 
 \subsection{Tokenizing Descriptions}
+\label{sub:tokenize_descriptions}
 
 Finally we tokenized all descriptions by setting them to lower case and using the \mintinline[]{python}{nltk} \cite{bird_natural_2009} Punkt \cite{Kiss:2006:UMS:1245119.1245122}tokenizer. We then formed a vocabulary of size $V_w$ from the training set and GloVe embeddings. We did this by taking all words in the training set that had appeared at least 5 times and if they appeared in the GloVe vocabulary, adding them to our training vocabulary. Once this was done, we filled the remaining space in the vocabulary with the most popular words in GloVe that had not already been included. This was done to minimize out-of-vocabulary ($<$UNK$>$) tokens. This tokenized training vocabulary was then used for all learners.
 
