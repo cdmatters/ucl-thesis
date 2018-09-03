@@ -305,6 +305,8 @@ Where  $\textbf{H}^P \in \mathbb{R}^{V_p\text{x}D_p}$ is our path embedding matr
 $\textbf{H}^N \in \mathbb{R}^{V_n\text{x}D_n}$ is our terminal node embedding matrix, 
 $\textbf{W}_c \in \mathbb{R}^{D_c\text{x}(D_p+D_n)}$,
 $\textbf{b}_c \in \mathbb{R}^{D_c}$,
+$V_p$ is the size of our path vocabulary,
+$V_n$ is the size of our terminal node vocabulary,
 $D_c$ is the size of our context vector,
 $D_p$ is the size of our path embedding vector,
 $D_n$ is the size of our terminal node embedding vector, and
@@ -399,21 +401,63 @@ If we required multiple names, we concatenated the strings, using separator toke
 
 \subsection{Extracting \& Tokenizing VPC Data }
 Although in principle, the VPCs could be taken directly from the entire AST of the accompanying source, a few small modifications were made to facilitate training, and reduce the redundant VPCs in the model. 
-First the AST was pruned to remove terminal nodes that not variables, such as \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} nodes, as visible in Figure \ref{fig:fullAST}. 
+First the AST was pruned to remove terminal nodes that not variables, such as \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} nodes. Such nodes are visible in Figure \ref{fig:fullAST}. 
 
-Although these nodes carry useful information as to whether the target name was being loaded or stored, they almost doubled the number of terminal nodes, and therefore quadratically increase the number of \textit{pathcontexts} in the AST. Given our memory and time considerations in both training and preparation we pruned these nodes, noting that the path $p$ for any VPCs eliminated would still be present in the corresponding variable node to which \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} refers. 
-Although the loading and storing information had been removed, the tree still contained much information about the closeness and type of relationships between variables.
+Although these nodes carry useful information as to whether the target name was being loaded or stored, they almost doubled the number of terminal nodes, and therefore quadratically increase the number of \textit{path-contexts} in the AST. Given our memory and time considerations in both training and preparation we pruned these nodes, noting that the path $p$ for any VPCs eliminated would still be present in the corresponding variable node to which \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} refers. 
+Although the loading and storing information had been removed, the tree still contained a rich information about the relationships between variable - the investigation of Section \ref{the_dataset}, for instance, was done after pruning.
 
-* by doing this we can run quickly
-* we dont lose any paths
+Finally, in extracting VPCs we also removed the paths that led to the \mintinline[]{yaml}{arguments} series of nodes, and the string node child of \mintinline[]{yaml}{FunctionDef} . These nodes contained information such as the names of the arguments or name of the function. Since we wanted the function signature data to be investigated separately we removed these paths. 
 
-
-
-
+Finally we had our VPCs and could prepare to tokenize them. To do this we took the $V_p$ most common paths and the $V_n$ most common terminal nodes in the training set, and used these our respective vocabularies.  All other paths and nodes were given an $<$UNK$>$ token in encoding. $V_p$ and $V_n$ were hyperparameters we tuned given the resources of the models.
 
 \subsection{Tokenizing Descriptions}
 
+Finally we tokenized all descriptions by setting them to lower case and using the \mintinline[]{python}{nltk} \cite{bird_natural_2009} Punkt \cite{Kiss:2006:UMS:1245119.1245122}tokenizer. We then formed a vocabulary of size $V_w$ from the training set and GloVe embeddings. We did this by taking all words in the training set that had appeared at least 5 times and if they appeared in the GloVe vocabulary, adding them to our training vocabulary. Once this was done, we filled the remaining space in the vocabulary with the most popular words in GloVe that had not already been included. This was done to minimize out-of-vocabulary ($<$UNK$>$) tokens. This tokenized training vocabulary was then used for all learners.
 
+\section{Evaluation}
+
+To evaluate our quantively models we used the corpus BLEU-4 metric\cite{papineni_bleu_2001}, common in machine translation. This is a metric that has been shown to correlate with fluency and adequancy of translations. 
+
+To calculate BLEU, we first define a modified ngram precision, $p_n$ as:
+\begin{align}
+    p_n = \dfrac{\sum_{ngram \in \mathcal{C}} Count_{clip}(ngram)}{\sum_{ngram' \in \mathcal{C}} Count(ngram')} \nonumber b
+\end{align}
+where $Count(ngram)$ counts the number of ngrams in the candidate sentence, and  $Count_{clip}(ngram)$ counts the number of ngrams in the candidate sentence, up to the maximum number of those ngrams that exist in any reference sentence:
+\begin{align}
+Count_{clip}(ngrams) = min(Count(ngrams),MaxRefCount(ngrams)) \nonumber
+\end{align}
+
+We then define a brevity penalty, to penalise high precision scores, when candidates of length $c$ are much shorter than references of length $r$.
+\begin{align}
+BP = \begin{cases}
+      1 & \text{if}\ c > r \\
+      e^{1-r/c} & \text{if}\ c \leq r
+    \end{cases}\nonumber
+\end{align}
+
+The sentence-level BLEU-4, is then brevity penalty multiplied by the geometric mean of the modified ngram precisions, up to 4-gram:
+\begin{align}
+\text{BLEU-4} = BP\cdotp\prod_{n=1}^4 p_n^{\frac{1}{4}}
+\end{align}
+
+This metric can be very harsh on individual sentences, so on a corpus level, we take our modified precisions by summing ngram matches sentence by sentence first.
+\begin{align}
+    p_n = \dfrac{
+    \sum_{C \in \{Candidates\}}\sum_{ngram \in \mathcal{C}} Count_{clip}(ngram)}{
+    \sum_{C' \in \{Candidates\}}\sum_{ngram' \in \mathcal{C'}} Count(ngram')} \nonumber 
+\end{align}
+We then calculate our length $c$ and $r$ from the brevity penalty as the total length of the candidates and references respectively.
+With these modification, the calculation of BLEU-4 is identical
+
+In our experiments we used corpus BLEU-4 for evaluating our models, though occasionally examined sentence BLEU-4 for our analysis. 
+For a qualitative evaluation, we always interrogated the generated descriptions, source code and gold descriptions directly.
+
+
+\section{General Procedure}
+
+Our general experimental procedure was straightforward. We would take our chosen dataset from Table \ref{tab:final_datasets} and  tokenize it as above. Then we would feed these into our own implementations of models, written in Tensorflow\cite{tensorflow2015-whitepaper}. Variables in these models were all initialised with Xavier initialisation \cite{glorot_understanding_nodate}. Since our objective function does not correspond well with our evaluation metric, we would train these models on GeForce GTX TITAN X GPUs for a fixed number of epochs, evaluating and saving our models every epoch, and would choose the best model according our to our evaluation metric. This is the approach taken in other papers faced with the same problem \cite{bahdanau_neural_2014}, \cite{barone_parallel_2017}.  If we were running a number of experiments conjointly all would run for the same number of epochs. In the longest cases (150 epochs with the longest sequences) some models ran for a day and half.
+
+In the case of our Rote Learner, we would run each model directly on the tokenized data 50 times, to get a sense of the variance according the inherent stochasticity of the model.
 
 
 
