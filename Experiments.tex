@@ -1,148 +1,43 @@
 \chapter{Experiments and Results}
 \label{experiments_and_results}
 
-
-% All experiments followed a similar general pattern of execution. 
-% This pattern of execution is described in detail in Section \ref{sec:experimental_setup}, which covers the general pipeline of the preparation, training and evaluation for each experiment.
-% Section \ref{sec:investigating_human_readable_channel} then describes the specific experiments and results of our investigations in to the human readable channel of code, whereas Section \ref{sec:investigating_the_computer_channel} covers the computer readable channel investivations.
-% The the results of the experiments combining these channels is presented in \ref{sec:investigating_combined_channels}, and further experiments into the dataset are presented in section \textbf{SECTION}
-
-
-% \section{Experimental Setup} % (fold)
-% \label{sec:experimental_setup}
-
-% \subsection{General Procedure} % (fold)
-% \label{sub:general_procedure}
-
-% % subsection general_procedure (end)
-
-% All our experiments were conducted in the same fashion, starting with a choice of dataset partition from Table \ref{table:thefinaldataset} that would be suitable to the investigation.
-% We would then tokenize the names and descriptions and other textual features, and if necessary extract the features we would from the code. 
-% These tokenization procedures and code extraction procedures are described in subsections \ref{sub:tokenizing_textual_input}, \ref{sub:tokenizing_argument_descriptions} and \ref{sub:tokenizing_code_features}.
-% After tokenization, the neural models would be trained on TESLA \textbf{GPUs}, for HOW long. 
-% These would evaluate performance on a dev set every epoch, and print translations.
-% How long did an epoch take.
-% When did we stop training.
-% Models were all evaluated by the same procedure as detailsed in section blah. 
-% %evaluated by assessing the BLEU, loss \& perplexity.
-
-
-% \subsection{Tokenizing Argument and Function Names} % (fold)
-% \label{sub:tokenizing_textual_input}
-
-% \subsection{Tokenizing Argument Descriptions} % (fold)
-% \label{sub:tokenizing_argument_descriptions}
-
-% \subsection{Tokenizing Code Features} % (fold)
-% \label{sub:tokenizing_code_features}
-
-% \subsection{Evaluation Procedure} % (fold)
-% \label{sub:evaluation_procedure}
-
-% subsection evaluation_procedure (end)
-
-% subsection tokenizing_code_features (end)
-
-% subsubsection tokenizing_argument_descriptions (end)
-
-% subsection tokenizing_textual_input (end)
-
-% \subsubsection{Preparing the Data} % (fold)
-% \label{ssub:Preparing the Data}
-
-% \begin{enumerate}
-%     \item All our data would come from one of the partitions of the dataset described in section \ref{sec:final_preparations}.
-
-%     \item To tokenize variable names, function names and other arguments:
-%     \begin{enumerate}
-%         \item we generated a vocabulary of all possible tokens in valid python
-%         \item We added separator tokens to the vocabulary, \mintinline{python}{"<SEPARATOR_1>"}
-%         \item We then tokenizer as sequences of characters and adding an \mintinline{python}{"<END_OF_ARG>"} token to the end.
-%     \end{enumerate}
-    
-%     \item To tokenize the argument descriptions:
-%     \begin{enumerate}
-%         \item We then generated a vocabulary for our training data by:
-%         \begin{enumerate}
-%             \item first generating a provisional vocabulary of tokens used more than 4 times in the training data.
-%             \item if these words existed in our Glove embedding vocabulary they were added to our the final vocabulary. We used the  \mintinline{python}{glove.6B.200d.txt} file of 200d embeddings trained on 6 billion tokens for our Glove embeddings, (CITE). 
-%             \item when this provisional list was exhausted we took the remaining most popular words, as defined by the Glove embedding file, to fill our final vocabulary to our designated "vocab-size"
-%         \end{enumerate}
-%         \item We then tokenized the descriptions by moving to lower case, removing new lines, and  tokenizing them using the nltk punkt tokenizer (\mintinline{python}{nltk.word_tokenize})
-%         \item We then replaced out of vocabulary tokens with an \mintinline{python}{"<UNK>"} token, and finally bookending our descriptions with \mintinline{python}{"<START>"} and \mintinline{python}{"<END>"} tokens.
-%         \item Path - seq?
-
-%     \end{enumerate}
-
-
-
-%     \item In cases of tokenized code: 
-%      \begin{enumerate}
-%          \item  In the case of tokenizing code paths, we first extracted the syntax tree from the source code, and traversed it exploring all paths between two nodes.
-%          \item CONTINUE
-%      \end{enumerate}
-
-% \end{enumerate}
-
-% Once these tokenizations were complete we were ready to train our models.
-
-% \subsubsection{Training} % (fold)
-% \label{ssub:training}
-
-
-%     Our models were trained in the standard way:
-%     \begin{enumerate}
-%         \item The Rote Learner was trained determininstically, in this case using `ngram overlap' feature, as mentioned in\ref{sec:rote_learner_model}. It was evaluated with different random seeds 50 times on the hold out dataset.
-%         \item The Seq-to-Seq model was trained using the backpropagation algorithm and adaptive momentum optimisation. The hyperparameters are presented in table X. 80 Epochs were evaluated, and the best and average scores were taken \textbf{EDIT}
-%     \end{enumerate}
-
-
-
-
-% \subsubsection{Evaluation} % (fold)
-% \label{ssub:evaluation}
-
-% % subsection training (end
-% \begin{enumerate}
-
-
-
-%     \item Finally when it came to evaluating our models on held-out datasets, we would ran translations on the dataset and calculated the BLEU score using the BLEU method found in \textbf{HERE}.
-%     In particular BLEU scores were calculated over the whole corpus and \textbf{WHAT SMOOTHING HYPERPARAMTERS}.
-%     \item It should be stressed that if a hyperparameter had to be tuned, it was always done on the validation set, with the test set untouched, until final evaluation. In the case of all neural models, the results presented are using the best hyperparameters under the validation set.
-
-% \end{enumerate}
-
-% section experimental_setup (end)
-
-\section{Investigating Human Readable Channel} % (fold)
-\label{sec:investigating_human_readable_channel}
+\section{Investigating the Function Signature} % (fold)
+\label{sec:investigating_function_sig}
 
 % INVESTIGATION PURELY BASED ON NAME
 \subsection{Comparing Baseline Models} % (fold)
 \label{sub:comparing_baseline_models}
 
+
+% We focused on the signature because of the important nature of this section of the code. 
+% In langugages such as C++, the signature of function may be all that is presented to the user of a third-party library, when using that library. 
+% Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
+% This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
+
+
+
 \subsubsection{Experiment Objective} % (fold)
 
-As a baseline, we first wanted to investigate the informative power of simply the names of variables, with regards to different architectures of our baseline model.
-We expected a reasonable signal to come from just the variable name which should be learnable by both our seq-to-seq model and rote learner. 
+As a baseline, we first wanted to investigate the informative power of simply the name of each argument, with regards to different architectures of our baseline model.
+Since good developer practice often involves giving insightful names to variables\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}, we hypothesized that
+ both our Rote Learner and Seq2Seq models should able to generate a plausible description using just the name of the argument.
+We wanted to use this opportunity to investigate the relative performance of different features of the Seq2Seq model.
 
 \subsubsection{Method \& Results} % (fold)
 
-Since this experiment would only use the variable name to predict the descrption, we used the Reduced Random-Split Dataset listed in section.
+Since this experiment would only use the variable name to predict the descrption, we used the \textbf{Reduced Random-Split Dataset} listed in Table \ref{tab:final_datasets}.
 This prevented inflation of BLEU scores due to exact matches being both in the train and validation set.
+% TODO: As comparisond, 
 
-We then ran the standard tokenizations of input name on the Rote Learner, which only used the N-character-gram overlap criterion.
-This was repeated 50 times, to provide an robust estimate of the standard deviation and mean BLEU scores, due to the inherent stocasticity to the model.
+We ran our Rote Model as described in section \ref{sec:general_procedure}. We then ran our on the basic Seq2Seq architectures in an reverse ablation study: we started from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
+These models were trained for a maximum of 150 epochs, in the manner as outline in section \ref{sec:general_procedure}, with our best model on validation set selected. 
+The hyperparameters for these models are found in Appendix Table \ref{table:hyperparams_name_baseline}.
+ % WHY 150
 
-Then we ran a series of experiments on the basic Char-to-Seq architectures, starting from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
-These best models were taken on the best BLEU scores up to 150 epochs, of training, and evaluated on the test and development set. % WHY 150
+We report our corpus-level BLEU-4 scores in Table \ref{table:name_baseline}, and confirm our hypothesis that just argument name is a valuable indicator for generating descriptions. We note a strong BLEU-4 score from the Rote Learner of $9.03 \pm 0.32$ on validation and $10.60 \pm  0.30$ on test, which demonstrates the informativeness of simple n-character subsequences. 
+This is surpassed by the bidirectional Seq2Seq with attention and dropout,  which achieves a BLEU-4 score of $12.46 $ and $12.72$ on validation and test set respectively.
+In our ablation study we note the improvement that each new feature adds, noting that the pure Seq2Seq model underperforms the Rote Learner, scoring $7.76 $ and $  7.63$ on the validation and test set. 
 
-We report the BLEU scores in Table \ref{table:name_baseline} showing a strong performance from the Rote Learner of corpus level BLEU $9.03 \pm 0.32$ on validation and $10.60 \pm  0.30$. 
-The Seq-to-Seq architectures initially underperformed the Rote Learner, scoring $7.76 $ and $  7.63$ on the validation and test set. However a marked improvement was seen by adding attention, as was adding the bidirectional encoder and dropout. 
-The final model, with all addition beat the Rote Learner reasonably with a BLEU score of $12.46 $ and $12.72$ on validation and test set respectively.
-
-The hyperparameters for these models are found in the Appendix, Table \ref{table:hyperparams_name_baseline}.
 % ALL STOPPED at 150 EPOCHS. No improvement on best for 20 epochs, except original 146
 
 

@@ -454,6 +454,7 @@ For a qualitative evaluation, we always interrogated the generated descriptions,
 
 
 \section{General Procedure}
+\label{sec:general_procedure}
 
 Our general experimental procedure was straightforward. We would take our chosen dataset from Table \ref{tab:final_datasets} and  tokenize it as above. Then we would feed these into our own implementations of models, written in Tensorflow\cite{tensorflow2015-whitepaper}. Variables in these models were all initialised with Xavier initialisation \cite{glorot_understanding_nodate}. Since our objective function does not correspond well with our evaluation metric, we would train these models on GeForce GTX TITAN X GPUs for a fixed number of epochs, evaluating and saving our models every epoch, and would choose the best model according our to our evaluation metric. This is the approach taken in other papers faced with the same problem \cite{bahdanau_neural_2014}, \cite{barone_parallel_2017}.  If we were running a number of experiments conjointly all would run for the same number of epochs. In the longest cases (150 epochs with the longest sequences) some models ran for a day and half.
 
