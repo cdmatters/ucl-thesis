@@ -1118,4 +1118,49 @@
   note = {Software available from tensorflow.org}
 }
 
+@article{martins_softmax_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1602.02068},
+  primaryClass = {cs, stat},
+  title = {From {{Softmax}} to {{Sparsemax}}: {{A Sparse Model}} of {{Attention}} and {{Multi}}-{{Label Classification}}},
+  shorttitle = {From {{Softmax}} to {{Sparsemax}}},
+  abstract = {We propose sparsemax, a new activation function similar to the traditional softmax, but able to output sparse probabilities. After deriving its properties, we show how its Jacobian can be efficiently computed, enabling its use in a network trained with backpropagation. Then, we propose a new smooth and convex loss function which is the sparsemax analogue of the logistic loss. We reveal an unexpected connection between this new loss and the Huber classification loss. We obtain promising empirical results in multi-label classification problems and in attention-based neural networks for natural language inference. For the latter, we achieve a similar performance as the traditional softmax, but with a selective, more compact, attention focus.},
+  language = {en},
+  journal = {arXiv:1602.02068 [cs, stat]},
+  author = {Martins, Andr\'e F. T. and Astudillo, Ram\'on Fernandez},
+  month = feb,
+  year = {2016},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/erichambro/Zotero/storage/8BRDRPY3/Martins and Astudillo - 2016 - From Softmax to Sparsemax A Sparse Model of Atten.pdf},
+  annote = {Comment: Minor corrections}
+}
+
+@article{pereyra_regularizing_2017,
+  title = {{{REGULARIZING NEURAL NETWORKS BY PENALIZING CONFIDENT OUTPUT DISTRIBUTIONS}}},
+  abstract = {We systematically explore regularizing neural networks by penalizing low entropy output distributions. We show that penalizing low entropy output distributions, which has been shown to improve exploration in reinforcement learning, acts as a strong regularizer in supervised learning. Furthermore, we connect a maximum entropy based confidence penalty to label smoothing through the direction of the KL divergence. We exhaustively evaluate the proposed confidence penalty and label smoothing on 6 common benchmarks: image classification (MNIST and Cifar-10), language modeling (Penn Treebank), machine translation (WMT'14 English-to-German), and speech recognition (TIMIT and WSJ). We find that both label smoothing and the confidence penalty improve state-of-the-art models across benchmarks without modifying existing hyperparameters, suggesting the wide applicability of these regularizers.},
+  language = {en},
+  author = {Pereyra, Gabriel and Tucker, George and Chorowski, Jan and Kaiser, \L{}ukasz and Hinton, Geoffrey},
+  year = {2017},
+  pages = {11},
+  file = {/Users/erichambro/Zotero/storage/PADHLTBW/Pereyra et al. - 2017 - REGULARIZING NEURAL NETWORKS BY PENALIZING CONFIDE.pdf}
+}
+
+@article{niculae_regularized_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1705.07704},
+  primaryClass = {cs, stat},
+  title = {A {{Regularized Framework}} for {{Sparse}} and {{Structured Neural Attention}}},
+  abstract = {Modern neural networks are often augmented with an attention mechanism, which tells the network where to focus within the input. We propose in this paper a new framework for sparse and structured attention, building upon a smoothed max operator. We show that the gradient of this operator defines a mapping from real values to probabilities, suitable as an attention mechanism. Our framework includes softmax and a slight generalization of the recently-proposed sparsemax as special cases. However, we also show how our framework can incorporate modern structured penalties, resulting in more interpretable attention mechanisms, that focus on entire segments or groups of an input. We derive efficient algorithms to compute the forward and backward passes of our attention mechanisms, enabling their use in a neural network trained with backpropagation. To showcase their potential as a drop-in replacement for existing ones, we evaluate our attention mechanisms on three large-scale tasks: textual entailment, machine translation, and sentence summarization. Our attention mechanisms improve interpretability without sacrificing performance; notably, on textual entailment and summarization, we outperform the standard attention mechanisms based on softmax and sparsemax.},
+  language = {en},
+  journal = {arXiv:1705.07704 [cs, stat]},
+  author = {Niculae, Vlad and Blondel, Mathieu},
+  month = may,
+  year = {2017},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/erichambro/Zotero/storage/74Z9TEG3/Niculae and Blondel - 2017 - A Regularized Framework for Sparse and Structured .pdf},
+  annote = {Comment: Published in NIPS 2017. 23 pages, including appendix}
+}
+
 
