@@ -561,14 +561,14 @@ This indicates both an improvement that may be down to some form of overfitting 
 \begin{tabular}{c l}
     & \textbf{Paths} \\
     \\
-    \textbf{Path A} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\uparrow$ Assign $\downarrow$ Name : \mintinline[]{yaml}{palette} \\
-    \textbf{Path B} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\downarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
-    \textbf{Path C} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
-    \textbf{Path D} & Name $\uparrow$ comprehension $\downarrow$ Name : \mintinline[]{yaml}{name} \\
+    \textbf{Path A} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\downarrow$ comprehension : \mintinline[]{yaml}{<UNK>} \\
+    \textbf{Path B} & Name $\uparrow$ comprehension $\uparrow$ ListComp $\uparrow$ Assign $\downarrow$ Name : \mintinline[]{yaml}{palette} \\
+    \textbf{Path C} & Name $\uparrow$ comprehension $\downarrow$ Name : \mintinline[]{yaml}{name} \\
+    \textbf{Path D} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
     \textbf{Path E} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
-    \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{palette} \\
+    \textbf{Path F} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
     \textbf{Path G} & $<$UNK$>$ : \mintinline[]{yaml}{len} \\
-    \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{name} \\
+    \textbf{Path H} & $<$UNK$>$ : \mintinline[]{yaml}{color_palette} \\
     \textbf{Path I} & $<$UNK$>$ : \mintinline[]{yaml}{<UNK>} \\
 \end{tabular}
 \endgroup
@@ -604,26 +604,35 @@ This indicates both an improvement that may be down to some form of overfitting 
 
 \subsubsection{Experiment Objective} % (fold)
 
-The Code2Vec Decoder model uses a vocabulary of terminal nodes strings to generate code paths. 
-Due to the python abstract syntax tree, these are almost always names, which could be either those of internal variables, built-in functions or even out of scope objects. 
-We investigated masking these terminal node names, to be able to conclude that that the structure of the code was providing a valuable signal to the Code2Vec Decoder, beyond the ideosyncracies of variable and method naming.
+The Code2Vec Decoder model uses a vocabulary of terminal nodes strings in its VPCs. 
+% A VPC consists of a path $p$ and terminal node $n$ string. 
+These terminal nodes strings are almost always object names, which could belong to local variables, built-in functions or even out-of-scope objects. 
+We investigated masking these terminal node names by renaming them, to test the robustness of our model to trivial changes in  code structure. 
+We investigated two scenarios: first where the co-arguments are renamed; and second where all the names (including built-in methods) are renamed.
+
+
+% The Code2Vec Decoder model uses a vocabulary of terminal nodes strings to generate code paths. 
+% Due to the python abstract syntax tree, these are almost always names, which could be either those of internal variables, built-in functions or even out-of-scope objects. 
+% Therefore, in principle, the model could learn which variable names are used within certain functions, and make it prediction from these.
+% We investigated masking these terminal node names, to be able to conclude that the path structure of AST was providing a valuable signal to the Code2Vec Decoder, beyond the ideosyncracies of variable and method naming.
 
 \subsubsection{Method \& Results} % (fold)
 
 We used the same dataset and tokenization procedure as described in Section \ref{sub:comparing_code2vec_to_baselines} to prepare the tokenized code paths as before.
-However, this time we investigated two different masking procedures, to hide the terminal node from the models.
+Then we prepared two different masking procedures, to hide the terminal node from the models.
 
-In the first masking, we masked the only the coarguments in the code paths.
-We did this by creating new terminal node identifiers, for "first coargument", "second coargument", and so forth, and renaming all terminal node identifier indices to these numbers.
-This means that the model can still recognise when two code paths belong to the same terminal node, but no embedding can be generated linking the fact that that argument shares a coargument name with any other variables.
+In the first masking, we masked the only the coarguments names in the VPCs.
+We did this by creating new terminal node identifiers, for "first coargument", "second coargument", and so forth, and replacing the the relevant identifiers in all the VPCs.
+This meant that the model could still recognise when two code paths belong to the same terminal node, but could not use the link the name of the coargument to any variable seen before.
 
-In our second masking, we masking we repeated this procedure, but for every point in the dataset.
-This meant that very indicative global variables were masked, but also any inbuilt method.
-Instead the model only had access to enough information to be able to differentiate terminal nodes within a function.
+In our second masking, we repeated this procedure, but for every provided new terminal nodes for every object in the function: `first object', `second object' and so on.
+This meant that very indicative global variables were masked, but also any built-in method.
+The model only had access to enough information to be able to distinguish terminal nodes within a function, it could not generalise to their use between functions.
 
-Once again we trained these for 100 epochs, with the hyperparameters specified in Appendix X.
+As before, this model was trained for 100 epochs, with the hyperparameters visible in Table X.
 
-We present the results in Table \ref{table:code_2_vec_masked}, noting that Coargument Masking only resulted in a slight performance drop, of one to two BLEU points, from the unmasked variables, while the Full Masking resulted in a significant drop of six BLEU points, while still beating the best Rote Learner baseline.
+We present the results in Table \ref{table:code_2_vec_masked}, noting that Coargument Masking only resulted in a slight performance drop, of one to two BLEU points, from the unmasked variables, while the Full Masking resulted in a significant drop of six BLEU points, but still beating the best Rote Learner baseline. 
+We note this as a significant result, demonstrating the robustness of our Code2Vec Decoder, in being able to generate reasonable descriptions, even with every single object in a function renamed.
 
 
 
@@ -664,14 +673,24 @@ We present the results in Table \ref{table:code_2_vec_masked}, noting that Coarg
 
 \subsubsection{Analysis} % (fold)
 
-Once again we investigated the performance of these models on the validation set, examining the entropies of both the masked models, on the validation dataset.
+To interrogate the models, we once again examined the entropies of both the models' attention on the validation set. These are visualised in Figure \ref{fig:all_entropies}.
+Masking the coarguments changes the entropy distribution little, except boosting the region of very low entropy.
+ % We note that masking coarguments does not appear to change the entropy distribution drastically, except a small boost in the region of very low entropy. 
+This implies the model behaves similarly in most cases, but has become very sure of some single VPCs in a couple of points.
+This could be explained by the emergence of `tell-tale' VPCs involving coarguments, now being accessed more frequently at test time.
+This `overfitting' to single features might well explain the slight drop in BLEU score.
 
-Noting the BLEU score and the lack of shift of the center of the entropies, it appears that losing coarguments, when the rest of the code is present, does not significantly impact the models behaviour.
-There is a spike in the number of attentions with close to zero entropy, which could be explained by having informative codepaths involving coarguments, now being accessed more regularly at test time, but otherwise there is little change.
+% Noting the BLEU score and the lack of shift of the center of the entropies, it appears that losing coarguments, when the rest of the code is present, does not significantly impact the models behaviour.
+% There is a spike in the number of attentions with close to zero entropy, which
 
-However, for the fully masked arguments we see alarge shift to even lower entropys, and greater mass closer to 0 entropy. In these cases it is likely the model is simply fitting to the paths it recognises, as the target nodes become less informative, and we start to see a performance of the model that starts to come close to the Rote Learner.
+This behaviour appears accentuated for the fully masked arguments. We see the distribution shift lower, and a greater mass around 0 entropy. Since the terminal nodes have become more generic, the model is more certain of the few paths it recognises, and performance only just surpasses that of the Rote Learner. 
 
-However, this experiment shows that by completely renaming all variables (including aliasing built-ins!), the model is still able to learn features from the paths of the source code themselves, suggesting that types of variables, and idiomatic expressions can add information, even in potentially very large syntax trees.
+% This behaviour is most evident in Figure \ref{fig:single_examples}, which shows the attention distributions for our earlier example.
+
+Nonetheless the conclusion is remarkable: the model still learns to generate descriptions from code alone, even with all the objects renamed. These objects include built-in methods like \mintinline[]{yaml}{len} or \mintinline[]{yaml}{append} - features that humans may struggle without when attempting the same task. 
+In each of these models the specifics of what the model pays attention to is different - this as can be seen in  Figure \ref{fig:single_examples} - but this is a feature representation learning. 
+The model is able to learn the most important features from the VPCs themselves, even if it the features are only sytactical.
+ % suggesting that types of variables, and idiomatic expressions can add information, even in potentially very large syntax trees.
 
 
 \begin{figure}
@@ -704,12 +723,7 @@ def xkcd_palette(colors):
 \end{listing}
 
 
-
-
-
-
-
-\section{Investigating Combined Channels} % (fold)
+\section{Combining our Models} % (fold)
 \label{sec:investigating_combined_channels}
 
 
@@ -720,26 +734,27 @@ def xkcd_palette(colors):
 
 \subsubsection{Experiment Objective} % (fold)
 
-Both the Seq-to-Seq models and Code2Vec Decoder models fundamentally look at different modalities of code when making their inference.
-In this investigation we sought to investigate what could happen by combining these two modalities of information in the Code2Vec + Seq2Seq Decoder.
+The Seq2Seq model and Code2Vec Decoder model fundamentally treat code in different ways.
+The Seq2Seq model investigates code from a naming perspective, learning from character structure of the function signature.
+The Code2Vec Decoder learns from an AST perspective, picking out patterns in the VPCs. 
+We hypothesized that these two different forms of learning could be successfully combined, to provide a better model than the individual components.
+In this investigation we compared our individual models to the Code2Vec + Seq2Seq Decoder model, to test this hypothesis.
 
 \subsubsection{Method \& Results} % (fold)
 
-Given the nature of the code elements of this investigation, we continued with the Full Random-Split Library, and proceeded with the same format of investigation as outlined in previous sections. 
-We ran the full neural models for 100 epochs, using the name only tokenizations for the human readable channel and the full unmasked paths for the code2vec encoder.
+Given the nature of the AST element of this investigation, we used the \textbf{Full Random-Split Dataset} for this investigation, noting this might artificially boost our Seq2Seq only model. We then proceeded the same format of investigation as outlined in previous sections. 
+We ran the all models for 100 epochs, using the name only tokenizations for the Seq2Seq and the unmasked VPCs for the Code2Vec Decoder. The hyperparamters for these model are presented in Appendix T. 
 
-The results of these experiments are presented in Table \ref{table:code2vec_embed}. 
-We report that the combined model surpasses both individual models achieving a BLEU of $28.7$ and $27.08$ on validation and test respectively. 
-However, this is only making a small improvement on the Seq-to-Seq models, of about 2 points. 
-This is at least partly down to the presence of (name, description) duplicate pairs in the dataset, which boosts both the performance of the Seq-to-Seq, and that of the rote learner.
+We report our corpus level BLEU score in Table \ref{table:code2vec_embed}, and noting that the combined model surpasses both individual models achieving a BLEU of $28.7$ and $27.08$ on validation and test respectively. 
+This high score is a small improvement on the Seq-to-Seq models, of about 2 points, and at least be partly down to the presence of (name, description) duplicate pairs in the dataset, which would boosts all name-focused methods.
 
-It is interesting to note that the combined Rote Learner model performs worse when trying to learn on both modalities, achieving a score of $15.0$ annd $15.75$, which underperforms the name only model of $19.0$ and $19.68$ on validation and test.  
+None the less this demonstrates a clear improvement for the combined neural model, that interestingly Rote Learner fails to achieve. The combined Rote Learner performs worse when trying to learn on both modalities, achieving a score almost four points worse than the name only model, which demonstrates one of the strengths of neural methods in combining modalities.
 
 
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{ c | c | c  }
-    Model                             & BLEU Validation  & BLEU Split     \\
+    Model                             & BLEU (Validation)  & BLEU (Test)     \\
     \hline
     Rote Learner  (code only)        & $ 11.84 \pm  0.16 $ & $ 12.62 \pm 0.12 $ \\
     Code2Vec Decoder                 & $ 18.94 $ & $ 18.13 $ \\
