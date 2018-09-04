@@ -400,6 +400,7 @@ If we required multiple names, we concatenated the strings, using separator toke
 \end{figure}
 
 \subsection{Extracting \& Tokenizing VPC Data }
+\label{sub:code_tokenization}
 Although in principle, the VPCs could be taken directly from the entire AST of the accompanying source, a few small modifications were made to facilitate training, and reduce the redundant VPCs in the model. 
 First the AST was pruned to remove terminal nodes that not variables, such as \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} nodes. Such nodes are visible in Figure \ref{fig:fullAST}. 
 

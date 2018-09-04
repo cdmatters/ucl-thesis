@@ -184,9 +184,16 @@
 \usepackage{algpseudocode}
 % \usepackage{algorithmic}
 
-% Create a new environment
+% Create a new environment: tight enumerate
 \newenvironment{tight_enumerate}{
 \begin{enumerate}
   \setlength{\itemsep}{0pt}
   \setlength{\parskip}{0pt}
 }{\end{enumerate}}
+
+% Create a new environment: tight itemize
+\newenvironment{tight_itemize}{
+\begin{itemize}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+}{\end{itemize}}
