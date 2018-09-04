@@ -18,7 +18,8 @@
 
 \subsubsection{Experiment Objective} % (fold)
 
-As a baseline, we first wanted to investigate the informative power of simply the name of each argument, with regards to different architectures of our baseline model.
+As a baseline, we first wanted to investigate the informative power of simply the name of each argument with regards to different architectures of our model.
+% As a baseline, we first wanted to investigate the informative power of simply the name of each argument with regards to different architectures of our model.
 Since good developer practice often involves giving insightful names to variables\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}, we hypothesized that
  both our Rote Learner and Seq2Seq models should able to generate a plausible description using just the name of the argument.
 We wanted to use this opportunity to investigate the relative performance of different features of the Seq2Seq model.
@@ -442,7 +443,7 @@ A second suggestion of further work, is much simpler involving our tokenization.
 \section{Investigating the Variable Path Contexts} % (fold)
 \label{sec:investigating_the_computer_channel}
 
-\subsection{Comparing Code2Vec to Baselines} % (fold)
+\subsection{Comparing Code2Vec Decoder to Baselines} % (fold)
 \label{sub:comparing_code2vec_to_baselines}
 
 
@@ -599,7 +600,7 @@ This indicates both an improvement that may be down to some form of overfitting 
 
 % subsubsection analysis (end)
 
-\subsection{Masking Identifiers in Code2Vec} % (fold)
+\subsection{Masking Identifiers in Code2Vec Decoder} % (fold)
 \label{sub:comparing_code2vec_altered}
 
 \subsubsection{Experiment Objective} % (fold)
@@ -723,11 +724,11 @@ def xkcd_palette(colors):
 \end{listing}
 
 
-\section{Combining our Models} % (fold)
+\section{Investigating the Combination of Modalites} % (fold)
 \label{sec:investigating_combined_channels}
 
 
-\subsection{Combined Code2Vec } % (fold)
+\subsection{Code2Vec + Seq2Seq } % (fold)
 \label{sub:combined_code2vec}
 
 % subsection comparing_code2vec_to_baselines (end)
@@ -820,6 +821,8 @@ Nonetheless it still demonstrates the primary result of the superior combined mo
 
 \section{Investigating the Library Split Dataset} % (fold)
 \label{sec:analysis}
+
+\subsection{Investigating the Library Split Dataset} % (fold)
 
 \subsubsection{Experiment Objective} % (fold)
 
