@@ -801,15 +801,18 @@ None the less this demonstrates a clear improvement for the combined neural mode
 \subsubsection{Analysis} % (fold)
 
 
-Analysis of the combined models largely followed the pattern of those in sections \ref{sec:investigating_the_computer_channel}, which involved looking at the entropies of the Code2Vec attention distributions and the sentence level BLEU scores, as evaluated over the whole of the validation set.
+Analysis of the combined models largely followed the pattern of those in Sections \ref{sec:investigating_the_computer_channel}. We examined the entropies of the Code2Vec attention distributions and the sentence-level BLEU scores, as evaluated over the whole of the validation set.
+We found that unsurprisingly the Code2Vec + Seq to Seq Decoder model has a significantly wider distribution of entropies, centered around a higher point, than the individual Decoder. 
+This may partly be down to the fact that the model is now also learning from the highly informative variable name, and so depends less heavily on the specific VPCs. Nonetheless it still indicates the model is discerning among codepaths when it makes its decisions.
 
-We found the unsurprisingly the Code2Vec + Seq to Seq Decoder model has a significantly wider distribution of entropies, centered around a higher point. 
-This may partly be down to the fact that the model is now also learning from the highly informative variable name, and so depends less heavily on the specific code2vec paths. Nonetheless it still indicates the model is paying attention the codepaths when it makes its decisions.
+Although the combined model outperforms the individual models, it appears much of the performance comes from the Seq2Seq part. This can be seen by looking at the individual model BLEU scores in results Table \ref{table:code2vec_embed}. 
+These Seq2Seq model's scores are likely inflated, due to the number of duplicates of (name, description) pairs in the dataset, and so this is not the best comparison of Code2Vec Decoder to Seq2Seq.
+Nonetheless it still demonstrates the primary result of the superior combined model. This model manages to surpass the inflated Seq2Seq, which may benefit from overfitting on certain variable names.
 
-This indicates why the model should outperform the Seq-to-Seq, but it given it is only a small improvement, it suggests that most of the performance gain comes from the name element of the data. 
-Indeed, examining the distributions of sentence level BLEU scores, as visible in  \ref{fig:sentence_bleu}, suggests that te Seq-to-Seq model largely acts as a better Rote Learner, showing most of its improvements in the 1.0 scoring sentences. 
-This is unsurprising given the number of duplicates of (name, description) pairs in this dataset.
-Given the proximity of the BLEU scores for the Seq-to-Seq and Code2Vec + Seq-to-Seq scores, it is reasonable to assume a similar behavious is also occuring to some degree in the combined model.
+% Indeed, examining the distributions of sentence level BLEU scores, as visible in  \ref{fig:sentence_bleu}, suggests that the Seq-to-Seq model largely acts as a better Rote Learner, showing most of its improvements are in the 1.0 scoring sentences, but that the Combined Model
+
+% Nonetheless these experiments demonstrate that 
+% Given the proximity of the BLEU scores for the Seq-to-Seq and Code2Vec + Seq-to-Seq scores, it is reasonable to assume a similar behaviour is also occuring to some degree in the combined model.
 
 % This is in agreement with the distribution of bleu scores in \ref{fig:sentence_bleu} v 
 
@@ -820,45 +823,49 @@ Given the proximity of the BLEU scores for the Seq-to-Seq and Code2Vec + Seq-to-
 
 \subsubsection{Experiment Objective} % (fold)
 
-Our final investigation sought to apply the most difficult test to our models, namely to investigate whether different modalities of code could help generate argument descriptions across completely differnet code bases and different authors.
-This involved taking our strongest models and repeat them on our Full Library-Split Dataset.
+Our final investigation sought to apply the most difficult test to our models, namely to investigate whether our different models could help generate argument descriptions across completely different code bases and different authors.
+%TODO: EMPHASISE CHALLENGE
+This involved taking our strongest models and repeating them on our Full Library-Split Dataset.
 
 \subsubsection{Method \& Results}  % (
 
-The method of our investigations was as outlined above. In this case the models required significantly less training, plateauing their BLEU scores very early. We selected the best models that ran for at most 40 epochs. 
-The results for each experiment is visible in Table \ref{table:split_datasets_embed}, with the hyperparameters presented in Table X.
+In this investigation, we repeated the above investigations on the \textbf{Full Library Split} dataset. 
+We followed the methodologies outlined above, only making a change to the number of epochs run.
+In this case we ran for 40 epochs at most, since in all models, the BLEU scores failed to improve very early on. 
+Our hyperparameters for these models are presented in Table \ref{}, with the for each experiment is reported in Table \ref{table:split_datasets_embed}.
 
-We report that the neural model significantly struggled to learn the labelled translations on the library split datset.
-The weakest models, the code only Code2Vec Decoders, scored BLEU scores of $0.89$ on both train and dev, very close to the code only Rote Learner score of   $ 1.01257 \pm  0.11410$, while the argument name models manage to achieve BLEU scores of about $1.5$ across both the Rote Learner and Seq-to-Seq models. 
-Finally, the combined model of the Code2Dev + Seq-to-Seq model performs best, by a marginal amount, scoring  $ 1.85 $ and $ 1.59 $ across validation and test sets respectively,  outperforming the combined Rote Learner on both modalities byt about half a BLEU point.
+We report that the neural models significantly struggled to learn the labelled translations on the library split datset.
+The weakest models, the Code2Vec Decoders, scored BLEU scores of $0.89$ on both train and dev, very close to the code only Rote Learner score of   $ 1.02 \pm  0.11$, while the argument name models manage to achieve BLEU scores of about $1.5$ across both the Rote Learner and Seq-to-Seq models. 
+Finally, the combined model of the Code2Dev + Seq-to-Seq model performed best, by a marginal amount, scoring  $ 1.85 $ and $ 1.59 $ across validation and test sets respectively,  outperforming the combined Rote Learner on both modalities by about half a BLEU point.
 
 
 
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{ c | c | c }
-    Model                             & BLEU Validation & BLEU Test \\
+    Model                             & BLEU (Validation) & BLEU (Test) \\
     \hline
     Rote Learner  (code only)         & $ 1.02 \pm  0.11 $ & $ 0.85 \pm 0.05 $ \\
-    Code2Vec                          & $ 0.89 $ & $ 0.89 $ \\
-    Code2Vec  (Mask Co-arguments)             & $ 0.67 $ & $ 0.67 $ \\
-    Code2Vec  (Mask All)             & $ 0.69 $ & $ 0.71 $ \\
+    \hline
+
+    Code2Vec                          &   & \\
+    \textit{No Masking}                         & $ 0.89 $ & $ 0.89 $ \\
+    \textit{Co-argument Masking}             & $ 0.67 $ & $ 0.67 $ \\
+    \textit{Full Masking}            & $ 0.69 $ & $ 0.71 $ \\
     \hline
     \hline
     Rote Learner  (name only)         & $ 1.44 \pm  0.17 $ & $ 1.36 \pm 0.06$ \\
     \hline
     Seq2Seq                             & &   \\
-    - \textit{name only}              & $ 1.53 $ & $ 1.582$ \\
-    - \textit{name + function name}      & $ 1.55 $ & $ 1.52 $ \\
-    - \textit{name + co-argument names}         & $ 1.53 $ & $ 1.45$ \\   
-    - \textit{name + function name +co-argument names}     & $ 1.51 $ & $ 1.48$ \\
+    \textit{name only}              & $ 1.53 $ & $ 1.582$ \\
+    \textit{name + function name}      & $ 1.55 $ & $ 1.52 $ \\
+    \textit{name + co-argument names}         & $ 1.53 $ & $ 1.45$ \\   
+    \textit{name + function name +co-argument names}     & $ 1.51 $ & $ 1.48$ \\
     \hline
     \hline
     Rote Learner (combined)            & $ 1.23 \pm  0.169 $ & $ 1.157 \pm 0.101 $ \\
-    Code2Vec  + Char to Seq            & $ 1.85 $ & $ 1.59 $ \\\\
+    Code2Vec  + Char to Seq            & $ 1.85 $ & $ 1.59 $ \\
     \hline
-
-
     % Model                             & BLEU Validation & BLEU Test \\
     % \hline
     % Rote Learner  (code only)         & $ 1.01257 \pm  0.11410 $ & $ 0.84707 \pm 0.04996 $ \\
@@ -893,28 +900,35 @@ Finally, the combined model of the Code2Dev + Seq-to-Seq model performs best, by
 These results at first glance seem to indicate that the neural models can perform no better in generalised translation than the overfitting Rote Learner models.
 However these low BLEU scores give little indication to the type of translations that are being generated.
 To investigate the quality of these translations we examined a random sample of translations from both the Rote Learner and the Code2Vec models. 
+In these we see very little semantic overlap, though the translations make grammatical sense. 
+In particular the Code2Vec descriptions appear shorter and more general than their counterparts with the Rote Learner, but both generally have a poor alignment with the target description. 
 A random sample are shown in Table \ref{tab:lib_split}.
 
-In these we see very little overlap, though the translations make grammatical sense. 
-In particular the types of descriptions generated appear shorter and more general than their counterparts with the Rote Learner, but both generally have a poor alignment with the true description.
 
 % Although we see a very low ngram overlap,
 % 1)  descriptions of the neural models seem plausible, and certainly less repeated and specific that Rote Learner.
 % 2) (However,) looking at the one word overlap of the the models we see the following distributions.
 % Searching for direct repeats of translations we find that X of the validation sentences are found in the training, indicating /not invdicating overfitting.
 
-These low BLEU scores, despite grammatical sounding descriptions, lead us to the biggest problem with this task.
-Generalisation across code documentation is difficult when code is written by different authors, with different contexts and conventions. 
-Although related work in section X demonstrates that idioms and patterns in code do exist, we are fundamentally hampered by the both the variance of code between libraries and variation of the target language that we aim to generate when we split between libraries.
-Codebases develop idioms and name conventions within libraries, and often have a context when it comes the language used in descriptions. 
-Unlike in many words in the real world, descriptions of code artefacts are almost always metaphorical (for instance "colours", instead of "list of strings"),  and therefire different libraries are under no obligation to use the same language, or even vocabularies when referring to the same underlying code objects. 
+These low BLEU scores, despite fluent sounding descriptions, lead us to the biggest problem with this task.
+Generalisation across code different codebases is hard.  It requires generalization across code and documentation written by different authors in different contexts with different conventions. 
+Although related work in code language modelling demonstrates that idioms and patterns in code do exist\cite{allamanis_mining_nodate}, it has also shown that modelling across project boundaries is significantly harder,
+ % ]we are fundamentally hampered by the both the variance of code between libraries and variation of the target language that we aim to generate when we split between libraries.
+as codebases develop idioms and conventions within the project domain \cite{hinton_distributed_nodate}. 
 
-For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, but generating language surround the second example may be difficult without training examples without example of the relevant context.
- In the abstract the model may be able to infer something general, such as the type, but again idiomatic use of the code would need to be provided for this.
+Furthermore the natural language used in descriptions will likely be highly contextualised. 
+Unlike the usage of most words in the real world, descriptions of code artefacts are almost always metaphorical (for instance \textit{``colours"}, instead of \textit{``list of strings"}).  and therefore different libraries are under no obligation to use the same language or vocabularies when referring to the same underlying code objects. 
+For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, but generating a description surrounding the second example may be difficult without example of the relevant context.
+% Out aim is that the model may be able to infer something general from the cde, such as the type, but this too requires idiomatic use of the code that crosses boundaries.
 
-This lack of context and vocabulary, both with code and text, seems to be the case with our datasets.
-We investigated how the different train set and validation set description vocabularies varied between the Random-Split and Library-Split Datasets after tokenization, and found that the in our Library Split dataset, the vocabularies of our training set are reduced by over 10\%, compared to a Random Split. 
-Furthermore, we also found that after tokenization 16\% of the words in our validation set vocabulary do not even appar in the training set - even though these are not "UNK" tokens. This is almost a fourfold increase compared to the Random Split dataset.
+This lack of context and vocabulary, both with code and text,  seems to be the case with our tokenized datasets.
+After tokenization, the Library Split training set vocabulary is 10\% smaller than that of the Random Split training set. To make matters worse, 16\% of the Library Split validation vocabulary then doesn't even appear in the training set - a fourfold increase compared to the Random Split case.
+These facts both indicate that in our tokenized Library Split, the model is learning from less diverse contexts, and yet more often is asked to extrapolate to new contexts.
+
+% and after tokenization, 16\% of the words in the validation set vocabil
+
+% We investigated how the different train set and validation set description vocabularies varied between the Random-Split and Library-Split Datasets after tokenization, and found that the in our Library Split dataset, the vocabularies of our training set are reduced by over 10\%, compared to a Random Split. 
+% Furthermore, we also found that after tokenization 16\% of the words in our validation set vocabulary do not even appar in the training set - even though these are not "UNK" tokens. This is almost a fourfold increase compared to the Random Split dataset.
 
 \begin{table}
     \begin{center}
@@ -940,16 +954,15 @@ Furthermore, we also found that after tokenization 16\% of the words in our vali
 
 
 This behaviour is even worse when it comes to the code paths.
-Unlie the vocabulary for descriptions, the the vocabulary for code paths is set entirely by the training set - there are no Glove preembeddings of paths to help!
-As a results we found that the fraction of codepaths with "<UNK>" path component in the validation set rose from 38\% to 58\%, and "<UNK>" terminal nodes ran from 15\% to 45\%. 
-These large increases further explain why, even on a general level looking at the computer channel, our Code2Vec models struggled to generalise. A summary of these results in presented in Table \ref{tab:vocabsplit}
+Unlike the vocabulary for descriptions, the  vocabulary for code paths is set entirely by the training set - there are no Glove preembeddings of paths to help us build a list. The result is that in our tokenized Library Split, the fraction of codepaths with $<$UNK$>$ path component in the validation set rose from 38\% to 58\%, and $<$UNK$>$ terminal nodes rose from 15\% to 45\%. 
+These large increases further explain why, despite their capacity for abstraction, our Code2Vec models struggled to generalise well. A summary of these results in presented in Table \ref{tab:vocabsplit}
 
-This work shows how challenging it is to generalise code across repository. Syntax trees are vast and diverse, which poses a problem for vocabularies, even if only taking a small subsection of the tree. 
-Furthermore, the language thats used is necessarily different and metaphorical, which leads to fitting on training that fails to generalise.
-It is possible that other tokenizations of the source code on this dataset may prove more informative in future, which may be a promising path of future investigation.
+This work shows how challenging it is to generalise code across repository. Syntax trees are vast and diverse \cite{allamanis_survey_2017}, which poses a problem for vocabularies, even if only taking a small subsection of the tree. 
+Furthermore, the language thats used is necessarily different and metaphorical, which leads to fitting on training that can fail generalise.
 
-
-
+Further work on this dataset should focus on different tokenizations and representations that can help capture the similarities betwen the different partitions across libraries, and avoid vocabulary problems.
+Pointer networks, such as used by Bhoopchand et al\cite{bhoopchand_learning_2016}, could be a signficant way of dealing with out-of-vocabulary tokens in code descriptions. So too could generating descriptions at a character level, though this poses its own problems, for particularly long sequences. 
+Similarly different representations of AST codepaths could be investigated, allowing for a more composable version of a VPC. 
 
 \begin{table}[ht]
 
