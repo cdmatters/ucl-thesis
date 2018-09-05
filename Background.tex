@@ -1,10 +1,10 @@
 \chapter{Background}
 \label{background}
 
-In this section we present an overview of the theoretical items to necessary to our task of generating natural language from code features.
+In this section we present an overview of the theoretical items necessary to our task of generating natural language from code features.
 We start with an overview of language models, defining what they are, and noting where our task fits in the traditional NLP tasks of conditional langauge generation.
 Then we provide an overview of the relevant representation learning techniques we use to achieve our goal.
-Finally we conclude with a brief overview of the structure of source code, in particular its representation as an Abstract Syntax Tree. 
+Finally we conclude with a brief overview of the structure of source code, in particular its representation as an Abstract Syntax Tree, and set of Path-Contexts. 
 
 % In this section we first present an overview of the theoretical items necessary to our task of generating natural language from code features.
 % % In particular we cast our sequence generation problem in the commonly used framework of machine translation, exploring language models, translation techniques, and neural approaches to them. 
@@ -18,62 +18,76 @@ Finally we conclude with a brief overview of the structure of source code, in pa
 \label{sub:recurrent_neural_networks}
 
 % In order to accurately model sequences of words, we often require an  require an evaluation of the true probability of distribution sequence of words.
-Although natural language has the potential to be rich and complex, more often than not it is mundane and repetetive \cite{Hindle:2012:NS:2337223.2337322}. 
+Although natural language has the potential to be rich and complex, more often than not it is mundane and repetetive. \citep{c._e._shannon_prediction_1951} 
 It is such repetitiveness that makes it possible to predict in many instances. For instance, in natural English the phrase ``\textit{The music is loud, turn it ...}", is much more likely to be followed by `\textit{off}', or `\textit{down}', than the word `\textit{around}'.
 This is because the actual distribution of utterances is very sparse in  the vast space of possible utterances in natural language.
 
 In our task, we seek to generate sequences of natural language, $\{y_1, y_2,..., y_n\}$ from a set of features of code, $\mathcal{C}$.
 Ideally we seek to do this through maximising a probability:
-
-$$p(y_1, y_2,...,y_n | \mathcal{C}) \propto p(\mathcal{C} | y_1, y_2,...,y_n )  p(y_1, y_2,...,y_n )$$
-
+\begin{align}
+p(y_1, y_2,...,y_n | \mathcal{C}) \propto p(\mathcal{C} | y_1, y_2,...,y_n )  p(y_1, y_2,...,y_n )
+\end{align}
 where the proportionality follows from Bayes' rule.
-This $p(y_1, y_2,...,y_n )$ term in this equation represents the probability of the sequence occuring naturally in the language. This term is what typical language models aim to represent.
+This $p(y_1, y_2,...,y_n )$ term in this equation represents the probability of the sequence occuring naturally in the language. This term is what  language models aim to represent.
 
-Language models are an unsupervised means of determining the natural distribution of utterences in a language (or corpus). 
+Language models are an unsupervised means of determining the natural distribution of utterences in a language or corpus. 
 Often these utterences are broken down into single token sequences, and the probabilities are formed as a product of conditional probabilities.
 
-$$p(y_1, y_2,...,y_n ) = p(y_n | y_1, y_2,...y_{n-1} )  p(y_1, y_2,...y_{n-1} )$$
-$$= p(y_n | y_1, y_2,...y_{n-1} ) p(y_{n-1} | y_1, y_2,...y_{n-2} )...p(y_1)$$
-$$ = \prod_{i=1}^{n} p(y_i | y_1^{i-1} ) $$ where $y_1^{i-1} =  \{y_1, y_2,...y_{i-1}\}$, the sequence of tokens from $1$ to $i-1$
+\begin{align}
+p(y_1, y_2,...,y_n ) = p(y_n | y_1, y_2,...y_{n-1} )  p(y_1, y_2,...y_{n-1} ) \\
+= p(y_n | y_1, y_2,...y_{n-1} ) p(y_{n-1} | y_1, y_2,...y_{n-2} )...p(y_1) \nonumber\\
+ = \prod_{i=1}^{n} p(y_i | y_1^{i-1} )  
+\end{align}
+where $y_1^{i-1} =  \{y_1, y_2,...y_{i-1}\}$ is the sequence of tokens from $1$ to $i-1$.
 
 These probabilities can be calculated in different ways, or under different assumptions. An n-gram model assumes a Markovian conditional independence structure, where the next token is conditionally independent of all others, given the previous $n$: 
+\begin{align}
+ y_t \CI y_1^{t-n} \mid y^{t-1}_{t-n+1}  \\
+\therefore p(y_t | y_1, y_2,..., y_{t-1} )  = p(y_t | y_{t-n}, y_{t-n+1},..., y_{t-1}  ) 
+\end{align}
 
-$$ y_t \CI y_1^{t-n} \mid y^{t-1}_{t-n+1} $$
-$$\therefore p(y_t | y_1, y_2,..., y_{t-1} )  = p(y_t | y_{t-n}, y_{t-n+1},..., y_{t-1}  ) $$
+These models then estimate maximum likelihood probabilities from counts of occurences in corpora, and sometimes `smooth' these probabilities to overcome the sparsity of their training data. \citep{Chen:1996:ESS:981863.981904}
 
-These models then estimate maximum likelihood probabilities from counts of occurences in corpora, and sometimes `smooth' these probabilities to overcome the sparsity of their training data.
+Other models, such as neural language models, do not make such conditional independence assumptions and use a neural network as a function approximator:
+\begin{align}
+p(y_1, y_2,...,y_n ) = g(y_1, y_2,...,y_n)
+\end{align}
 
-Other models, such as neural language models, do not make such conditional indepence assumptions and use a neural network as a function approximator:
-
-$$p(y_1, y_2,...,y_n ) = g(y_1, y_2,...,y_n)$$
-
-In our work, we seek a conditional language model, which we can sample natural language given our conditioning code features $\mathcal{C}$. This conditional modelling is central to many tasks in natural language processing, which we elaborate in the next section.
+In our work, we seek a \textit{conditional} language model, which we can sample natural language given our conditioning code features $\mathcal{C}$. This conditional modelling is central to many tasks in natural language processing, which we elaborate in the next section.
 
 \subsection{Conditional Generation of Language}
 
-Many tasks in natural language processing require the generation of natural language conditioned on observations.
+Many tasks in NLP require the generation of natural language conditioned on observations.
 Three of the largest are machine translation, automatic summarization, and captioning.
-In this section we briefly compare our task to these traditional fields, noting the similarities and differences task across each.
+In this section we briefly compare our task to these traditional fields, noting the similarities and differences with our task across each.
 
-Firstly we consider machine translation. In this field, the objective is to generate the most likely sequence of a target language, $\{y_1, y_2,..., y_m\}$, given a sequence in an origin language  $\{x_1, x_2,..., x_n\}$. 
+\paragraph{Machine Translation}
+In machine translation, the objective is to generate the most likely sequence of a target language, $\{y_1, y_2,..., y_m\}$, given a sequence in an origin language  $\{x_1, x_2,..., x_n\}$. 
 The translation seeks to maximise the probability:
-$$ p(y_1, y_2,..., y_m| x_1, x_2,...,x_n )$$
-The history and context of machine translation traditionally revolves around $\{y_i\}$ and $\{x_i\}$ being in different languages with the same semantic meaning. 
-In this respect our task is not a typical translation task.
-However, since our models will at times attempt to generate a sequence from another, many techniques pioneered in this field are highly transferrable to our task.
+\begin{align}
+p(y_1, y_2,..., y_m| x_1, x_2,...,x_n ) \nonumber
+\end{align}
+% EDIT The history and context of machine translation traditionally revolves around $\{y_i\}$ and $\{x_i\}$ being in different languages with the same semantic meaning. 
+Traditionally in machine translation, $\{x_1, ..., x_n\}$ and $\{y_1,..., y_m\}$ correspond to different languages with the same semantic meaning. 
+In this respect our task is not a typical translation one.
+However, since our models will at times attempt to generate one sequence from another, many techniques pioneered in this field are highly transferrable to our task. 
+For further introductions to Machine Translation, we point the reader to \cite{trove.nla.gov.au/work/23999611,lopez_statistical_2008}
 
-Secondly, the task of summarization aims to extract summaries or descriptions from a document.
+\paragraph{Summarization}
+The task of summarization aims to extract summaries or descriptions from a document.
+A helpful review of the field is presented by \citet{allahyari_text_2017}.
 Typically this involves extraction and/or abstraction of a document in the same modality or language.
-Our task, generating descriptions about an element of a code document, naturally involves two distinct modalities - code as input, and english as output.
+Our task, generating descriptions about an element of code, naturally involves two different modalities - code as input, and english as output.
 However, in the best case our descriptions should reflect a true and relevant summary of the argument.
-Therefore, although ours is not a typical summarization task, it is sometimes framed that way in similar work\cite{iyer_summarizing_2016}.
+Therefore, although ours is not a typical summarization task, it is sometimes framed that way in similar work. \citep{iyer_summarizing_2016} 
 
+\paragraph{Captioning}
 A final task with a parallel to ours is that of captioning. 
-The distinction from summarization in this case is that captioning involves generating text from differnet modalities - such as captioning a picture, or video clip.
-The parallels with our code and language task are obvious here. However, it is perhaps unfair to describe documentation of code as `caption' when it aims to be a description of only the most important parts of the code, and aims to be succint.
+The distinction from summarization in this case is that captioning involves generating text from differnet modalities - often captioning image, \citep{Vinyals2015ShowAT} or parts of one \citep{Karpathy2015DeepVA}.
+The parallels with our code and language task are obvious here. However, it is perhaps unfair to describe documentation of code as `caption' when it aims to be a description of only the most important parts of the code, and intentionally aims for succintness.
 
-In summary our task falls in between a number of traditional NLP tasks and consequently related tasks blur the boundaries of translation, summarization and captioning. In the next section we present an overview of the relevant theoretical components for our model, indicating their provenance from their respective fields.
+\paragraph{}
+In summary our task falls in between a number of traditional NLP tasks and consequently related work blurs the boundaries of translation, summarization and captioning. In the next section we present an overview of the relevant theoretical components for our model, indicating their provenance from their respective fields. 
 
 \section{Representation Learning}
 
