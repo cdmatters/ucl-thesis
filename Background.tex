@@ -18,7 +18,7 @@ Finally we conclude with a brief overview of the structure of source code, in pa
 \label{sub:recurrent_neural_networks}
 
 % In order to accurately model sequences of words, we often require an  require an evaluation of the true probability of distribution sequence of words.
-Although natural language has the potential to be rich and complex, more often than not it is mundane and repetetive \cite{hindle_naturalness_nodate}. 
+Although natural language has the potential to be rich and complex, more often than not it is mundane and repetetive \cite{Hindle:2012:NS:2337223.2337322}. 
 It is such repetitiveness that makes it possible to predict in many instances. For instance, in natural English the phrase ``\textit{The music is loud, turn it ...}", is much more likely to be followed by `\textit{off}', or `\textit{down}', than the word `\textit{around}'.
 This is because the actual distribution of utterances is very sparse in  the vast space of possible utterances in natural language.
 
@@ -345,7 +345,7 @@ In this review we summarise the current advances of these methods and how they r
 
 \subsection{Language Models of Source Code}
 
-The earliest work modelling source code with natural language techniques comes from Hindle at al \cite{hindle_naturalness_nodate}, who used simple Kneser-Ney smoothed n-gram models of code tokens, to create language models for large-scale Java and C projects.
+The earliest work modelling source code with natural language techniques comes from Hindle at al \cite{Hindle:2012:NS:2337223.2337322}, who used simple Kneser-Ney smoothed n-gram models of code tokens, to create language models for large-scale Java and C projects.
 With these models, Hindle was able to demonstrate that the cross-entropy of source code within projects was lower than that of large English corpora - indicating the presence of repetetive common patterns that could be leveraged for code completion, naming and summarization.
 This was consistent with findings by Gabel and Su \cite{gabel_study_2010} who examined the lines of approximately 6000 projects of code and found widespread repetition of sections of up to several lines, both within and across projects.
 Despite the simplistic Markov chain assumption implicit in the ngram model, the effectiveness of this modelling techniques, especially within projects, opened up the field of code analysis to the wider natural language processing community.
@@ -370,7 +370,7 @@ Work by Sridhara et al \cite{sridhara_[not_2010}  used static analysis to find i
 This work produced text that describe the functions in question to a high degree of accuracy, but Sridhara noted the potential lack of transferrability to other settings, and lack of examples with which to compare their summaries.  
 This procedure was also inherently inflexible, relying on human crafted templates, and specified rules. Furthermore the size of the dataset, four projects in total, indicated a potential problem in the generalisability of the work to other domains, projects or even languages.
 
-However, the advent of the statistical approaches to code language modelling led by Hindle et al \cite{hindle_naturalness_nodate} signalled the start of similar approaches to sequence generation. The earliest is Movshovitz-Attias et al \cite{movshovitz-attias_natural_nodate}, who used both ngrams and topic models such as LDA to predict comments from JAVA source code. In this they found that modelling the lexical components of source code as coming from a mixture of topics - "code" and "text" - outperformed models that ignored this distinction.  This pointed to the strength of taking into account features of code (such as distinguishing comments from commands), even if such destinction were still purely on the lexical level.
+However, the advent of the statistical approaches to code language modelling led by Hindle et al \cite{Hindle:2012:NS:2337223.2337322} signalled the start of similar approaches to sequence generation. The earliest is Movshovitz-Attias et al \cite{movshovitz-attias_natural_nodate}, who used both ngrams and topic models such as LDA to predict comments from JAVA source code. In this they found that modelling the lexical components of source code as coming from a mixture of topics - "code" and "text" - outperformed models that ignored this distinction.  This pointed to the strength of taking into account features of code (such as distinguishing comments from commands), even if such destinction were still purely on the lexical level.
 
 % Since then, statistical approaches have become more popular in attacking the problem, often involving much larger corpora of training data.
 % Iyer et al \cite{iyer_summarizing_2016} sourced a large dataset of code snippets and questions from Stack Overflow, a popular programming website, to attempt this problem statistically.

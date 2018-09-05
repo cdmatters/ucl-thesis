@@ -22,25 +22,29 @@ Finally we present an overview of the contributions of our research and the foll
 % Given the prominence that computers and digital infrastructure take in modern life, it is not hard to motivate work to help humans communicate with machines or vice versa. 
 Source code is the purest medium through which humans communicate their instructions to computers.
 Yet these instructions need to be comprehensible to other humans as well.
-Understanding source code is already a valuable skill in industry today and one that is likely to grow in importance, given the prominence of computers in modern life.
+% EDIT:  Understanding source code is already a valuable skill in industry today and one that is likely to grow in importance, given the prominence of computers in modern life.
+Understanding source code is already a valuable skill in industry today and one that is likely to grow in importance, as it is vital for software development and maintenance of code.
 % as the number of people with such skills fails to match demand. 
-Work that facilitates human understanding of source code is therefore highly likely to find value, in industry and elsewhere. % where such communication through such a medium is vital.
+Work that facilitates human understanding of source code is therefore highly likely to find value in software development, engineering, research, and beyond. 
+% Work that facilitates human understanding of source code is therefore highly likely to find value, in industry and elsewhere. 
+% where such communication through such a medium is vital.
 
-Source code documentation is the textual component of code, designed to provide clear communication to human readers.
+Source code documentation is the natural language component of code, designed to provide clear communication to human readers.
 It is often an abstract summary of the purpose or function of the code, though sometimes an overview of the underlying subroutine.
 Such summaries prove valuable in their own right, but are only one aid in understanding the source code they relate to.
-Often an understanding of the individual, fine-grained elements of the source code requires investigation by the reader, or an explicit mention by the documentation writer.
+Often an understanding of the individual, fine-grained elements of the source code, such as arguments or variables, requires investigation by the reader  - or an explicit mention by the documentation writer.
 
-With the advent of dynamically-typed languages, which do not make explicit information such as `integer', or `string', explanations of individual elements of source code, such as arguments, have renewed importance.
-In fact, a number of open-source projects \cite{noauthor_numpydoc_nodate} and industrial company guidelines \cite{noauthor_style_2018} now require an explicit description of the arguments of each function in contributions to their projects.
+With the advent of dynamically-typed languages, explanations of individual elements of source code, such as arguments, have renewed importance.
+These languages do not give explicit type information, such as `string' or `integer', and can lead to critical run-time errors when arguments are misused. 
+In fact, a number of open-source projects\footnote{https://numpydoc.readthedocs.io/en/latest/format.html\#sections} and industrial company guidelines\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#38-comments-and-docstrings} now require an explicit description of the arguments of each function in all contributions to their projects.
 The constant enumeration of these is manual, tedious, and prone to error, inaccuracy (through code churn) or even neglect.
 % Furthermore, these descriptions are increasingly used to generate static websites that officially document code, so an outdated description 
 
 As a result an algorithm that could automatically provide human descriptions of arguments would find great use in software tooling, either to help code readers understand undocumented code, or to help code writers automate their task.
-Such an algorithm would also be a stepping stone to providing full descritions of all elements in the source code, further helping humans with code comprehension.
+Such an algorithm would also be a stepping stone to providing full descriptions of all elements in the source code, further helping humans with code comprehension.
 Given the advances that industry hope to make in the fields of automatic program synthesis, such tools will be vital to help humans understand
-the computer output.
-Lastly such a tool would be a stepping stone to the solving problem of type inference in dynamically-typed languages, which would help software developers prevent critical run-time failures in large scale software.
+a computer's output.
+Lastly such an algorithm would be a stepping stone to the solving problem of type inference in dynamically-typed languages, which would help software developers prevent critical run-time failures in large scale software.
 
 
 
@@ -64,29 +68,29 @@ Lastly such a tool would be a stepping stone to the solving problem of type infe
 
 
 Historically, academic research into software tooling has focused on formal and deductive methods. 
-For instance, in the field of bug finding, static analysis has formed the basis of methods to reduce runtime errors of software, either through explicit checks \cite{okada_combination_2007}, or through reasoning about sets of execution traces
+For instance, in the field of bug finding, static analysis has formed the basis of methods to reduce runtime errors of software, either through explicit checks \citep{okada_combination_2007}, or through reasoning about sets of execution traces
 % by analysing syntax
-\cite{bessey_few_2010}. 
+\citep{bessey_few_2010}. 
 This research exploits the fact that code has a structure that is logically consistent and can be reasoned about mathematically.
 As a result, these deductive methods have been attractive due to their formal nature and the guarantees they can offer in the worst case.
 
  % and formally, despite ignoring potentially valuable non-semantic information such as variable name conventions, programming idioms or comments.  
 
-However, the proliferation of online open-source code \cite{dyer_boa_2013} has provided opportunities for a more statistical approach. 
-Instead of formalising rule-based systems, the development of tools can now be guided by the most statistically significant features of the code.
+However, the proliferation of online open-source code \citep{dyer_boa_2013} has provided opportunities for a more statistical approach. 
+Instead of formalising rule-based systems, the development of tools can now be guided by the most statistically significant features of the code-in-the-wild.
 % CITE ALLAMANIS?
-Such a transition, from rule-based approach to statistical approach, signals a different end-goal for these tools, abandoning worst case guarantees for better performance on average \cite{allamanis_survey_2017}. %most of the time.
+Such a transition, from rule-based approach to statistical approach, signals a different end-goal for these tools, abandoning worst case guarantees for better performance on average \citep{allamanis_survey_2017}. %most of the time.
 % from a focus of best perfomance in the worst case (or in specific conditions), to best performance in most cases. PARAPHRASE
-This promises to be of much value to growing computing industry. It also opens up tooling research to the wealth of statistical machine learning techniques.
+This promises to be of much value to the growing computing industry. It also opens up tooling research to the wealth of statistical machine learning techniques.
  
-This transition is fundamentally justifed under the Naturalness Hypothesis, proposed by Allamanis et al \cite{allamanis_survey_2017}. 
-This hypothesis suggests that \textit{``Software is a form of human communications; software corpora have a similar statistical properties to natural language copora; and these properties can be exploited to build better software tools''}.\cite{allamanis_survey_2017} 
-The hypothesis draws inspiration from Don Knuth's idea of \textit{literate programming}\cite{knuth_literate_1984}, that the primary task of programming should be ``explaining to human beings what we want a computer to do...''\cite{knuth_literate_1984}, not simply preparing a set of commands for a machine.
+This transition is fundamentally justifed under the Naturalness Hypothesis, proposed by \citet{allamanis_survey_2017}. 
+This hypothesis suggests that \textit{``Software is a form of human communications; software corpora have a similar statistical properties to natural language copora; and these properties can be exploited to build better software tools''}.\citep{allamanis_survey_2017} 
+The hypothesis draws inspiration from Don Knuth's idea of \textit{literate programming}\citep{knuth_literate_1984}, that the primary task of programming should be ``explaining to human beings what we want a computer to do...''\citep{knuth_literate_1984}, not simply preparing a set of commands for a machine.
 
-Allamanis cites the successes that recent statistical natural language processing approaches have had when applied to `Big Code', dating back to Hindle et al \cite{hindle_naturalness_nodate}, to defending his hypothesis. He also points to evidence in cognitive science studies, that demonstrate that brain behaviour in reading programming languages is akin to reading ``natural languages with greater expertise''\cite{floyd_decoding_2017}.
+Allamanis cites the successes that recent statistical natural language processing (NLP) approaches have had when applied to `Big Code', dating back to \citet{Hindle:2012:NS:2337223.2337322}, to support his hypothesis. He also points to evidence in cognitive science studies, that demonstrate that brain behaviour in reading programming languages is akin to reading ``natural languages with greater expertise''\citep{floyd_decoding_2017}.
 
 We mention the Naturalness Hypothesis because it is a fundamental inspiration for the approach and methods of our research.
-We believe that it is only in looking at the statistical `naturalness' properties of both source code and the language accompanying it, that the generalisable, extenisble progress will be made in human-centric tasks such as code summarization, code explanation, and documentation generation.
+We believe that it is only in looking at the statistical `naturalness' properties of both source code and the language accompanying it, that generalisable, extenisble progress will be made in human-oriented tasks such as code summarization, code explanation, and documentation generation.
 
 %%% DIFFERENCES BETWEEN CODE & NL
 
@@ -110,17 +114,17 @@ Our contributions include a new and challenging dataset suitable for investigati
 To the best of our knowledge, this is the first dataset suitable for the task of argument description generation, and the first study of such a problem.
 We demonstrate the informative power of function signatures, using both Rote Learner models, and neural translation architectures.
 We also present a new architecture capable of generating argument description solely from a syntax tree, and demonstrate its effectiveness in this task.
-We demonstrate its ability to learn, despite partial and full occlusion of lexical data, and also present a multimodal archtitecture combining the lexical and syntactical code features.
+We demonstrate its ability to learn, despite partial and full occlusion of lexical data, and also present a multimodal archtitecture combining the lexical and syntactical code features that surpasses both individual models.
 We finally demonstrate the difficulty of applying such models between datasets, and show there is a still a significant challenge remaining on this dataset.
 
 
 \section{Structure of the Thesis} % (fold)
 \label{sec:structure_of_the_thesis}
 
-In addressing the research questions posed above, we first present a brief survey of the existing literature for this field in Chapter 2, and a background of theory in Chapter 3.
-Chapter 4 presents an in depth presentation of our new dataset, along with an analysis of its composition, while Chapter 5 presents the models which we used to investigate our central research question. 
-Chapter 6 provides an overview of our method, while Chapter 7 presents  report of our experiments, their results, and their analysis.
-Finally we present a conclusion of the results in Chapter 8, with an elaboration on potential future work
+In addressing the research questions posed above, we first present a background of theory in Chapter 2, and brief survey of the existing literature for this field in Chapter 3.
+Chapter 4 gives in depth presentation of our new dataset, along with an analysis of its composition, while Chapter 5 presents the method and models which we used to investigate our central research question. 
+Chapter 6 presents a report of our experiments, their results, and their analysis.
+Finally we present a conclusion of the results in Chapter 6, with an elaboration on potential future work.
 
 % section structure_of_the_thesis (end)
 
