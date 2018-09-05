@@ -252,7 +252,7 @@ to now being a function of the context vector at that point $c_t$ aswell:
 p(y_t| y_1, ..., y_{t-1}, \mathbf{x} ) = g(y_{t-1}, s_t, c_t)
 \end{equation}
 
-The context vector at each step is itself calculated using a weighted sum of the rnn outputs $\{h_1,... h_{t_1}\}$:
+The context vector at each step is itself calculated using a weighted sum of the RNN outputs $\{h_1,... h_{t_1}\}$:
 \begin{equation}
 c_t = \sum_{j=1}^{T_x}\alpha_{tj}h_j
 \end{equation}
@@ -275,27 +275,56 @@ In our models we use attention mechanisms extensively, both as a means of dealin
 \section{Structure of Code} % (fold)
 \label{sec:translating_code}
 
-Although in principle the models in this thesis could be run on any programming language, our dataset is one composed pure of the Python prgramming language.  
+Although in principle the models presented in this thesis could be applied to any programming language, our dataset consists of functions in the Python prgramming language.  
 In this section we provide a brief introduction to the language before presenting a broader overview of abstract syntax trees.
 
 \subsection{Introduction to Python} % (fold)
 \label{sub:python}
 
-
-Python is a \textit{dynamically typed} language, meaning that the `type' of an object, such as `string' or `integer', can be decided at runtime, rather than specified in advance.
+Python is a \textit{dynamically-typed} language, meaning that the `type' of an object, such as `string' or `integer', is be decided at runtime, rather than specified in advance, or \textit{statically}.
 This allows a greater flexibility in the language, but comes at the expense of a less informative source code.
-Declaring a variable \mintinline[]{python}{foo}, makes no guarantees on what it could be, or how it can be used. 
+Declaring a variable \mintinline[]{python}{var}, makes no guarantees on what it could be, or how it can be used. 
 
-Furthermore Python is \textit{strongly typed} language, meaning that a type can not be implicitly coerced into another one by the computer at run time. Changes in type must be explicit. For instance, evaluating \mintinline[]{python}{1 + '0'} would result in an \mintinline[]{yaml}{TypeError} being raised in Python. In \textit{weakly typed} JavaScript this returns \mintinline[]{python}{'10'}.
+Furthermore Python is \textit{strongly-typed} language, meaning that a type can not be implicitly coerced into another one by the computer at run time. Changes in type must be explicit. For instance, evaluating \mintinline[]{python}{1 + '0'} would result in an \mintinline[]{yaml}{TypeError} being raised in Python. In \textit{weakly-typed} JavaScript this returns \mintinline[]{python}{'10'}.
 This means that inappropriate use of variables can lead to run time crashes or errors very easily in Python.
+
+\begin{listing}[h!] 
+
+\begin{minted}[fontsize=\footnotesize]{python}
+def xkcd_palette(colors):
+    """Make a palette with color names from the xkcd color survey.
+    This is just a simple wrapper around the ``seaborn.xkcd_rgb`` dictionary.
+
+    Parameters
+    ----------
+    colors : 
+        List of keys in the ``seaborn.xkcd_rgb`` dictionary.
+
+    Returns
+    -------
+    palette : 
+        Returns the list of colors as RGB tuples in an object that behaves like
+        other seaborn color palettes
+    """
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+\end{minted}
+
+    \caption{A source code snipped from the validation set, with  a numpy-style doctring. The docstring presented been trimmed for brevity.}
+    \label{fig:docstring}
+\end{listing}
+
+
+
 
 Together, these features make documentation an especially important part of Python. 
 Functions and classes therefore have a built-in convention for containing documentation, called a docstring. 
 This is automatically displayed when the built-in \mintinline[]{python}{help} is called on the function.
-A typical function with a docstring is illustrated in fugure X. 
-Many open source libraries document their API's with html built straight from the docstring of the underlying methods.
+A typical function with a docstring is illustrated in Figure \ref{fig:docstring}. 
+Many open source libraries document their API's with HTML built straight from the docstring of the underlying methods.
 
-There are no explicit rules for how docstrings must be written, but two popular conventions are those the Google and numpy conventions. These specify that the arguments of a function explicitly be described in the docstring, along with a general description of the function.
+There are no explicit rules for how docstrings must be written, but two popular conventions are those the Google\footnote{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example\_google.html\#example-google} and numpy\footnote{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example\_numpy.html\#example-numpy} conventions. These specify that the arguments of a function explicitly be described in the docstring, along with the description of the function.
 Our project involves sourcing and parsing functions that use these conventions, to be able to get the close mapping between the elements of the source code (the arguments) and their human written descriptions. 
 
 
@@ -303,60 +332,63 @@ Our project involves sourcing and parsing functions that use these conventions, 
 \label{sub:abstract_syntax_trees}
 
 Programming languages communicate along two channels \citep{allamanis_survey_2017}. The \textit{human readable channel} consists of the lexical names and words in files as read and written by humans.  The \textit{computer readable channel} consists of the information that forms the direct instruction set aimed at the computer.
-This direct instruction set is often stripped of information superfluous to computer, such as comments and names, and can therefore be difficult for humans to interpret directly.
-Instead the instruction set can also be represented by an intermediate structure, known as an abstract syntax tree (AST).
+This direct instruction set is stripped of information superfluous to computer, such as comments and names, and is therefore difficult for humans to interpret directly.
+The instruction set is also represented by an intermediate structure, known as an abstract syntax tree (AST).
 This is directly obtained by parsing the written source code, and wholly specifies the instructional information to the computer.
 It is therefore the perfect data structure to investigate patterns in the computer readable channel.
 
-The form of abstract syntax trees differ from language to language. 
+The form of ASTs differ from language to language. 
 Each language may have a different set of nodes and variables, and information associated with them.
-However, in general an algorithm that operates on a syntax tree should be transferrable to another. 
+However, in general an algorithm that operates on one AST should be transferrable to another. 
+
+
 
 \begin{figure}[tb]
+
     \centering
-    \includegraphics[width=\linewidth]{ModelPics/xkcd_palette_strip_full.png}
-    \caption{An example of a Python Syntax tree with code, taken from our validation set. We omit the node containing the docstring for clarity. Terminal nodes are shown in green, non-terminal nodes are shown in blue }
+    \includegraphics[width=\linewidth]{ModelPics/xkcd_palette_strip_full_copy.png}
+    \caption{The Python AST corresponding to the code in Figure \ref{fig:docstring}. We omit the node containing the docstring for clarity. Terminal nodes are shown in green, non-terminal nodes are shown in blue. We highlight a path from \mintinline[]{yaml}{"len"} to  \mintinline[]{yaml}{"palette"}}
     \label{fig:fullAST}
 
 (\mintinline[]{yaml}{"len"}, string $\uparrow$ Name $\uparrow$ Call $\downarrow$ Name $\downarrow$ string ,  \mintinline[]{yaml}{"palette"})
-    \caption{An example of a \textit{path-context}, from the above syntax tree.}
+    \caption{An example of a \textit{path-context}, from the highlighted path in the above AST.}
     \label{fig:path_eg}
 
     (Name $\uparrow$ Call $\downarrow$ Name,  \mintinline[]{yaml}{"palette"})
     \caption{Example \ref{fig:path_eg} as a \textit{variable path-context} for the variable \mintinline[]{yaml}{"len"}}
     \label{fig:varpath_eg}
-
 \end{figure}
 
-In our project, we work with the Python syntax tree, as visibile in Figure \ref{fig:fullAST}.
+
+In our project, we work with the Python AST, as visible in Figure \ref{fig:fullAST}.
 This is composed of a series of instruction nodes, that terminate with lexical names. 
 These names are the names of objects, which could therefore be methods, variables, classes, etc. 
-In fact, in Python just about everything is an object. 
+In fact, in Python everything is an object.\footnote{https://jeffknupp.com/blog/2013/02/14/drastically-improve-your-python-understanding-pythons-execution-model/} 
 As can be seen from the syntax tree, sometimes these object names are being loaded into memory and at other times other objects are being assigned to them.
 
 In our project we aim to see if a statistical approach to looking at the structure or substructure of the AST can lead us to making inferences that will translate to language. 
-For instance, the use of certain AST subtrees may suggest the type of an object or how its used, in a more profound way.
+For instance, the use of certain AST subtrees may suggest the type of an object or how its used in a function.
 These kind of inferences are powerful, because they should be robust to trivial lexical changes, like renaming a variable.
 
 \subsection{Path-Contexts and Variable Path-Contexts} % (fold)
 \label{sub:abstract_syntax_trees}
 
 Although the AST is the definitive data structure that code is parsed into, it is also possible to reparameterise the tree as a set of shortest paths between terminal nodes. 
-This is the reparameterisation that Alon et al \cite{alon_general_2018} developed to facilitate learning on syntax trees.
+This is the reparameterisation that \citet{alon_general_2018} developed to facilitate learning on syntax trees.
 
 In this reparameterisation, an AST is made up of terminal nodes $\mathcal{T}$, and non-terminal nodes $\mathcal{N}$. 
 A path $p$ of length $k$, represented as $n_{1}d_{1}n_{2}d_{2}...n_{k-1}d_{k-1}n_{k}$, where $n_i \in (\mathcal{N} \cup \mathcal{T})$, and $d \in \{\uparrow, \downarrow\}$. 
-A \textit{path-context} is then defined as a triple $(x_s, p, x_f)$, where $x_s = val(n_1) $ and $x_s = val(n_k)$, and $n_1,n_k \in \mathcal{T}$.\cite{alon_general_2018} 
+A \textit{path-context} is then defined as a triple $(x_s, p, x_f)$, where $x_s = val(n_1) $ and $x_s = val(n_k)$, $n_1,n_k \in \mathcal{T}$ and $val$ returns the value of the node \citep{alon_general_2018} 
 An example \textit{path-context} from the furthest right of the example AST is shown in Figure \ref{fig:path_eg}.
 
-The advantage of this representation of the AST is that it breaks down the large tree into a set of locally connected pieces, each involving two well-defined variables.
-This setup is highly desirable for our own investigations, except we require the obfuscation one of the variables (our test argument).
+The advantage of this representation is that it breaks down AST into a set of locally connected pieces, each involving two well-defined variables.
+This setup is highly desirable for our own investigations, except that we require the obfuscation one of the variables (our test argument).
 Therefore, for the purposes of this investigation we define two new context tuples: a \textit{modified path-context}, and \textit{variable path-context}.
 
-A \textit{modified path-context} is a triple $(x_s, p', x_f)$ defined by \textit{path-context} $(x_s, p, x_f)$, where $p = n_{1}d_{1}p'd_{k-1}n_{k}$, $p'$. In otherwords, the type of the leaf nodes are not included in the new path. This is done to remove redundant information, since the Python syntax tree is so simple that the $val( )$ of the node already specifies its type.
-Then the \textit{variable path-context} for variable $x_s$ is defined as the double of $(p, x_f)$ for the \textit{modified path-context} from $x_s$ to $x_f$.
+A \textit{modified path-context} is a triple $(x_s, p', x_f)$ defined by \textit{path-context} $(x_s, p, x_f)$, where $p = n_{1}d_{1}p'd_{k-1}n_{k}$. In otherwords, the type of the leaf nodes are not included in the new path. This is done to remove redundant information, since the Python AST is so simple that the $val( )$ of the node already specifies its type.
+The \textit{variable path-context} for variable $x_s$ is then defined as the double of $(p', x_f)$ for the \textit{modified path-context} from $x_s$ to $x_f$.
 
-Although these collections of \textit{variable path-contexts} no longer specify the entirety of the tree, the ability to pluck out features of the code from the AST, that only involve our particular argument will prove very useful in our investigations. 
+Although these collections of \textit{variable path-contexts} no longer specify the entirety of the tree, the ability to pluck out features of the code from the AST that only involve our particular argument will prove very useful in our investigations. 
 
 
 
