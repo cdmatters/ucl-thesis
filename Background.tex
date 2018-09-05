@@ -91,7 +91,9 @@ In summary our task falls in between a number of traditional NLP tasks and conse
 
 \section{Representation Learning}
 
-Given the maturity and prominence of neural networks \footnote{Quote someone}, we assume a basic familiarity with the topic, including linear and sigmoidal layers, multilayer perceptrons, the backpropagation algorithm and stochastic gradient descent. For those seeking a further background on this topic, we strongly recommend a number of books \cite{nielsenneural} \cite{Goodfellow:2016:DL:3086952} 
+Given the maturity and prominence of neural networks 
+% \footnote{Quote someone}
+, we assume a basic familiarity with the topic, including linear and sigmoidal layers, multilayer perceptrons, the backpropagation algorithm and stochastic gradient descent. For those seeking a further background on this topic, we strongly recommend a number of books \cite{nielsenneural} \cite{Goodfellow:2016:DL:3086952} 
 
 
 
@@ -104,13 +106,24 @@ Others may appear lexically similar, but have different meanings - `large' and `
 In our language generation tasks we wish to generate words that have the correct semantics.
 As such it would be helpful to find numerical representations of words that reflect their semantic meaning. 
 
-One way of doing this is to distribute the semantic meaning over various components of a vector in a high dimensional space. In this space, `big' and `large' would be closer together than `large' and `largesse'. We could then use these representations in our natural language modelling as a form of transfer learning. Such an idea is not new \cite{hinton_distributed_nodate}, but recent applications of it have become widespread in statistical NLP. % REPHRASE but recent have shown trememendous benefits in training of models in recent years. CITE 
+One way of doing this is to distribute the semantic meaning over various components of a vector in a high dimensional space. In this space, `big' and `large' would be closer together than `large' and `largesse'. We could then use these pretrained representations, or \textit{word vectors}, in our natural language modelling as a form of transfer learning. \citep{hinton_parallel_1986}
+ % Such an idea is not new \cite{hinton_distributed_nodate}, but recent applications of it have become widespread in statistical NLP. 
+ % REPHRASE but recent have shown trememendous benefits in training of models in recent years. CITE 
 
-A traditional approach to finding distributioned representations includes counting cooccurences of words in a corpus, and performing matrix decomposition on the co-occurence matrix \cite{deerwester_indexing_1990}.  This is based on a core theory of distributional semantics dating back to Harris 1954 \cite{harris_distributional_1954}, that words which appear in the similar contexts have similar meanings. To quote linguist J.R Firth in 1957: ``You shall know a word by the company it keeps.'' \cite{Firth1957}
-Other methods of capturing semantic meaning include counting occurences in local window around the word in question, and have also proved effective \cite{mikolov_efficient_2013}.
+However, this begs the question: how do we etablish semantic equivalence in the first place? This is addressed the theory of distributional semantics which suggests that words which appear in similar contexts also have similar meanings. \citep{harris_distributional_1954}
+To quote linguist J.R Firth : \textit{``You shall know a word by the company it keeps."} \citep{firth_synopsis_1957}
 
-Glove embeddings, by Pennington et al \cite{pennington_glove_2014}, combine both local window methods and matrix factorization methods to derive their distributed represetations (word vectors).  
-In our experiments we make use of pretrained GloVe pretrained embeddings to decode the words generated from our model, as similar work has demonstrated their assistance in training $<$CITE$>$.
+As a result, methods of training word vectors often revolve around word co-occurences.  Traditional methods of doing this involved counting co-occurences of words in a corpus, and performing matrix decomposition on the co-occurence matrix. \citep{deerwester_indexing_1990} More recently neural networks have been used to train these vectors directly, using a local context window around the word in question, with much success. \citep{mikolov_efficient_2013,mikolov_distributed_2013} An approach which combines both local window methods and matrix factorization methods is that of GloVe embeddings, by \citet{pennington_glove_2014}, which we use in our experiments. 
+We make use of these embeddings to decode the words generated from our model, as their effectiveness has been demonstrated in a range of NLP tasks. \cite{young_recent_2017}
+
+
+
+
+% A traditional approach to finding distributioned representations includes counting cooccurences of words in a corpus, and performing matrix decomposition on the co-occurence matrix \cite{deerwester_indexing_1990}.  This is based on a core theory of distributional semantics dating back to Harris 1954 \cite{harris_distributional_1954}, that words which appear in the similar contexts have similar meanings. To quote linguist J.R Firth in 1957: ``You shall know a word by the company it keeps.'' \cite{Firth1957}
+% Other methods of capturing semantic meaning include counting occurences in local window around the word in question, and have also proved effective \cite{mikolov_efficient_2013}.
+
+% Glove embeddings, by Pennington et al \cite{pennington_glove_2014}, combine both local window methods and matrix factorization methods to derive their distributed represetations (word vectors).  
+% In our experiments we make use of pretrained GloVe pretrained embeddings to decode the words generated from our model, as similar work has demonstrated their assistance in training $<$CITE$>$.
 
 \subsection{Recurrent Neural Networks} % (fold){}
 \label{sub:recurrent_neural_networks}
