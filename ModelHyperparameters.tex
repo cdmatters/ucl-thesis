@@ -48,13 +48,127 @@ The hyperparameters of the best model for each experiment are presented in this 
                                       & max arg. name sequence length         & $120$   \\
                                       & max arg. description sequence length  & $120$  \\
     \hdashline
-    - \textit{name only}              & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
+    \textit{name only}              & (basic) + \textit{dropout}           & $0.1$           \\
+    \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
+    \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
+    \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
 \end{tabular}
-\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating the Function Signature }
 \label{table:hyperparams_different_tokenizations}
 \end{center}
 \end{table}
 
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & path vocabulary size            & $15,000$ \\
+    -                                 & node vocabulary size            & $15,000$ \\
+    -                                 & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      % & samples                           & $50$  \\
+    \hline
+    Code2Vec Decoder                  & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $300$           \\
+
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\label{table:hyperparams_code2vec}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & path vocabulary size            & $15,000$ \\
+    -                                 & node vocabulary size            & $15,000$ \\
+    -                                 & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+    \hline
+    Code2Vec Decoder                  & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $300$           \\
+
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\label{table:hyperparams_masking}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & path vocabulary size            & $15,000$ \\
+    -                                 & node vocabulary size            & $15,000$ \\
+    -                                 & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+    \hline
+    Code2Vec Decoder                  & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $300$           \\
+
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\label{table:hyperparams_c2e}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & path vocabulary size            & $15,000$ \\
+    -                                 & node vocabulary size            & $15,000$ \\
+    -                                 & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+    \hline
+    Code2Vec Decoder                  & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $300$           \\
+
+\end{tabular}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+\label{table:hyperparams_libsplit}
+\end{center}
+\end{table}
