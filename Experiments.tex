@@ -70,7 +70,7 @@ In our ablation study we note the improvement that each new feature adds, noting
     % + \textit{dropout}                & $ 6.37864 $ & $ 6.33307 $  \\
     % \hline
 \end{tabular}
-\caption {Results of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
+\caption {Results of Experiment Comparing Baseline Models}
 \label{table:name_baseline}
 \end{center}
 \end{table}
@@ -151,7 +151,7 @@ undefined , but may exhibit less contention .\\
 \end{tabular}
 }
 \end{center}
-\caption{A random sample of sentence level BLEU-4 scores that are non-zero on the validation set for a Rote Learner}
+\caption{A random sample of sentence level BLEU-4 scores that are non-zero on the validation set for a Rote Learner. We note that in the last example, the Rote Learner returns an almost identical description with 12.5\%, confidence, and in the first example returns a very similar description with 100\% confidence.}
 \label{tab:rotelearner_nameonly}
 \end{table}
 
@@ -232,7 +232,7 @@ Although this agreed with out hypothesis that there is value in extra naming of 
     
     \hline
 \end{tabular}
-\caption {Investigate the effect of different code features}
+\caption {Results of the experiments using different parts of the signature}
 \label{table:tokenization}
 \end{center}
 \end{table}
@@ -278,7 +278,10 @@ To illustrate this clearly, some typical examples of the model on the \textit{na
 \\
 
 \end{tabular}
-\caption{Three examples of typical errors in the character Seq-to-Seq model.  In this case, the first example shows good use of data in the sequence but is nonsensical. The second is an example of overfitting where the predicted sentence is found in the dataset. The final case, multiple sequences such as these are found in the dataset, each with a different discription. Without looking at code, or function name (in this case) it is impossible to disambiguate and the model fails to make sense }
+\caption{Three examples of typical errors in the character Seq-to-Seq model.
+The first example is an example of overfitting where the whole predicted sentence is found in the training set.  The second example is nonsensical, with lots of $<$UNK$>$ tokens.  In the final case, the predicted sentence is original and shows features of the desired sentence. 
+}
+%multiple sequences such as these are found in the dataset, each with a different discription. Without looking at code, or function name (in this case) it is impossible to disambiguate and the model fails to make sense }
 \label{table:typicalvarotherargs}
 \end{center}
 \end{table}
@@ -292,7 +295,7 @@ The attentions of the `plausible' and `nonsense' examples from  Table \ref{table
     % \includegraphics[width=0.7\linewidth]{images/otherargs_example.png}
     \includegraphics[width=0.9\linewidth]{ImagesCodeRelated/attn1pretty.png}
     \includegraphics[width=0.5\linewidth]{ImagesCodeRelated/attn2pretty.png}
-    \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. Fig A) is a picture of a typical example, Fig B) bottom is an example that is very overdetermined.}
+    \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. The top a picture is a typical example from the dataset, where all attention is on the last two tokens which (in this tokenization) never change.  The bottom is a less typical example that occurs when the character sequence is very overdetermined.}
     \label{fig:otherarg_attn}
 \end{center}
 \end{figure}
@@ -324,7 +327,9 @@ To disprove this possibility, we needed to check that the rest of the sequence w
     % \includegraphics[width=0.7\linewidth]{images/different_translations_dupsXotherargs_3230minib_white.png}
 \end{tabular}
 }
-    \caption{Three translations and attentions for an example of some the attentions of from the Name + Other Arguments on the tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input }
+    \caption{The attentions from the \textit{name + co-arguments} tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. In this dataset, the duplicates of (name, description) pairs make the name the most important feature, hence the attention at the separator token. However the rest of the sequence is still being used by the decoder, as the clipped input sequences still generate different descriptions.  
+    % Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input
+     }
     \label{fig:otherarg_attn_full_dataset}
 \end{table}
 
@@ -371,7 +376,7 @@ A second suggestion of further work is much simpler, involving our tokenization.
 \textbf{Validation Example}\\
 
 \textbf{I}: \mintinline[]{python}{i n p u t <S1> s t r u c t u r e <S2> m a s k <S2> o u t p}...\\
-...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2> <END>}\\
+...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
 \textbf{D}: binary image to be propagated inside ` mask ` .\\
 \textbf{P}: binary image where a element is provided and a structuring element . $<$END$>$\\
 \\\hline\\
