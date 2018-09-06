@@ -136,9 +136,11 @@ Such networks have proved highly adaptable to many NLP tasks \citep{young_recent
 \begin{figure}[h]
     \centering
     \includegraphics[width=.9\linewidth]{ModelPics/rnn_wiki.png}
-    \caption{A diagram of an RNN. This demonstrates how a recurrent connection can be `unrolled' to form an effective hidden state maintained by the network as it processes as sequence.  }
+    \caption{A diagram of an RNN.\protect\footnotemark 
+    This demonstrates how a recurrent connection can be `unrolled' to form an effective hidden state maintained by the network as it processes as sequence.}
     \label{fig:unrolled_lstm}
 \end{figure}
+    \footnotetext{Image sourced from https://en.wikipedia.org/wiki/Recurrent\_neural\_network}
 
 % Much of the semantic meaning of language is captured in the order of words. 
 % % It is not only the lexical tokens, but the sequence of them, that carries the information of a sentence.
@@ -181,9 +183,10 @@ A diagram is presented in Figure \ref{fig:lstm_colah}.
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ModelPics/LSTMcolah.png}
-    \caption{A diagram of an LSTM, sourced from \cite{noauthor_understanding_nodate}}
+    \caption{A diagram of an LSTM.\protect\footnotemark This demonstrates how the different gates operate to change the state of the LSTM. The top horizontal line indicates the $\mathbf{c_t}$ states and the bottom the $\mathbf{h_t}$ state. These operations are detailed in Equations \ref{eq:lstm1} to \ref{eq:lstm6}.}
     \label{fig:lstm_colah}{}
 \end{figure}
+\footnotetext{Image sourced from http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
 
 LSTM's have shown a remarkable versatility and strength in NLP tasks \citep{young_recent_2017}. In fact, a remarkable study of language modelling in 2017 showed that well-tuned LSTMs still surpass more recent and complex architectures, and achieve state of the art results, despite their relative simplicity \citep{melis_state_2017}.
 
@@ -200,7 +203,7 @@ At each time step, an RNN unit accepts an input $\mathbf{x_t}$ and emits an outp
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ModelPics/seq2seq.png}
-    \caption{An example of sequence to sequence architecture}
+    \caption{A sequence-to-sequence architecture. In this `unrolled' example a single RNN acts as encodes words into an intermediate representation that is decoded by an RNN decoder. As inference time, the outputs of the decoder are fed back into the decoder, to generate the next word.}
     \label{fig:seqtoseq}
 \end{figure}
 
@@ -227,19 +230,6 @@ This is partly due to the fact that model must now compress more information int
 
 \subsection{Attention} % (fold)
 
-\begin{figure}[tb]{}
-    \centering
-
-    \includegraphics[width=.7\linewidth]{ModelPics/bahd_diag.png}
-    \includegraphics[width=.7\linewidth]{ModelPics/luong_diag2.png}
-    \caption{Two example of sequence to sequence architecture with attentional models: Badanau Attention (above), Luong Attention(below)}
-    \label{fig:attention} 
-    % \label{fig:luongattention}
-    % \caption{An example of sequence to sequence architecture with Badanau attention}
-
-\end{figure}
-
-
 As the sequences get longer, encoder-decoder architectures struggle to pass the full information required from the encoder to the decoder. 
 One way of improving this is to augment the decoding process with a contextual vector at each step.  
 As before, the decoder estimates the conditional probability for the next word $y_t$, given the input sentence $\mathbf{x}$, and previous output tokens ${y_1, ..., y_{t-1}}$.
@@ -251,6 +241,18 @@ to now being a function of the context vector at that point $c_t$ aswell:
 \begin{equation}
 p(y_t| y_1, ..., y_{t-1}, \mathbf{x} ) = g(y_{t-1}, s_t, c_t)
 \end{equation}
+
+\begin{figure}[h!]{}
+    \centering
+
+    \includegraphics[width=.7\linewidth]{ModelPics/bahd_diag.png}
+    \includegraphics[width=.7\linewidth]{ModelPics/luong_diag2.png}
+    \caption{Two variations on attention in Seq2Seq architectures: \citet{bahdanau_neural_2014} Attention (above), \citet{luong_effective_2015} Attention (below). Both contextualise the decoding process, by building a vector from the weighted sum of encoder outputs. In Bahdanau attention, the vector is concatenated with inputs before RNN decoding. In Luong attention, the vector is concatenated with decoder outputs, before passing through another non-linear layer.}
+    \label{fig:attention} 
+    % \label{fig:luongattention}
+    % \caption{An example of sequence to sequence architecture with Badanau attention}
+
+\end{figure}
 
 The context vector at each step is itself calculated using a weighted sum of the RNN outputs $\{h_1,... h_{t_1}\}$:
 \begin{equation}
@@ -265,7 +267,7 @@ and $a$ is a function that maps to the reals - often a multilayer perceptron tha
 This method was introduced by \citet{bahdanau_neural_2014} who demonstrated that the networks could use the attention to align words during translation.
 In this case the $\alpha$ parameter acts like a weighting indicating the most important word used in each token generation - which word the decoder should pay attention to.
 
-Variations on attention (as demonstrated in Figure \ref{fig:attention})) have found great use in the field of machine translation  \citep{luong_effective_2015}, and have even demonstrated their use independently of RNNs in this field \citep{vaswani_attention_2017}.  They have also have demonstrated their effectiveness in fields such as captioning, where they prove an effectve way of working with different modalities \citep{xu_show_2015}.
+Variations on attention (as demonstrated in Figure \ref{fig:attention}) have found great use in the field of machine translation  \citep{luong_effective_2015}, and have even demonstrated their use independently of RNNs in this field \citep{vaswani_attention_2017}.  They have also have demonstrated their effectiveness in fields such as captioning, where they prove an effectve way of working with different modalities \citep{xu_show_2015}.
 
 In our models we use attention mechanisms extensively, both as a means of dealing with particularly long sequences (in our case of characters), and also as a means of dealing with the difficult modality of code.
 
@@ -311,7 +313,7 @@ def xkcd_palette(colors):
 
 \end{minted}
 
-    \caption{A source code snipped from the validation set, with  a numpy-style doctring. The docstring presented been trimmed for brevity.}
+    \caption{A source code snippet from the validation set, with a numpy-style doctring. The docstring presented been trimmed for brevity. This format is widely used in scientific libraries.}
     \label{fig:docstring}
 \end{listing}
 

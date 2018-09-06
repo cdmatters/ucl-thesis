@@ -71,7 +71,7 @@ A particularly successful example is that of \citet{iyer_summarizing_2016}, who 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=0.5\linewidth]{ModelPics/Iyer_etal.png}
-    \caption{Iyer et als Code NN, taken from \cite{iyer_summarizing_2016}}
+    \caption{A diagram of CODE-NN, taken from \cite{iyer_summarizing_2016}. The $A$ represents the attention mechanism over the sequence of code tokens $c_1,..., c_k$, and $\mathbf{h_t}$ represents the hidden state of the LSTM. These are combined, and passed through a softmax to generate the next word token $n_t$. This is subsequently encoded by the LSTM to generate  $\mathbf{h_{t+1}}$}
     \label{fig:Iyer}
 \end{figure}
 
@@ -90,7 +90,7 @@ These attention models show the effectiveness of being able to pickout relevant 
 In this regard, an improvement on these attentional models is that of \citet{allamanis_convolutional_2016}, which uses a convolutional attention network over tokens, for the task of predicting the names of functions given their body. This is cast as `extreme summarization'.
 %aiming to capture long range correlations in code through spatial convolutions instead of temporal hidden state.
 
-In this model, convolutions of fixed-width windows are run over the sequence of embedded source code tokens, creating a number of attentional feature vectors $\mathbf{\{v_k\}}$.
+In this model, convolutions of fixed-width windows are run over the sequence of embedded source code tokens, creating a matrix of attentional feature vectors $L_{feat}$.
 These feature vectors are then element-wise multiplied with the hidden state of an rnn, $\mathbf{h_{t-1}}$, to be effectively `selected' for their relevance to next generated token. 
 
 They are then normalised and convolved with an attention kernel, to give a set of attention weights, each corresponding to a token embedding. 
@@ -100,11 +100,11 @@ An illustration of the algorithm is presented in Figure \ref{fig:allamanis_conv}
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\linewidth]{ModelPics/allamanis_etal.png}
-    \caption{Convolutional Attention for Code Summarization taken from \citet{allamanis_convolutional_2016}  }
+    \caption{A diagream of the Allamanis et als convolutional attention mechanism taken from \citet{allamanis_convolutional_2016}. $E_{m_t}$ represents an embedded token, which passes through a convolution layers with widow sizes $w_1, w_2$. It is then element-wise multiplied with $\mathbf{h_{t-1}}$ to give $L_{feat}$ feature vectors, of dimension $k_2$. These are convolved to give attention vectors $\mathbf{\alpha}$ and $\mathbf{\kappa}$.  ($\mathbf{\kappa}$ is only used in Allamanis' attention + caching model.)  }
     \label{fig:allamanis_conv}
 \end{figure}
 
-The authors of this model apply it to both the narrow task of generating function names, and that of code retrieval. In it they find that taking into account the long range features of the code in the convolutional model surpasses a baseline attentional model of the machine translation model originated by \citet{bahdanau_neural_2014}, and found that this performance was further improved by adding a cacheing mechanism to the model.
+The authors of this model apply it to both the narrow task of generating function names, and that of code retrieval. In it they find that taking into account the long range features of the code in the convolutional model surpasses a baseline attentional model of the machine translation model originated by \citet{bahdanau_neural_2014}, and found that this performance was further improved by adding a caching mechanism to the model.
 
 Both these attention models show the strengths that attention can provide in combining the modalities of text and code. However, a key failing of both models remains their lack of appreciation for the syntax and semantics of the underlying code.
 Although Allamanis et al's model is more aware of the structure of lexical code tokens than Iyer et als, both models continue to ignore a fundamental channel of information communication through code - that of communication from human to computer.
