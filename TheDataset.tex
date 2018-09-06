@@ -222,7 +222,7 @@ Corresponding to our findings on a library level, we found that a large number o
         \caption {
     \textbf{Left}: the \% of data composed of args with (name, desc.) pairs repeated N times \\
     \textbf{Right}: the \% of unique (name, desc.) pairs that are repeated N times\\
-    Almost have the datapoints have a unique name + description, indicating a variety of descriptions for the same name (\textit{left}). However \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name}: \textit{``A name for operation (optional).''} still accounts for 3.3\% of the collected data.}
+    Almost half the datapoints have a unique name + description, indicating a variety of descriptions for the same name (\textit{left}). However \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name}: \textit{``A name for operation (optional).''} still accounts for 3.3\% of the collected data.}
     \label{table:name_desc_histogram}
 
 \makebox[\linewidth][c]{
@@ -276,7 +276,8 @@ Apart from this we note no major irregularities the arguments. The distribution 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ImagesCodeRelated/length_distribution.png}
-    \caption{Caption here}
+    \caption{The frequency distributions of description lengths (\textit{left}) and argument name lengths (\textit{right}). 
+    \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name} outlier is visible in the descriptions graph.}
     \label{fig:length_dist}
 \end{figure}
 
@@ -299,7 +300,11 @@ However, we also note from this table that some outliers have a preposterous lar
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ImagesCodeRelated/lines_of_code.png}
-    \caption{Caption here}
+    \caption { 
+    \textbf{Left}: distribution of lines of code in the function of each argument \\
+    \textbf{Right}: distribution of lines of code of the original functions in the dataset\\
+These indicate that most functions in the dataset are under 25 LOC (\textit{left}), yet there are still a significant number of arguments with functions over 75 LOC.
+        }
     \label{fig:loc}
 \end{figure}
 
@@ -324,26 +329,24 @@ However, we also note from this table that some outliers have a preposterous lar
         10.  & Name $\uparrow$ Call $\uparrow$ Assign $\uparrow$ Try $\uparrow$ If $\downarrow$ Assign $\downarrow$ Call $\downarrow$ keyword &  0.184 \\ 
   
     \end{tabular}
-    \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }
-    \label{table:pop_paths} 
+    \caption { The most popular the paths of the \textit{modified path-contexts} of the dataset}.  
     \begin{tabular}{c | c | c  }       
     
         Paths Per DataPoint & Count  &  \%-ile of data points \\  
         \hline
-        0 &               24  &     0.07865 \\
-        1 &               138  &    0.53090 \\
-        2 - 9 &           2451  &   8.56328 \\
-        10 - 49 &         8717  &   37.13050 \\
-        50 - 99 &         4517  &   51.93354 \\
-        100 - 499 &       10023  &  84.78076 \\
-        500 - 999 &       2449  &   92.80658 \\
-        1000 - 9999 &     2160  &   99.88530 \\
-        10000 - 99999 &   32  &     99.99017 \\
-        100000 - 999999 & 3  &      100.00000 \\
+        0 &               24  &     0.079 \\
+        1 &               138  &    0.531 \\
+        2 - 9 &           2451  &   8.563 \\
+        10 - 49 &         8717  &   37.131 \\
+        50 - 99 &         4517  &   51.934 \\
+        100 - 499 &       10023  &  84.781 \\
+        500 - 999 &       2449  &   92.807 \\
+        1000 - 9999 &     2160  &   99.885 \\
+        10000 - 99999 &   32  &     99.990 \\
+        100000 - 999999 & 3  &      100.000 \\
 
     \end{tabular}
-    \caption { A table of the count and frequency of distinct code paths as they feature in the raw dataset. 
-        These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
+    \caption {A table of the number of codepaths per argument. This spread covers several orders of magnitude, although 50\% of arguments fall between 50 and 500. Having 0 paths indicated an abstract class method which raised an \mintinline[]{python}{NotImplementedError}. These were filtered out. }
     \label{table:paths_per_point} 
 
 \end{table}
@@ -386,6 +389,6 @@ Our final datasets are presented in Table \ref{tab:final_datasets}, with their t
     \hline
     \hline
     \end{tabular}
-    \caption{Our Final Datasets}
+    \caption{Our Final Datasets. Random Split partitions training, validation and test at random, while Library Split ensures test and validation are from different libraries to training. A Reduced dataset indicates (name, description) pairs are unique, and is therefore useful for investigations that dont use the AST. }
     \label{tab:final_datasets}
 \end{table}

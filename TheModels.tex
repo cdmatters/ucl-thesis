@@ -37,12 +37,12 @@ The rest of this section is dedicated to presenting each of these models, summar
           Model & Uses Signature Data & Uses VPC Data \\ 
     \hline
     Rote Learner & \checkmark & \checkmark \\
-    Seq2Seq Decoder & \checkmark & \\
+    Seq2Seq Model & \checkmark & \\
     Code2Vec Decoder &    &  \checkmark \\
-    Code2Vec + Seq2Seq Decoder& \checkmark & \checkmark \\
+    Code2Vec + Seq2Seq Model& \checkmark & \checkmark \\
     \hline
     \end{tabular}
-    \caption{Overview of Our Models}
+    \caption{A Summary of the Models in our Investigation}
     \label{tab:our_models_capability}
 \end{table}
 
@@ -132,7 +132,7 @@ The benefit of this model is that the definition of `best-matching' can then be 
     \end{tabular}
 }
 
-    \caption{A summary of the BestMatchingSet algorithms we use in the experiments. For sake of simplicity, a \textit{best-effort} match here refers to the match with longest matching subsequence, when treating a VPC as one long sequence}
+    \caption{A summary of the BestMatchingSet functions used in our RoteLearner (Algorithm \ref{alg:rote_learner_general}).  For sake of simplicity, a \textit{best-effort} match here refers to the match with longest matching subsequence, when treating a VPC as one long sequence}
     \label{tab:matching_summary}
 \end{table}
 
@@ -399,7 +399,7 @@ If we required multiple names, we concatenated the strings, using separator toke
     \textbf{tokenized (sequence):} \mintinline[]{python}{f,o,o,<S1>,f,u,n,c,A,<S2>,b,a,r,A,<S3>,b,a,r,B,<S3>,<EOS>}\\
     \textbf{tokenized (string):} \mintinline[]{python}{"foo|funcA-barA+barB+?"}\\
 \hrulefill\\ 
-    \caption{An example of a tokenization of the signature data}
+    \caption{An example of a tokenization of the signature data. The sequence representation was used for our Seq2Seq, while the string representation was used for our Rote Learner.}
     \label{fig:tokenizatio}
 \end{figure}
 
