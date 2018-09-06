@@ -254,23 +254,23 @@ To illustrate this clearly, some typical examples of the model on the \textit{na
 
 \textbf{Overfitting}\\
 
-\textbf{Input}: \mintinline[]{python}{e n c o d i n g _ t y p e <SEP-1> s e l f <SEP-2> d o c u m e}...\\
-...\mintinline[]{python}{n t <SEP-2> r e t r y <SEP-2> t i m e o u t <SEP-2> <END>}\\
+\textbf{Input}: \mintinline[]{python}{e n c o d i n g _ t y p e <S1> s e l f <S2> d o c u m e}...\\
+...\mintinline[]{python}{n t <S2> r e t r y <S2> t i m e o u t <S2> <END>}\\
 \textbf{Description}: the encoding type used by the api to calculate offsets .\\
 \textbf{Prediction}: the encoding type used by the api to calculate sentence offsets . \\
 \\\hline\\
 
 \textbf{Nonsense}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> n a m e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> n a m e <S2> <END>}\\
 \textbf{D}: a ` tensor ` of type ` complex64 ` . a complex64 tensor .\\
 \textbf{P}: ` $<$UNK$>$ ` , ` $<$UNK$>$ ` . shape is ` [ ... , m , m ] ` . \\
 \\\hline\\
 
 \textbf{Plausible}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
-...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> s t r u c t u r e <S2> m a s k <S2> o u t p}...\\
+...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2> <END>}\\
 \textbf{D}: binary image to be propagated inside ` mask ` .\\
 \textbf{P}: binary image where a element is provided and a structuring element .\\
 \\\hline\\
@@ -335,8 +335,8 @@ However we can also conclude from this experiment that the function signature is
  % to decode variable descriptions (as seen from our Rote Learner), and that neural approaches can provide a way of doing this.
 Unlike our Rote Learner, our Seq2Seq model is capable of generating completely new descriptions, often with good fluency and has numerous examples of doing so. This seems to work best when the Seq2Seq is assimilating information from different training points, instead of overfitting to one. 
 % However, because of the  but this seems more difficult to do when so much identifying information is given without information on redundancy. 
-To give an example, Table \ref{table:example_plausible_training} shows the `plausible' example given above, with all the different training instances that start in the same way - with \mintinline[]{yaml}{input<SEP-1>structure}. 
-Here one can see an original sentence, yet with certain features assimilated from the training, such as the use of \textit{``binary image"}. We note in this example a room for improvement. The potentially helpful input sequence \mintinline[]{yaml}{<SEP-2>mask<SEP-2>} appears to have been ignored by the Seq2Seq, despite appearing relevant to the description. 
+To give an example, Table \ref{table:example_plausible_training} shows the `plausible' example given above, with all the different training instances that start in the same way - with \mintinline[]{yaml}{input<S1>structure}. 
+Here one can see an original sentence, yet with certain features assimilated from the training, such as the use of \textit{``binary image"}. We note in this example a room for improvement. The potentially helpful input sequence \mintinline[]{yaml}{<S2>mask<S2>} appears to have been ignored by the Seq2Seq, despite appearing relevant to the description. 
 Getting the model to pay attention to these points is the key to our recommendations for improving this type of model.
 
 \subsubsection{Further Work}
@@ -370,38 +370,38 @@ A second suggestion of further work is much simpler, involving our tokenization.
 \hline
 \textbf{Validation Example}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
-...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> s t r u c t u r e <S2> m a s k <S2> o u t p}...\\
+...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2> <END>}\\
 \textbf{D}: binary image to be propagated inside ` mask ` .\\
 \textbf{P}: binary image where a element is provided and a structuring element . $<$END$>$\\
 \\\hline\\
 
-\textbf{Training Examples} starting \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e}\\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e 1 <SEP-2> s t r u c t u r}...\\
-...\mintinline[]{yaml}{e 2 <SEP-2> o u t p u t <SEP-2> o r i g i n 1 <SEP-2> o r i g i n 2 <SEP-2> <END>}\\
+\textbf{Training Examples} starting \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e 1 <S2> s t r u c t u r}...\\
+...\mintinline[]{yaml}{e 2 <S2> o u t p u t <S2> o r i g i n 1 <S2> o r i g i n 2 <S2> <END>}\\
 \textbf{D}: binary image where a pattern is to be detected .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> o u t }...\\
-...\mintinline[]{yaml}{p u t <SEP-2> o r i g i n <SEP-2> m a s k <SEP-2> b o r d e r _ v a l u e }\\
-...\mintinline[]{yaml}{<SEP-2> b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> o u t }...\\
+...\mintinline[]{yaml}{p u t <S2> o r i g i n <S2> m a s k <S2> b o r d e r _ v a l u e }\\
+...\mintinline[]{yaml}{<S2> b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary array\_like to be closed . non-zero ( true ) elements form the subset to be closed .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> o r}...\\
-...\mintinline[]{yaml}{i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> o u t p u t <S2> o r}...\\
+...\mintinline[]{yaml}{i g i n <S2> <END>}\\
 \textbf{D}: n-dimensional binary array with holes to be filled\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> o u t p u t <S2> <END>}\\
 \textbf{D}: an array-like object to be labeled . any non-zero values in ` input ` are counted as features...\\
 ...and zero values are considered the background .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k }...\\
-...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
-...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> m a s k }...\\
+...\mintinline[]{yaml}{<S2> o u t p u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary image to be eroded . non-zero ( true ) elements form the subset to be eroded .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k}...\\
-...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
-...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> m a s k}...\\
+...\mintinline[]{yaml}{<S2> o u t p u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary array\_like to be dilated . non-zero ( true ) elements form the subset to be dilated .\\
 \\
 
