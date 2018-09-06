@@ -1416,4 +1416,197 @@ Both finite impulse and infinite impulse recurrent networks can have additional 
   annote = {Comment: First Workshop on Neural Machine Translation, 2017}
 }
 
+@inproceedings{r._kneser_improved_1995,
+  title = {Improved Backing-off for {{M}}-Gram Language Modeling},
+  volume = {1},
+  isbn = {1520-6149},
+  doi = {10.1109/ICASSP.1995.479394},
+  booktitle = {1995 {{International Conference}} on {{Acoustics}}, {{Speech}}, and {{Signal Processing}}},
+  author = {{R. Kneser} and {H. Ney}},
+  month = may,
+  year = {1995},
+  keywords = {natural languages,Probability distribution,speech recognition,backing-off,distributions,Error analysis,experiments,grammars,History,Interpolation,Laboratories,perplexity,probability,Smoothing methods,sparse data problem,speech processing,statistical analysis,stochastic language modeling,stochastic processes,Stochastic processes,Training data,word error rate},
+  pages = {181-184 vol.1}
+}
+
+@article{zhong_seq2sql_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1709.00103},
+  primaryClass = {cs},
+  title = {{{Seq2SQL}}: {{Generating Structured Queries}} from {{Natural Language}} Using {{Reinforcement Learning}}},
+  shorttitle = {{{Seq2SQL}}},
+  abstract = {Relational databases store a significant amount of the worlds data. However, accessing this data currently requires users to understand a query language such as SQL. We propose Seq2SQL, a deep neural network for translating natural language questions to corresponding SQL queries. Our model uses rewards from inthe-loop query execution over the database to learn a policy to generate the query, which contains unordered parts that are less suitable for optimization via cross entropy loss. Moreover, Seq2SQL leverages the structure of SQL to prune the space of generated queries and significantly simplify the generation problem. In addition to the model, we release WikiSQL, a dataset of 80654 hand-annotated examples of questions and SQL queries distributed across 24241 tables from Wikipedia that is an order of magnitude larger than comparable datasets. By applying policybased reinforcement learning with a query execution environment to WikiSQL, Seq2SQL outperforms a state-of-the-art semantic parser, improving execution accuracy from 35.9\% to 59.4\% and logical form accuracy from 23.4\% to 48.3\%.},
+  language = {en},
+  journal = {arXiv:1709.00103 [cs]},
+  author = {Zhong, Victor and Xiong, Caiming and Socher, Richard},
+  month = aug,
+  year = {2017},
+  keywords = {Computer Science - Computation and Language,Computer Science - Artificial Intelligence},
+  file = {/Users/erichambro/Zotero/storage/UYDBBWXQ/Zhong et al. - 2017 - Seq2SQL Generating Structured Queries from Natura.pdf},
+  annote = {Comment: 12 pages, 5 figures}
+}
+
+@article{blei_latent_2003,
+  title = {Latent {{Dirichlet Allocation}}},
+  volume = {3},
+  issn = {1532-4435},
+  journal = {J. Mach. Learn. Res.},
+  author = {Blei, David M. and Ng, Andrew Y. and Jordan, Michael I.},
+  month = mar,
+  year = {2003},
+  pages = {993-1022},
+  publisher = {{JMLR.org}},
+  issue_date = {3/1/2003},
+  numpages = {30},
+  acmid = {944937}
+}
+
+@inproceedings{denkowski:lavie:meteor-wmt:2014,
+  title = {Meteor {{Universal}}: {{Language Specific Translation Evaluation}} for {{Any Target Language}}},
+  booktitle = {Proceedings of the {{EACL}} 2014 {{Workshop}} on {{Statistical Machine Translation}}},
+  author = {Denkowski, Michael and Lavie, Alon},
+  year = {2014}
+}
+
+@inproceedings{Koehn:2007:MOS:1557769.1557821,
+  address = {Prague, Czech Republic},
+  series = {ACL '07},
+  title = {Moses: {{Open Source Toolkit}} for {{Statistical Machine Translation}}},
+  booktitle = {Proceedings of the 45th {{Annual Meeting}} of the {{ACL}} on {{Interactive Poster}} and {{Demonstration Sessions}}},
+  publisher = {{Association for Computational Linguistics}},
+  author = {Koehn, Philipp and Hoang, Hieu and Birch, Alexandra and {Callison-Burch}, Chris and Federico, Marcello and Bertoldi, Nicola and Cowan, Brooke and Shen, Wade and Moran, Christine and Zens, Richard and Dyer, Chris and Bojar, On{\v d}rej and Constantin, Alexandra and Herbst, Evan},
+  year = {2007},
+  pages = {177-180},
+  numpages = {4},
+  acmid = {1557821}
+}
+
+@inproceedings{rush_neural_2015,
+  address = {Lisbon, Portugal},
+  title = {A {{Neural Attention Model}} for {{Abstractive Sentence Summarization}}},
+  doi = {10.18653/v1/D15-1044},
+  abstract = {Summarization based on text extraction is inherently limited, but generation-style abstractive methods have proven challenging to build. In this work, we propose a fully data-driven approach to abstractive sentence summarization. Our method utilizes a local attention-based model that generates each word of the summary conditioned on the input sentence. While the model is structurally simple, it can easily be trained end-to-end and scales to a large amount of training data. The model shows significant performance gains on the DUC-2004 shared task compared with several strong baselines.},
+  language = {en},
+  booktitle = {Proceedings of the 2015 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}}},
+  publisher = {{Association for Computational Linguistics}},
+  author = {Rush, Alexander M. and Chopra, Sumit and Weston, Jason},
+  year = {2015},
+  pages = {379-389},
+  file = {/Users/erichambro/Zotero/storage/QCR9BQ3V/Rush et al. - 2015 - A Neural Attention Model for Abstractive Sentence .pdf}
+}
+
+@inproceedings{gated-graph-sequence-neural-networks,
+  title = {Gated {{Graph Sequence Neural Networks}}},
+  abstract = {Graph-structured data appears frequently in domains including chemistry, natural language semantics, social networks, and knowledge bases. In this work, we study feature learning techniques for graph-structured inputs. Our starting point is previous work on Graph Neural Networks (Scarselli et al., 2009), which we modify to use gated recurrent units and modern optimization techniques and then extend to output sequences. The result is a flexible and broadly useful class of neural network models that has favorable inductive biases relative to purely sequence-based models (e.g., LSTMs) when the problem is graph-structured. We demonstrate the capabilities on some simple AI (bAbI) and graph algorithm learning tasks. We then show it achieves state-of-the-art performance on a problem from program verification, in which subgraphs need to be matched to abstract data structures.},
+  booktitle = {Proceedings of {{ICLR}}'16},
+  author = {Li, Yujia and Zemel, Richard and Brockschmidt, Marc and Tarlow, Daniel},
+  month = apr,
+  year = {2016}
+}
+
+@inproceedings{tai_improved_2015,
+  address = {Beijing, China},
+  title = {Improved {{Semantic Representations From Tree}}-{{Structured Long Short}}-{{Term Memory Networks}}},
+  doi = {10.3115/v1/P15-1150},
+  abstract = {Because of their superior ability to preserve sequence information over time, Long Short-Term Memory (LSTM) networks, a type of recurrent neural network with a more complex computational unit, have obtained strong results on a variety of sequence modeling tasks. The only underlying LSTM structure that has been explored so far is a linear chain. However, natural language exhibits syntactic properties that would naturally combine words to phrases. We introduce the Tree-LSTM, a generalization of LSTMs to tree-structured network topologies. TreeLSTMs outperform all existing systems and strong LSTM baselines on two tasks: predicting the semantic relatedness of two sentences (SemEval 2014, Task 1) and sentiment classification (Stanford Sentiment Treebank).},
+  language = {en},
+  booktitle = {Proceedings of the 53rd {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}} and the 7th {{International Joint Conference}} on {{Natural Language Processing}} ({{Volume}} 1: {{Long Papers}})},
+  publisher = {{Association for Computational Linguistics}},
+  author = {Tai, Kai Sheng and Socher, Richard and Manning, Christopher D.},
+  year = {2015},
+  pages = {1556-1566},
+  file = {/Users/erichambro/Zotero/storage/D7FCBJGP/Tai et al. - 2015 - Improved Semantic Representations From Tree-Struct.pdf}
+}
+
+@inproceedings{dong_language_2016,
+  address = {Berlin, Germany},
+  title = {Language to {{Logical Form}} with {{Neural Attention}}},
+  doi = {10.18653/v1/P16-1004},
+  abstract = {Semantic parsing aims at mapping natural language to machine interpretable meaning representations. Traditional approaches rely on high-quality lexicons, manually-built templates, and linguistic features which are either domainor representation-specific. In this paper we present a general method based on an attention-enhanced encoder-decoder model. We encode input utterances into vector representations, and generate their logical forms by conditioning the output sequences or trees on the encoding vectors. Experimental results on four datasets show that our approach performs competitively without using hand-engineered features and is easy to adapt across domains and meaning representations.},
+  language = {en},
+  booktitle = {Proceedings of the 54th {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}} ({{Volume}} 1: {{Long Papers}})},
+  publisher = {{Association for Computational Linguistics}},
+  author = {Dong, Li and Lapata, Mirella},
+  year = {2016},
+  pages = {33-43},
+  file = {/Users/erichambro/Zotero/storage/NASAHZ8W/Dong and Lapata - 2016 - Language to Logical Form with Neural Attention.pdf}
+}
+
+@article{yin_syntactic_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1704.01696},
+  primaryClass = {cs},
+  title = {A {{Syntactic Neural Model}} for {{General}}-{{Purpose Code Generation}}},
+  abstract = {We consider the problem of parsing natural language descriptions into source code written in a general-purpose programming language like Python. Existing datadriven methods treat this problem as a language generation task without considering the underlying syntax of the target programming language. Informed by previous work in semantic parsing, in this paper we propose a novel neural architecture powered by a grammar model to explicitly capture the target syntax as prior knowledge. Experiments find this an effective way to scale up to generation of complex programs from natural language descriptions, achieving state-of-the-art results that well outperform previous code generation and semantic parsing approaches.},
+  language = {en},
+  journal = {arXiv:1704.01696 [cs]},
+  author = {Yin, Pengcheng and Neubig, Graham},
+  month = apr,
+  year = {2017},
+  keywords = {Computer Science - Computation and Language,Computer Science - Software Engineering,Computer Science - Programming Languages},
+  file = {/Users/erichambro/Zotero/storage/CH5H2E9R/Yin and Neubig - 2017 - A Syntactic Neural Model for General-Purpose Code .pdf},
+  annote = {Comment: To appear in ACL 2017}
+}
+
+@article{parisotto_neuro-symbolic_2016,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1611.01855},
+  primaryClass = {cs},
+  title = {Neuro-{{Symbolic Program Synthesis}}},
+  abstract = {Recent years have seen the proposal of a number of neural architectures for the problem of Program Induction. Given a set of input-output examples, these architectures are able to learn mappings that generalize to new test inputs. While achieving impressive results, these approaches have a number of important limitations: (a) they are computationally expensive and hard to train, (b) a model has to be trained for each task (program) separately, and (c) it is hard to interpret or verify the correctness of the learnt mapping (as it is defined by a neural network). In this paper, we propose a novel technique, Neuro-Symbolic Program Synthesis, to overcome the above-mentioned problems. Once trained, our approach can automatically construct computer programs in a domain-specific language that are consistent with a set of input-output examples provided at test time. Our method is based on two novel neural modules. The first module, called the cross correlation I/O network, given a set of input-output examples, produces a continuous representation of the set of I/O examples. The second module, the RecursiveReverse-Recursive Neural Network (R3NN), given the continuous representation of the examples, synthesizes a program by incrementally expanding partial programs. We demonstrate the effectiveness of our approach by applying it to the rich and complex domain of regular expression based string transformations. Experiments show that the R3NN model is not only able to construct programs from new input-output examples, but it is also able to construct new programs for tasks that it had never observed before during training.},
+  language = {en},
+  journal = {arXiv:1611.01855 [cs]},
+  author = {Parisotto, Emilio and Mohamed, Abdel-rahman and Singh, Rishabh and Li, Lihong and Zhou, Dengyong and Kohli, Pushmeet},
+  month = nov,
+  year = {2016},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Programming Languages},
+  file = {/Users/erichambro/Zotero/storage/6M57GSJ5/Parisotto et al. - 2016 - Neuro-Symbolic Program Synthesis.pdf}
+}
+
+@article{parisotto_neuro-symbolic_2016-1,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1611.01855},
+  primaryClass = {cs},
+  title = {Neuro-{{Symbolic Program Synthesis}}},
+  abstract = {Recent years have seen the proposal of a number of neural architectures for the problem of Program Induction. Given a set of input-output examples, these architectures are able to learn mappings that generalize to new test inputs. While achieving impressive results, these approaches have a number of important limitations: (a) they are computationally expensive and hard to train, (b) a model has to be trained for each task (program) separately, and (c) it is hard to interpret or verify the correctness of the learnt mapping (as it is defined by a neural network). In this paper, we propose a novel technique, Neuro-Symbolic Program Synthesis, to overcome the above-mentioned problems. Once trained, our approach can automatically construct computer programs in a domain-specific language that are consistent with a set of input-output examples provided at test time. Our method is based on two novel neural modules. The first module, called the cross correlation I/O network, given a set of input-output examples, produces a continuous representation of the set of I/O examples. The second module, the RecursiveReverse-Recursive Neural Network (R3NN), given the continuous representation of the examples, synthesizes a program by incrementally expanding partial programs. We demonstrate the effectiveness of our approach by applying it to the rich and complex domain of regular expression based string transformations. Experiments show that the R3NN model is not only able to construct programs from new input-output examples, but it is also able to construct new programs for tasks that it had never observed before during training.},
+  language = {en},
+  journal = {arXiv:1611.01855 [cs]},
+  author = {Parisotto, Emilio and Mohamed, Abdel-rahman and Singh, Rishabh and Li, Lihong and Zhou, Dengyong and Kohli, Pushmeet},
+  month = nov,
+  year = {2016},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Programming Languages},
+  file = {/Users/erichambro/Zotero/storage/R7UE3RZV/Parisotto et al. - 2016 - Neuro-Symbolic Program Synthesis.pdf}
+}
+
+@article{chen_tree--tree_2018,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1802.03691},
+  primaryClass = {cs},
+  title = {Tree-to-Tree {{Neural Networks}} for {{Program Translation}}},
+  abstract = {Program translation is an important tool to migrate legacy code in one language into an ecosystem built in a different language. In this work, we are the first to consider employing deep neural networks toward tackling this problem. We observe that program translation is a modular procedure, in which a sub-tree of the source tree is translated into the corresponding target sub-tree at each step. To capture this intuition, we design a tree-to-tree neural network as an encoder-decoder architecture to translate a source tree into a target one. Meanwhile, we develop an attention mechanism for the tree-to-tree model, so that when the decoder expands one non-terminal in the target tree, the attention mechanism locates the corresponding sub-tree in the source tree to guide the expansion of the decoder. We evaluate the program translation capability of our tree-to-tree model against several state-of-the-art approaches. Compared against other neural translation models, we observe that our approach is consistently better than the baselines with a margin of up to 15 points. Further, our approach can improve the previous state-of-the-art program translation approaches by a margin of 20 points on the translation of real-world projects.},
+  language = {en},
+  journal = {arXiv:1802.03691 [cs]},
+  author = {Chen, Xinyun and Liu, Chang and Song, Dawn},
+  month = feb,
+  year = {2018},
+  keywords = {Computer Science - Machine Learning,Computer Science - Artificial Intelligence,Computer Science - Programming Languages},
+  file = {/Users/erichambro/Zotero/storage/8CLDLUX7/Chen et al. - 2018 - Tree-to-tree Neural Networks for Program Translati.pdf},
+  annote = {Comment: Early version accepted in ICLR 2018 workshop}
+}
+
+@inproceedings{y._oda_learning_2015,
+  title = {Learning to {{Generate Pseudo}}-{{Code}} from {{Source Code Using Statistical Machine Translation}} ({{T}})},
+  doi = {10.1109/ASE.2015.36},
+  booktitle = {2015 30th {{IEEE}}/{{ACM International Conference}} on {{Automated Software Engineering}} ({{ASE}})},
+  author = {{Y. Oda} and {H. Fudaba} and {G. Neubig} and {H. Hata} and {S. Sakti} and {T. Toda} and {S. Nakamura}},
+  year = {9},
+  keywords = {Natural languages,Software,Software engineering,natural language processing,statistical analysis,Algorithms,Computer languages,Education,English pseudocode,Generators,Japanese pseudocode,language translation,natural language,programming language,Programming profession,Python statement,SMT framework,source code,Statistical Approach,statistical machine translation},
+  pages = {574-584}
+}
+
 
