@@ -8,30 +8,30 @@ However, in order to examine the automatic documentation of individual elements 
 
 Therefore we set out to collect our own dataset, according to a number of criteria:
 
-\begin{enumerate}
+\begin{tight_enumerate}
     \item The data should be `real-world', ideally from open source code
     \item The data should have a close alignment between natural language and the code described. Ideally the natural language \textit{explicitly} describes the source code.
     \item The code used must be high quality and parsable, so that syntactic structure can be extracted.
     \item The data should require \textit{minimal} preprocessing and cleaning, to avoid mistakes and errors.
     \item The data should comparable in size to existing datasets
-\end{enumerate}
+\end{tight_enumerate}
 
-These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 112 of the most popular libaries in `PyPI', the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
+These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 112 of the most popular libaries in `PyPI'\footnote{https://pypi.org/}, the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
 Finally we present the different partitions of the dataset, we used in our experiments.
 
 
 \section{Method of Collection} % (fold)
 \label{sec:method_of_collection}
 
-As mentioned in Section \ref{sub:python}, a number of conventions exist for the formatting of docstrings, the two most prominent ones being `numpy'-style and `Google'-style.
-Not all codebases use such styles, (as seen in the Edinburgh Corpus \cite{barone_parallel_2017}), but they are popular with large open source projects. 
+As mentioned in Section \ref{sub:python}, a number of conventions exist for the formatting of docstrings, the two most prominent ones being numpy-style and Google-style.
+Not all codebases use such styles, (as seen in the Edinburgh Corpus \citep{barone_parallel_2017}), but they are popular with large open source projects. 
 
-Sphinx is the industry standard for generating static HTML pages of documentation from source code. It contains a plugin - \textit{napoleon} - especially designed for Python docstrings formatted according to the numpy or Google conventions. 
+Sphinx\footnote{http://www.sphinx-doc.org/} is the industry standard for generating static HTML pages of documentation from source code. It contains a plugin - \textit{napoleon}\footnote{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/} - especially designed for Python docstrings formatted according to the numpy or Google conventions. 
 This plugin loads the source into memory and obtains the docstring from the AST itself.
 Then \textit{napoleon} uses its custom parser to parse out different features from the docstring, such as argument names and their descriptions.
 
-In order to make use of \textit{napoleon} docstring parsing facilities, we wrote a plugin, \textit{bonaparte}\footnote{https://github.com/condnsdmatters/bonaparte}, forking the \textit{napoleon}'s source. 
-Instead of generating HTML, this plugin generated a series of yaml files with the associated data we required, including argument names, descriptions, docstrings, function code and filenames.
+In order to make use of \textit{napoleon} docstring parsing facilities, we wrote a plugin, \textit{bonaparte}\footnote{https://github.com/condnsdmatters/bonaparte}, forking the \textit{napoleon} source. 
+Instead of generating HTML, this plugin generated a series of yaml\footnote{http://yaml.org/} files with the associated data we required, including argument names, descriptions, docstrings, function code and filenames.
  
 
 \begin{listing}[ht!]
@@ -67,8 +67,8 @@ Instead of generating HTML, this plugin generated a series of yaml files with th
 
 
 Having written the plugin, we required a repository of large scale projects that documented their code according to these conventions. 
-Therefore, we decided to run the bonaparte plugin on the 300 most popular libraries in PyPI, as of April 2018 \footnote{https://python3wos.appspot.com/}.
-After collecting these, we processed the data by removing arguments without descriptions (such as \mintinline[]{python}{self}) or without code bodies (from abstract base classes), or in an inappropriate documentation convention. 
+Therefore, we ran the bonaparte plugin on the 300 most popular libraries in PyPI, as of April 2018 \footnote{https://python3wos.appspot.com/}.
+We then processed our data by removing arguments without descriptions (such as \mintinline[]{python}{self}) or without code bodies (from abstract base classes), or with an inappropriate documentation convention. 
 This fulfilled our objective of obtaining a large number of arguments, descriptions and source code from popular high quality code-in-the-wild sources, with minimal processing to extract the relevant data.
 
 \section{Structure of Data}
@@ -84,7 +84,7 @@ An example datapoint is presented in Listing \ref{lst:single_point_short}. The f
 \subsection{Statistical Analysis of Libraries}
 
 We first analysed our dataset by looking at the libraries included within it.
-We found that although the criteria for choice of library was based solely on frequency of downloads from the PyPI, there was a clear bias towards scientific libraries in the composition of the data.
+We found that although the criteria for choice of library was based solely on frequency of downloads from PyPI, there was a clear bias towards scientific libraries in the composition of the data.
 
 Of the 112 libraries that eventually contributed data to the dataset, only 21 are labelled with the `Scientific/Engineering' tag on PyPI, yet these libraries contribute 68.3\% of arguments to the overall dataset, and 61.6\% of the functions. 
 Even more surprisingly one library, \mintinline{python}{tensorflow}, contributes 41\% of the arguments to the data - vastly more than any other library.
@@ -275,12 +275,12 @@ Our dataset of derives from 264,056 lines of code (LOC)\footnote{Calculated with
 When each function is split into different arguments, the total LOC associated with the dataset grows to 1,340,891. The distribution of these lengths is visible in figure \ref{fig:loc}, demonstrating that most functions are shorter than 50 lines of code.
 The average length of the source code for a datapoint is 34 LOC, with a standard deviation of 57 LOC.
 
-Since we aimed to investigate the code using Alon et al's \cite{alon_general_2018} path based parameterisation, we also investigated the most popular paths present in the dataset. Specfically, for each argument, we extracted the path-contexts for which the argument was a terminal node, and counted the paths associated with these contexts.
+Since we aimed to investigate the code using \citet{alon_general_2018}'s path based parameterisation, we also investigated the most popular paths present in the dataset. Specfically, for each argument, we extracted the \textit{modified path-contexts} for which the argument was a terminal node, and counted the paths associated with these contexts.
 A table histogram, Table \ref{table:codepath_histogram}, displays the distributions of paths. 
 In it one can see that very few paths in the dataset are completely unique, which is promising if we are hoping to generalise across different sets of paths.
 Furthermore, looking at the number of paths per data point (Table \ref{table:paths_per_point}), we see most data points have a large number of paths - about half have between 50 and 500 paths, which is also promising.
 
-However, we also note from this table that some outliers have a preposterous large number of paths. These often correspond with the outliers that have exceptionally large line of code, and are often tied to items like class definitions and the like. None the less, this indicates the data set is very much source from `real-life'.
+However, we also note from this table that some outliers have a preposterous large number of paths. These often correspond with the outliers that have exceptionally large line of code, and are often tied to items like class definitions. None-the-less, this indicates the data set is very much source from `real-life'.
 
 
 
@@ -340,10 +340,10 @@ However, we also note from this table that some outliers have a preposterous lar
 \section{Final Preparations} % (fold)
 \label{sec:final_preparations}
 
-Our final preparations of the dataset involved the filtering of duplicates that we had discovered in section \ref{sec:analysis_of_data}, and two different partitionings of train, validation and test according to `in-project' splits and `out-project' splits.
+Our final preparations of the dataset involved the filtering of duplicates that we had discovered in Section \ref{sec:analysis_of_data}, and creating two different partitionings of train, validation and test according to `in-project' splits and `out-project' splits.
 
-First we restricted the number of duplicates of (name, description) pairs to 10. This removed the problem of exemplified by tensorflow's \mintinline[]{python}{name}, while still maintaining a 91\% of the data. This would be a \textbf{Full} dataset, which would be used to investigate syntax tree related approaches, since the syntax trees would be different for each of the duplicates.
-We also prepared a \textbf{Reduced} dataset, where (name, description) pairs where unique. This would give us the opportunity, to do a broader analysis, where we might not use the syntax tree.
+First we restricted the number of duplicates of (name, description) pairs to 10. This removed the problem of exemplified by tensorflow's \mintinline[]{python}{name}, while still maintaining a 91\% of the data. This would be a \textbf{Full} dataset, which would be used to investigate AST related approaches, since the ASTs would be different for each of the duplicates.
+We also prepared a \textbf{Reduced} dataset, where (name, description) pairs where unique. This would give us the opportunity, to do a broader analysis, where we might not use the AST.
 
 Then we partitioned our datasets into train, validation and test in two different ways:
 \begin{enumerate}

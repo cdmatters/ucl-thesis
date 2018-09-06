@@ -132,7 +132,7 @@ This is provided by the \citet{alon_general_2018}'s tree reparameterisation, int
 % A simpler way to capture the syntax of the code is to reparameterise the AST.
 % Since a tree can be fully specified by the set of shortest paths between all leaf nodes, an AST can now be treated as bag of these paths. 
 % This was the parameterisation was proposed by Alon et al in 2018 \cite{alon_general_2018}, and 
-This paramaterisation has since been applied successfully in a function name classification context \citep{alon_code2vec_2018}.
+This paramaterisation has since been applied successfully in a function name classification context, in the Code2Vec model by \citep{alon_code2vec_2018}.
 % In this model, codepaths are parameterised into `path-contexts' - triples of the two terminal node names and the specific paths connecting them.
 % Each path and terminal node has a respective embedding (learnt alongside the main task), and for each path-context, the repective two terminals and path are concatenated and fed through a neural-network layer to combine into a single path-context vector.
 % A general code vector is then produced from a simple attention mechanism over the every path-context vector in the tree. 
