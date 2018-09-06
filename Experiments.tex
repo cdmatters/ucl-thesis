@@ -30,7 +30,7 @@ Since this experiment would only use the variable name to predict the descrption
 This prevented inflation of BLEU scores due to exact matches being both in the train and validation set.
 % TODO: As comparison, see how much BLEU score increases & decreases 
 
-We ran our Rote Learner model as described in Section \ref{sec:general_procedure}. We then ran our on the basic Seq2Seq architectures in an reverse ablation study: we started from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
+We ran our Rote Learner model as described in Section \ref{sec:general_procedure}. We then ran our on the basic Seq2Seq architectures in an ablation study: we started from a basic seq-to-seq, then adding attention, a bidirectional encoder and finally dropout.
 These models were trained for a maximum of 150 epochs, in the manner as outline in section \ref{sec:general_procedure}, with our best model on validation set selected. 
 The hyperparameters for these models are found in Appendix Table \ref{table:hyperparams_name_baseline}.
  % WHY 150
@@ -70,7 +70,7 @@ In our ablation study we note the improvement that each new feature adds, noting
     % + \textit{dropout}                & $ 6.37864 $ & $ 6.33307 $  \\
     % \hline
 \end{tabular}
-\caption {Results of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
+\caption {Results of Experiment Comparing Baseline Models}
 \label{table:name_baseline}
 \end{center}
 \end{table}
@@ -81,7 +81,7 @@ In our ablation study we note the improvement that each new feature adds, noting
 We were most surprised by the strength of Rote Learner on this dataset. Given there are no exact matches of (name, description) pairs in this dataset, we were curious to see where the performance had come from.
 We examined the predictions of the Rote Learner on the validation set by taking their sentence-level BLEU-4 scores, and reading the predictions.
 We found that although the vast majority evaluate to zero, a number of examples have a coincidental overlap in descriptions, resulting in a non negligible BLEU score. 
-A number of examples also have the same name and almost identical, giving some predictions very high BLEU scores.
+A number of examples also have the same name and almost identical descriptions, giving some predictions very high BLEU scores.
 A random sample of these non-zero sentence-level BLEU translations are presented in Figure \ref{tab:rotelearner_nameonly}.
 
 
@@ -104,7 +104,7 @@ We were interested to note that the basic Seq2Seq narrowly underperforms the Rot
 It is possible that without the contextualising information from attention, the model struggles to learn from long description sequences. In contrast, the Rote Learner can regurgitate these immediately. 
 
 Once the attention is added, and the capacity increased, the Seq2Seq's outperformance of the Rote Learner is explanatory.
-The model synthesises similar (or even the same!) sequences of characters, with different descriptions, into a single description, which may fit better than randomly guessing from a bag of seen sequences. 
+The Seq2Seq synthesises similar (or even the same!) sequences of characters, with different descriptions, into a single description, which may fit better than randomly guessing from a bag of seen sequences. 
 
 For instance, the most frequent argument, \mintinline[]{yaml}{name}, occurs in the train set 318 times with different descriptions. 
 It also occurs 52 times in the validation set, again, with different descriptions. 
@@ -151,7 +151,7 @@ undefined , but may exhibit less contention .\\
 \end{tabular}
 }
 \end{center}
-\caption{A random sample of sentence level BLEU-4 scores that are non-zero on the validation set for a Rote Learner}
+\caption{A random sample of sentence level BLEU-4 scores that are non-zero on the validation set for a Rote Learner. We note that in the last example, the Rote Learner returns an almost identical description with 12.5\%, confidence, and in the first example returns a very similar description with 100\% confidence.}
 \label{tab:rotelearner_nameonly}
 \end{table}
 
@@ -180,7 +180,7 @@ These tokenizations were:
     \item the argument name with both function name and co-argument names
 \end{tight_enumerate}
 
-Once again we used the \textbf{Reduced Random-Split Dataset}, to prevent advantages due to duplicates, ran tokenization procedures outlined in Section \ref{sub:tokenize_descriptions}, and followed the general procedure outlined in Section \ref{sec:general_procedure}. For our Seq2Seq, we used the best arrangement from our first experiment, including a bidirectional encoder, attention and dropout. We ran these for 150 epochs, and selected the best, just as in Section \ref{sub:comparing_baseline_models}. The hyperparameters for our trainng are presented in Appendix Table \ref{table:hyperparams_different_tokenizations}.
+Once again we used the \textbf{Reduced Random-Split Dataset}, to prevent advantages due to duplicates, ran tokenization procedures outlined previously, and followed the general procedure outlined in Section \ref{sec:general_procedure}. For our Seq2Seq, we used the best arrangement from our first experiment, including a bidirectional encoder, attention and dropout. We ran these for 150 epochs, and selected the best, just as in Section \ref{sub:comparing_baseline_models}. The hyperparameters for our trainng are presented in Appendix Table \ref{table:hyperparams_different_tokenizations}.
 
 We report our corpus level BLEU-4 results in Table \ref{table:tokenization}. 
 We note that in all cases the Rote Learner's performance improved with added information, confirming that character overlap in the function signature can be an indicative feature in generating argument description.
@@ -232,7 +232,7 @@ Although this agreed with out hypothesis that there is value in extra naming of 
     
     \hline
 \end{tabular}
-\caption {Investigate the effect of different code features}
+\caption {Results of the experiments using different parts of the signature}
 \label{table:tokenization}
 \end{center}
 \end{table}
@@ -254,23 +254,23 @@ To illustrate this clearly, some typical examples of the model on the \textit{na
 
 \textbf{Overfitting}\\
 
-\textbf{Input}: \mintinline[]{python}{e n c o d i n g _ t y p e <SEP-1> s e l f <SEP-2> d o c u m e}...\\
-...\mintinline[]{python}{n t <SEP-2> r e t r y <SEP-2> t i m e o u t <SEP-2> <END>}\\
+\textbf{Input}: \mintinline[]{python}{e n c o d i n g _ t y p e <S1> s e l f <S2> d o c u m e}...\\
+...\mintinline[]{python}{n t <S2> r e t r y <S2> t i m e o u t <S2> <END>}\\
 \textbf{Description}: the encoding type used by the api to calculate offsets .\\
 \textbf{Prediction}: the encoding type used by the api to calculate sentence offsets . \\
 \\\hline\\
 
 \textbf{Nonsense}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> n a m e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> n a m e <S2> <END>}\\
 \textbf{D}: a ` tensor ` of type ` complex64 ` . a complex64 tensor .\\
 \textbf{P}: ` $<$UNK$>$ ` , ` $<$UNK$>$ ` . shape is ` [ ... , m , m ] ` . \\
 \\\hline\\
 
 \textbf{Plausible}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
-...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> s t r u c t u r e <S2> m a s k <S2> o u t p}...\\
+...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2> <END>}\\
 \textbf{D}: binary image to be propagated inside ` mask ` .\\
 \textbf{P}: binary image where a element is provided and a structuring element .\\
 \\\hline\\
@@ -278,7 +278,10 @@ To illustrate this clearly, some typical examples of the model on the \textit{na
 \\
 
 \end{tabular}
-\caption{Three examples of typical errors in the character Seq-to-Seq model.  In this case, the first example shows good use of data in the sequence but is nonsensical. The second is an example of overfitting where the predicted sentence is found in the dataset. The final case, multiple sequences such as these are found in the dataset, each with a different discription. Without looking at code, or function name (in this case) it is impossible to disambiguate and the model fails to make sense }
+\caption{Three examples of typical errors in the character Seq-to-Seq model.
+The first example is an example of overfitting where the whole predicted sentence is found in the training set.  The second example is nonsensical, with lots of $<$UNK$>$ tokens.  In the final case, the predicted sentence is original and shows features of the desired sentence. 
+}
+%multiple sequences such as these are found in the dataset, each with a different discription. Without looking at code, or function name (in this case) it is impossible to disambiguate and the model fails to make sense }
 \label{table:typicalvarotherargs}
 \end{center}
 \end{table}
@@ -292,12 +295,12 @@ The attentions of the `plausible' and `nonsense' examples from  Table \ref{table
     % \includegraphics[width=0.7\linewidth]{images/otherargs_example.png}
     \includegraphics[width=0.9\linewidth]{ImagesCodeRelated/attn1pretty.png}
     \includegraphics[width=0.5\linewidth]{ImagesCodeRelated/attn2pretty.png}
-    \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. Fig A) is a picture of a typical example, Fig B) bottom is an example that is very overdetermined.}
+    \caption{An example of some the attentions of from the Name + Other Arguments tokenization on a Seq-to-Seq model, on the Reduced Random-Split Dataset. The top a picture is a typical example from the dataset, where all attention is on the last two tokens which (in this tokenization) never change.  The bottom is a less typical example that occurs when the character sequence is very overdetermined.}
     \label{fig:otherarg_attn}
 \end{center}
 \end{figure}
 
-This implies the model is not learning to apply parts of the sequence to parts of the translation, in the alignment fashion demonstrated by Bahdanau\cite{bahdanau_neural_2014}. Instead it appears to be using all the encoded input information to create (almost) the same single vector to contextualise on at each step.
+This implies the model is not learning to apply parts of the sequence to parts of the translation, in the alignment fashion demonstrated by \citet{bahdanau_neural_2014}. Instead it appears to be using all the encoded input information to create (almost) the same single vector to contextualise on at each step.
 % This implies the model is using all the extra information to encode a single vector to contextualise on, rather than learning to apply parts of the sequence to parts of translation, in the alignment fashion demonstrated by Bahdanau\cite{bahdanau_neural_2014}.
 This single contextual vector can contain all the input sequence information because, in an RNN, the encoder outputs at step $N$ can contain information from the previous $N-1$ tokens. This in principle allows the model to condition word generation on the all the information up to the final `attended' encoded token. 
 
@@ -324,19 +327,21 @@ To disprove this possibility, we needed to check that the rest of the sequence w
     % \includegraphics[width=0.7\linewidth]{images/different_translations_dupsXotherargs_3230minib_white.png}
 \end{tabular}
 }
-    \caption{Three translations and attentions for an example of some the attentions of from the Name + Other Arguments on the tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input }
+    \caption{The attentions from the \textit{name + co-arguments} tokenization on a Seq-to-Seq model trained on the Full Random-Split Dataset. In this dataset, the duplicates of (name, description) pairs make the name the most important feature, hence the attention at the separator token. However the rest of the sequence is still being used by the decoder, as the clipped input sequences still generate different descriptions.  
+    % Here is shows that, on the Full Random-Split Dataset, the most important feature is variable name, and the model attends solely to that, but that the hidden state of the LSTM still takes into account characters after the variable input
+     }
     \label{fig:otherarg_attn_full_dataset}
 \end{table}
 
 One conclusion to be drawn from this overall investigation is that the attention has not distributed well over characters, failing to pick out individual features. Instead, with these tokenizations, the neural network seems to treat the signature strings like much longer single names. 
-This has led to overfitting in many cases, as the new `names' are more likely to be unique. In cases such as argument name + function name this seems to lead the network down the wrong path. It also suggests why the Seq2Seq model might not be outperforming  the Rote Learner in our corpus -BLEU score. 
+This has led to overfitting in many cases, as the new `names' are more likely to be unique. In cases such as argument name + function name this seems to lead the network down the wrong path. It also suggests why the Seq2Seq model might not be outperforming  the Rote Learner in our corpus-level BLEU score. 
 
 However we can also conclude from this experiment that the function signature is capable of providing information to generate documentation - as visibile from the Rote Learner - and that neural methods seem a good way to do this.
  % to decode variable descriptions (as seen from our Rote Learner), and that neural approaches can provide a way of doing this.
 Unlike our Rote Learner, our Seq2Seq model is capable of generating completely new descriptions, often with good fluency and has numerous examples of doing so. This seems to work best when the Seq2Seq is assimilating information from different training points, instead of overfitting to one. 
 % However, because of the  but this seems more difficult to do when so much identifying information is given without information on redundancy. 
-To give an example, Table \ref{table:example_plausible_training} shows the `plausible' example given above, with all the different training instances that start in the same way - with \mintinline[]{yaml}{input<SEP-1>structure}. 
-Here one can see an original sentence, yet with certain features assimilated from the training, such as the use of \textit{``binary image"}. We note in this example a room for improvement. The potentially helpful input sequence \mintinline[]{yaml}{<SEP-2>mask<SEP-2>} appears to have been ignored by the Seq2Seq, despite appearing relevant to the description. 
+To give an example, Table \ref{table:example_plausible_training} shows the `plausible' example given above, with all the different training instances that start in the same way - with \mintinline[]{yaml}{input<S1>structure}. 
+Here one can see an original sentence, yet with certain features assimilated from the training, such as the use of \textit{``binary image"}. We note in this example a room for improvement. The potentially helpful input sequence \mintinline[]{yaml}{<S2>mask<S2>} appears to have been ignored by the Seq2Seq, despite appearing relevant to the description. 
 Getting the model to pay attention to these points is the key to our recommendations for improving this type of model.
 
 \subsubsection{Further Work}
@@ -354,11 +359,12 @@ This could easily be done just be adding a parameter, $\alpha$ to control the en
 \begin{align}
 softermax(\mathbf{x_i}, \alpha) = \dfrac{e^{{\alpha}x_i}}{\sum_ie^{{\alpha}x_i}}
 \end{align}
-A better proposal, however, is to implement a structured attention, which is designed to encourage a sparse focus across contiguous segments (\textit{fusedmax}) or non-contiguous segments (\textit{oscarmax}) of the encoded sequence. \cite{niculae_regularized_2017}
-This technique has previously been used to improve performance and interpretability in machine translation tasks. 
-Another approach, would be to regularise the network by simply penalising it for being too confident in its attention, as has proven to be effective by Pereyra et al\cite{pereyra_regularizing_2017}.
+A better proposal, however, is to implement a structured attention, which is designed to encourage a sparse focus across contiguous segments (\textit{fusedmax}) or non-contiguous segments (\textit{oscarmax}) of the encoded sequence. \citep{niculae_regularized_2017}
+This technique has previously been used to improve performance and interpretability in machine translation tasks 
+\citep{niculae_regularized_2017}.
+Another approach, would be to regularise the network by simply penalising it for being too confident in its attention, as has proven to be effective by \citet{pereyra_regularizing_2017}.
 
-A second suggestion of further work, is much simpler involving our tokenization. Since we always tokenized in the same order (argument name, function, coargument) we missed an opportunity for data augmentation, that might help the network pay more attention to the different names in the signature. By adding duplicates with shuffled orders, and maybe even synonyms in descriptions, the model may learn a more generalisable descriptions.
+A second suggestion of further work is much simpler, involving our tokenization. Since we always tokenized in the same order (argument name, function, coargument) we missed an opportunity for data augmentation, that might help the network pay more attention to the different names in the signature. By adding duplicates with shuffled orders, and maybe even synonyms in descriptions, the model may learn a more generalisable descriptions.
 
 
 \begin{table}
@@ -369,38 +375,38 @@ A second suggestion of further work, is much simpler involving our tokenization.
 \hline
 \textbf{Validation Example}\\
 
-\textbf{I}: \mintinline[]{python}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> m a s k <SEP-2> o u t p}...\\
-...\mintinline[]{python}{u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{python}{i n p u t <S1> s t r u c t u r e <S2> m a s k <S2> o u t p}...\\
+...\mintinline[]{python}{u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
 \textbf{D}: binary image to be propagated inside ` mask ` .\\
 \textbf{P}: binary image where a element is provided and a structuring element . $<$END$>$\\
 \\\hline\\
 
-\textbf{Training Examples} starting \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e}\\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e 1 <SEP-2> s t r u c t u r}...\\
-...\mintinline[]{yaml}{e 2 <SEP-2> o u t p u t <SEP-2> o r i g i n 1 <SEP-2> o r i g i n 2 <SEP-2> <END>}\\
+\textbf{Training Examples} starting \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e 1 <S2> s t r u c t u r}...\\
+...\mintinline[]{yaml}{e 2 <S2> o u t p u t <S2> o r i g i n 1 <S2> o r i g i n 2 <S2> <END>}\\
 \textbf{D}: binary image where a pattern is to be detected .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> o u t }...\\
-...\mintinline[]{yaml}{p u t <SEP-2> o r i g i n <SEP-2> m a s k <SEP-2> b o r d e r _ v a l u e }\\
-...\mintinline[]{yaml}{<SEP-2> b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> o u t }...\\
+...\mintinline[]{yaml}{p u t <S2> o r i g i n <S2> m a s k <S2> b o r d e r _ v a l u e }\\
+...\mintinline[]{yaml}{<S2> b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary array\_like to be closed . non-zero ( true ) elements form the subset to be closed .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> o r}...\\
-...\mintinline[]{yaml}{i g i n <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> o u t p u t <S2> o r}...\\
+...\mintinline[]{yaml}{i g i n <S2> <END>}\\
 \textbf{D}: n-dimensional binary array with holes to be filled\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> o u t p u t <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> o u t p u t <S2> <END>}\\
 \textbf{D}: an array-like object to be labeled . any non-zero values in ` input ` are counted as features...\\
 ...and zero values are considered the background .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k }...\\
-...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
-...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> m a s k }...\\
+...\mintinline[]{yaml}{<S2> o u t p u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary image to be eroded . non-zero ( true ) elements form the subset to be eroded .\\
 \\
-\textbf{I}: \mintinline[]{yaml}{i n p u t <SEP-1> s t r u c t u r e <SEP-2> i t e r a t i o n s <SEP-2> m a s k}...\\
-...\mintinline[]{yaml}{<SEP-2> o u t p u t <SEP-2> b o r d e r _ v a l u e <SEP-2> o r i g i n <SEP-2>}\\
-...\mintinline[]{yaml}{b r u t e _ f o r c e <SEP-2> <END>}\\
+\textbf{I}: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e <S2> i t e r a t i o n s <S2> m a s k}...\\
+...\mintinline[]{yaml}{<S2> o u t p u t <S2> b o r d e r _ v a l u e <S2> o r i g i n <S2>}\\
+...\mintinline[]{yaml}{b r u t e _ f o r c e <S2> <END>}\\
 \textbf{D}: binary array\_like to be dilated . non-zero ( true ) elements form the subset to be dilated .\\
 \\
 
@@ -408,7 +414,7 @@ A second suggestion of further work, is much simpler involving our tokenization.
 
 \end{tabular}
 }
-\caption{A validation example and the a selection of training points. Despite being a long sequence, }
+\caption{A validation example and all of training points that start with the same sequence of characters: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e}. These demonstrate that model is, to some degree, assimilating the information from its training data, in these very long sequences. }
 \label{table:example_plausible_training}
 \end{center}
 \end{table}
@@ -450,7 +456,7 @@ A second suggestion of further work, is much simpler involving our tokenization.
 \subsubsection{Experiment Objective} % (fold)
 
 In our first examinations of the AST data, we aim to validate our initial hypothesis that by using just parts of the code, in the form of VPCs, we could generate reasonable argument descriptions.
-In particular we wished to assess what possible tokenizations of code paths could prove most effective in doing this, so as to build as strong a Rote Learner model as possible. We could then fully compare this as strong benchmark against our Code2Vec Decoder model.
+In particular we wished to assess what possible tokenizations of code paths could prove most effective in doing this, so as to build as strong a Rote Learner model as possible. We could then fully compare this as a strong benchmark against our Code2Vec Decoder model.
 
 \subsubsection{Method \& Results} % (fold)
 
@@ -467,10 +473,9 @@ We ran these different methods to investigate what features might be most indica
 %     \end{tight_itemize}
 % We ran these different matching criteria to investigate 
 
-We also ran the Code2Vec Decoder with the same tokenizations and for a maximum of 100 epochs. 
-We trained for this amount of time since we saw little improvement after this point.
+We also ran the Code2Vec Decoder with the same tokenizations and for a maximum of 100 epochs, since we saw little improvement after this point.
 As usual we selected our model that performed best on our validation set.
-The hyperparameters for this model are found in Table {X}.
+The hyperparameters for this model are found in Table \ref{table:hyperparams_code2vec}.
 
 We report our corpus-level BLEU-4 results in Table \ref{table:name_code2vec_solo}. We note that the Rote Learner performed best using the Max Context criterion, which matched points that fully overlapped the most with the VPCs of test. This achieved a reasonable BLEU score of $ 11.82 \pm  0.16 $ and  $ 12.61 \pm 0.12 $ on validation and test,. However, we noted that the Code2Vec Decoder significantly outperformed this, achieving a BLEU score of $ 18.94 $ and $ 18.13 $ on validation and test respectively.
 
@@ -509,50 +514,39 @@ These results first confirmed the informative power of VPCs, and suggested that 
     % % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
     % \hline
 \end{tabular}
-\caption {BLEU Scores on the Full Random-Split Dataset, for Code2Vec Decoder and a series of code only Rote Learners}
+\caption {Results for Code2Vec Decoder and a series of code only Rote Learners on the Full Random Split Dataset}
 \label{table:name_code2vec_solo}
 \end{center}
 \end{table}
 
 \subsubsection{Analysis} % (fold)
 \label{ssub:analysis}
-Noting the superior performance of the Code2Vec Decoder model, we first examined the model qualittively. We sampled points from the validation set, printed their source code and VPCs, and visualizied their attentions as they passed through the model.
+Noting the superior performance of the Code2Vec Decoder model, we first examined the model qualitatively. We sampled points from the validation set, printed their source code and VPCs, and visualizied their attentions as they passed through the model.
 We observed that although sometimes the model's attention fit overwhelming to a single path, more often than not the model distributed its attention over 4 or 5 paths, even if there were thousands to choose from.
 
-An illustrative example of such analysis is presented in Figure  \ref{fig:single_examples}. 
-It shows the pruned AST, the attented VPCs, the source code and the model's predictions.
-From this example it is interesting to note that the model has chosen two paths that indicate list comprehensions feature in the variable, and it has inferred that a list should feature in the description from the code alone.
-
-
-
-\begin{figure}[h]
+\begin{listing}[h!] 
 \begin{center}
-\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
+
+\includegraphics[width=\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
+\begin{minted}[]{python}
+def xkcd_palette(colors):
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+\end{minted}
+\begin{tabular}{l}
+\hline
+\textbf{Argument Name}: \mintinline[]{python}{colors}\\
+\textbf{Description}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
+\textbf{Prediction}: a list of data to read . if none , all other the first will be returned .\\
+\end{tabular}
 \end{center}
-\caption{code2vec entropy}
-\label{fig:entropy_code2vec}
-\end{figure}
+\caption{A pruned AST from which VPCs were extracted, and its source representation below. Below that the predictions that the Code2Vec Decoder made on the snippet of source. The predicted description correctly identifies a list.}
+\label{fig:single_examples_code}
+\end{listing}
 
 
-Having noted that the model seemed to be performing as expected on a qualitative level, we continued to investigate the model more quantitatively. 
-Figure \ref{fig:entropy_code2vec} shows the distribution of the entropies of the attention in the Code2Vec model, for each point in the validation set. 
-Presented alongside is the distribution of entropies that would have occured if every data point in the validation set had attained a uniform, categorical distribution as attention over its VPC context vectors.
-The shift to a lower entropy clearly verifies that the Code2Vec's attention focuses on only a fraction of the paths, and, in some few cases (where the entropy is effectively 0) decides resolutely on single points.
-
-We also investigated the sentence-level BLEU-4 scores across the validation set. This metric is prone to low scores (since 4-gram precision of 0 immediately nullifies the score), but gave us a good sense for where the performance improvements come from in the Code2Vec Decoder Model.
-With this metric we noted both a significant increase in the Code2Vec Decoder's 1.0 scoring sentences (about 12\%), and also a similar increase in model's low scoring sentences.
-This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. A graph presenting the distribution of scores in presented in Figure \ref{fig:sentence_bleu}.
-
-
-
-% more points now scored a perfect 1.0 score (approximately 12\% more), and significantly more points now In particular this demonstrated that significant number of points now scoreed over  200 more
-% % Figure \ref{fig:sentence_bleu} shows the counts of sentence-level BLEU-4 score of each sentence in the validation set.
-% % Although this sentence-level BLEU-4 is prone to low scores on individual sentences, since BLEU-4 evaluates to 0 if no 4-gram is present, we can use it to get a sense for where the performance improvements come from in the Code2Vec Decoder Model.
-% From this graph it is one can see both a significant increase in the models 1.0 scoring sentences, and also a modest increase in low scoring sentences. 
-% This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. 
-
-
-\begin{table}[ht!]
+\begin{listing}[ht!]
 \begin{center}
 
 \includegraphics[width=0.9\linewidth]{ImagesCodeRelated/pretty_attention_XKCD.png}
@@ -578,9 +572,44 @@ This indicates both an improvement that may be down to some form of overfitting 
 % \end{table}
 
 \end{center}
-\caption{Code \& List}
+\caption{The attentions scores for the VPCs corresponding to code in Listing \ref{fig:single_examples_code}, for each of our Code2Vec models. It is interesting that Path B implies that our argument \mintline[]{python}{colors} is involved in a list comprehension and is highly weighted by most models.   }
 \label{fig:single_examples}
-\end{table}
+\end{listing}
+
+
+
+
+An illustrative example of such analysis is presented in Listings  \ref{fig:single_examples_code} and \ref{fig:single_examples}. 
+Listing  \ref{fig:single_examples_code} shows the pruned AST, source code, and the models predictions, while Listing \ref{fig:single_examples} shows the attented VPCs, and their relative attention scores.
+From this example it is interesting to note that the model has chosen two paths that indicate list comprehensions feature in the variable, and it has inferred that a list should feature in the description from the code alone.
+
+
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
+\end{center}
+\caption{The distribution of entropies of the attentions of the Code2Vec Decoder model across the validation set (\textit{red}). For comparison, distributions of entropies of corresponding uniform categorical attentions is also presented (\textit{blue}). This demonstrates that the model choses a small number of paths to attend to, even though the spread of possible paths may be great.}
+\label{fig:entropy_code2vec}
+\end{figure}
+
+
+Having noted that the model seemed to be performing as expected on a qualitative level, we continued to investigate the model more quantitatively. 
+Figure \ref{fig:entropy_code2vec} shows the distribution of the entropies of the attention in the Code2Vec model, for each point in the validation set. 
+Presented alongside is the distribution of entropies that would have occured if every data point in the validation set had attained a uniform, categorical distribution as attention over its VPC context vectors.
+The shift to a lower entropy clearly verifies that the Code2Vec's attention focuses on only a fraction of the paths, and, in some few cases (where the entropy is effectively 0) decides resolutely on single points.
+
+We also investigated the sentence-level BLEU-4 scores across the validation set. This metric is prone to low scores (since 4-gram precision of 0 immediately nullifies the score), but gave us a good sense for where the performance improvements come from in the Code2Vec Decoder Model.
+With this metric we noted both a significant increase in the Code2Vec Decoder's 1.0 scoring sentences (about 12\%), and also a similar increase in model's low scoring sentences.
+This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. A graph presenting the distribution of scores in presented in Figure \ref{fig:sentence_bleu}.
+
+
+
+% more points now scored a perfect 1.0 score (approximately 12\% more), and significantly more points now In particular this demonstrated that significant number of points now scoreed over  200 more
+% % Figure \ref{fig:sentence_bleu} shows the counts of sentence-level BLEU-4 score of each sentence in the validation set.
+% % Although this sentence-level BLEU-4 is prone to low scores on individual sentences, since BLEU-4 evaluates to 0 if no 4-gram is present, we can use it to get a sense for where the performance improvements come from in the Code2Vec Decoder Model.
+% From this graph it is one can see both a significant increase in the models 1.0 scoring sentences, and also a modest increase in low scoring sentences. 
+% This indicates both an improvement that may be down to some form of overfitting (the model is able to find arguments that are very similar, and have similar code paths), but also an improvement due to generating just a few of the correct words, as in the example presented above. 
 
 
 
@@ -623,16 +652,16 @@ We used the same dataset and tokenization procedure as described in Section \ref
 Then we prepared two different masking procedures, to hide the terminal node from the models.
 
 In the first masking, we masked the only the coarguments names in the VPCs.
-We did this by creating new terminal node identifiers, for "first coargument", "second coargument", and so forth, and replacing the the relevant identifiers in all the VPCs.
-This meant that the model could still recognise when two code paths belong to the same terminal node, but could not use the link the name of the coargument to any variable seen before.
+We did this by creating new terminal node identifiers, for `first coargument', `second coargument', and so forth, and replacing the the relevant identifiers in all the VPCs.
+This meant that the model could still recognise when two code paths belong to the same terminal node, but could not use names to link the coargument to any previously-seen variable.
 
-In our second masking, we repeated this procedure, but for every provided new terminal nodes for every object in the function: `first object', `second object' and so on.
+In our second masking, we repeated this procedure, but provided new terminal nodes for every object in the function: `first object', `second object' and so on.
 This meant that very indicative global variables were masked, but also any built-in method.
 The model only had access to enough information to be able to distinguish terminal nodes within a function, it could not generalise to their use between functions.
 
-As before, this model was trained for 100 epochs, with the hyperparameters visible in Table X.
+As before, this model was trained for 100 epochs, with the hyperparameters visible in Table \ref{table:hyperparams_masking}.
 
-We present the results in Table \ref{table:code_2_vec_masked}, noting that Coargument Masking only resulted in a slight performance drop, of one to two BLEU points, from the unmasked variables, while the Full Masking resulted in a significant drop of six BLEU points, but still beating the best Rote Learner baseline. 
+We present the results in Table \ref{table:code_2_vec_masked}, noting that Coargument Masking only resulted in a slight performance drop, of one to two BLEU points, from the unmasked variables, while the Full Masking resulted in a significant drop of six BLEU points, but still surpassed the best Rote Learner baseline. 
 We note this as a significant result, demonstrating the robustness of our Code2Vec Decoder, in being able to generate reasonable descriptions, even with every single object in a function renamed.
 
 
@@ -655,7 +684,7 @@ We note this as a significant result, demonstrating the robustness of our Code2V
     % Code2Vec  (Full Masking)                & $ 13.27677 $ & $ 13.07374 $ \\
     \hline
 \end{tabular}
-\caption {Investigate code2vec but with masked variables}
+\caption {Results of investigating the Code2Vec Decoder with masked terminal nodes.}
 \label{table:code_2_vec_masked}
 \end{center}
 \end{table}
@@ -667,7 +696,7 @@ We note this as a significant result, demonstrating the robustness of our Code2V
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_encoder.png}
 \end{center}
-\caption{all entropies}
+\caption{The changing distributions of entropies of attentions of the different Code2Vec Decoder variations: Mask Coarguments (\textit{top}), Mask All (\textit{middle}), Code2Vec + Seq2Seq Decoder (\textit{bottom}) }
 \label{fig:all_entropies}
 \end{figure}
 
@@ -678,7 +707,8 @@ To interrogate the models, we once again examined the entropies of both the mode
 Masking the coarguments changes the entropy distribution little, except boosting the region of very low entropy.
  % We note that masking coarguments does not appear to change the entropy distribution drastically, except a small boost in the region of very low entropy. 
 This implies the model behaves similarly in most cases, but has become very sure of some single VPCs in a couple of points.
-This could be explained by the emergence of `tell-tale' VPCs involving coarguments, now being accessed more frequently at test time.
+% This is expected, as the reduction in information leads the model to rely more heavily on the fewer VPCs it does recognise.
+% This could be explained by the emergence of `tell-tale' VPCs involving coarguments, now being accessed more frequently at test time.
 This `overfitting' to single features might well explain the slight drop in BLEU score.
 
 % Noting the BLEU score and the lack of shift of the center of the entropies, it appears that losing coarguments, when the rest of the code is present, does not significantly impact the models behaviour.
@@ -700,28 +730,11 @@ The model is able to learn the most important features from the VPCs themselves,
 \includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_s2s.png}
 \includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_c2e.png}
 \end{center}
-\caption{sentence bleu}
+\caption{A histogram of validation set sentence-BLEU scores for: Code2Vec Decoder (\textit{top}), Seq2Seq (\textit{middle}), Code2Vec + Seq2Seq Decoder (\textit{bottom}). The y-axis is logarithmic. }
 \label{fig:sentence_bleu}
 
 \end{figure}
 
-\begin{listing}[h!] 
-\begin{center}
-
-\includegraphics[width=\linewidth]{ImagesCodeRelated/xkcd_palette_strip.png}
-\begin{minted}[]{python}
-def xkcd_palette(colors):
-    palette = [xkcd_rgb[name] for name in colors]
-    return color_palette(palette, len(palette))
-
-\end{minted}
-\begin{tabular}{l}
-\textbf{I}: \mintinline[]{python}{colors}\\
-\textbf{D}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
-\textbf{P}: a list of data to read . if none , all other the first will be returned .\\
-\end{tabular}
-\end{center}
-\end{listing}
 
 
 \section{Investigating the Combination of Modalites} % (fold)
@@ -743,8 +756,8 @@ In this investigation we compared our individual models to the Code2Vec + Seq2Se
 
 \subsubsection{Method \& Results} % (fold)
 
-Given the nature of the AST element of this investigation, we used the \textbf{Full Random-Split Dataset} for this investigation, noting this might artificially boost our Seq2Seq only model. We then proceeded the same format of investigation as outlined in previous sections. 
-We ran the all models for 100 epochs, using the name only tokenizations for the Seq2Seq and the unmasked VPCs for the Code2Vec Decoder. The hyperparamters for these model are presented in Appendix T. 
+Given the nature of the AST element of this investigation, we used the \textbf{Full Random-Split Dataset} for this investigation, noting this might artificially boost our Seq2Seq only model. We then used the same format of investigation as outlined in previous sections. 
+We ran the all models for 100 epochs, using the name only tokenizations for the Seq2Seq and the unmasked VPCs for the Code2Vec Decoder. The hyperparamters for these model are presented in Appendix Table \ref{table:hyperparams_c2e}. 
 
 We report our corpus level BLEU score in Table \ref{table:code2vec_embed}, and noting that the combined model surpasses both individual models achieving a BLEU of $28.7$ and $27.08$ on validation and test respectively. 
 This high score is a small improvement on the Seq-to-Seq models, of about 2 points, and at least be partly down to the presence of (name, description) duplicate pairs in the dataset, which would boosts all name-focused methods.
@@ -794,7 +807,7 @@ None the less this demonstrates a clear improvement for the combined neural mode
     % Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
     \hline
 \end{tabular}
-\caption {Investigate code2vec combined with seq to seq}
+\caption {Results of the investigation into combining the individual learners.}
 \label{table:code2vec_embed}
 \end{center}
 \end{table}
@@ -820,9 +833,9 @@ Nonetheless it still demonstrates the primary result of the superior combined mo
 %  it is clear the availability of (name, description) duplicates helps both the name only learners, outperform the code only models ands suggests why the name only Rote Learner out performs the combined model. 
 
 \section{Investigating the Library Split Dataset} % (fold)
-\label{sec:analysis}
 
 \subsection{Investigating the Library Split Dataset} % (fold)
+\label{sub:investigating_lib_split}
 
 \subsubsection{Experiment Objective} % (fold)
 
@@ -835,9 +848,9 @@ This involved taking our strongest models and repeating them on our Full Library
 In this investigation, we repeated the above investigations on the \textbf{Full Library Split} dataset. 
 We followed the methodologies outlined above, only making a change to the number of epochs run.
 In this case we ran for 40 epochs at most, since in all models, the BLEU scores failed to improve very early on. 
-Our hyperparameters for these models are presented in Table \ref{}, with the for each experiment is reported in Table \ref{table:split_datasets_embed}.
+Our hyperparameters for these models are presented in Table \ref{table:hyperparams_libsplit}, with the for each experiment is reported in Table \ref{table:split_datasets_embed}.
 
-We report that the neural models significantly struggled to learn the labelled translations on the library split datset.
+We report that the neural models significantly struggled to learn the labelled translations on the library split dataset.
 The weakest models, the Code2Vec Decoders, scored BLEU scores of $0.89$ on both train and dev, very close to the code only Rote Learner score of   $ 1.02 \pm  0.11$, while the argument name models manage to achieve BLEU scores of about $1.5$ across both the Rote Learner and Seq-to-Seq models. 
 Finally, the combined model of the Code2Dev + Seq-to-Seq model performed best, by a marginal amount, scoring  $ 1.85 $ and $ 1.59 $ across validation and test sets respectively,  outperforming the combined Rote Learner on both modalities by about half a BLEU point.
 
@@ -890,7 +903,7 @@ Finally, the combined model of the Code2Dev + Seq-to-Seq model performed best, b
     % Code2Vec  + Char to Seq            & $ 1.84887 $ & $ 1.58697 $ \\\\
     \hline
 \end{tabular}
-\caption {Investigate split datasets}
+\caption{The results of all models on the Library Split Dataset}
 \label{table:split_datasets_embed}
 \end{center}
 \end{table}
@@ -915,17 +928,17 @@ A random sample are shown in Table \ref{tab:lib_split}.
 
 These low BLEU scores, despite fluent sounding descriptions, lead us to the biggest problem with this task.
 Generalisation across code different codebases is hard.  It requires generalization across code and documentation written by different authors in different contexts with different conventions. 
-Although related work in code language modelling demonstrates that idioms and patterns in code do exist\cite{allamanis_mining_nodate}, it has also shown that modelling across project boundaries is significantly harder,
+Although related work in code language modelling demonstrates that idioms and patterns in code do exist \citep{allamanis_mining_nodate}, it has also shown that modelling across project boundaries is significantly harder,
  % ]we are fundamentally hampered by the both the variance of code between libraries and variation of the target language that we aim to generate when we split between libraries.
-as codebases develop idioms and conventions within the project domain \cite{hinton_distributed_nodate}. 
+as codebases develop idioms and conventions within the project domain \citep{Hindle:2012:NS:2337223.2337322}. 
 
 Furthermore the natural language used in descriptions will likely be highly contextualised. 
 Unlike the usage of most words in the real world, descriptions of code artefacts are almost always metaphorical (for instance \textit{``colours"}, instead of \textit{``list of strings"}).  and therefore different libraries are under no obligation to use the same language or vocabularies when referring to the same underlying code objects. 
-For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, but generating a description surrounding the second example may be difficult without example of the relevant context.
+For instance a list of strings could just as easily by a \mintinline[]{python}{x_axis_labels} or \mintinline[]{python}{song_categories}, but generating a description surrounding the latter may be difficult without example of the relevant context.
 % Out aim is that the model may be able to infer something general from the cde, such as the type, but this too requires idiomatic use of the code that crosses boundaries.
 
 This lack of context and vocabulary, both with code and text,  seems to be the case with our tokenized datasets.
-After tokenization, the Library Split training set vocabulary is 10\% smaller than that of the Random Split training set. To make matters worse, 16\% of the Library Split validation vocabulary then doesn't even appear in the training set - a fourfold increase compared to the Random Split case.
+After tokenization, the Library Split training set description vocabulary is 10\% smaller than that of the Random Split training set. To make matters worse, 16\% of the Library Split validation description vocabulary then doesn't even appear in the training set - a fourfold increase compared to the Random Split case.
 These facts both indicate that in our tokenized Library Split, the model is learning from less diverse contexts, and yet more often is asked to extrapolate to new contexts.
 
 % and after tokenization, 16\% of the words in the validation set vocabil
@@ -940,17 +953,18 @@ These facts both indicate that in our tokenized Library Split, the model is lear
             & Random Split & Library Split \\
             \hline
             Tokenized Train Description Vocab Size    & 5249  &  4701 \\
-            Tokenize Valid Description Vocab Size    & 3012  &  2866 \\
-            \% of Tok. Valid Vocab not in Tok. Train Vocab                & 4.1\% &  15.8\% \\
+            Tokenized Valid Description Vocab Size    & 3012  &  2866 \\
+            \% of Tokenized Valid Vocab not in Tokenized Train Vocab                & \textbf{4.1\%} &  \textbf{15.8\%} \\
             \hline
-            \% of $<$UNK$>$ path elements in Train          &  37.4\%  &  32.4 \%   \\
-            \% of $<$UNK$>$ path elements in Validation     &  37.5\%  &  57.4\% \\
-            \% of $<$UNK$>$ terminal nodes in Train         &  12.3\%  &  8.8\%  \\ 
-            \% of $<$UNK$>$ terminal nodes in Validation    &  14.7\% &  44.9\% \\   
+            \% of VPCs with $<$UNK$>$ path elements in Train          &  37.4\%  &  32.4 \%   \\
+            \% of VPCs with $<$UNK$>$ path elements in Validation     &  \textbf{37.5\%}  &  \textbf{57.4\%} \\
+            \% of VPCs with $<$UNK$>$ terminal nodes in Train         &  12.3\%  &  8.8\%  \\ 
+            \% of VPCs with $<$UNK$>$ terminal nodes in Validation    &  \textbf{14.7\%} &  \textbf{44.9\%} \\   
             \hline
         \end{tabular}
     \end{center}
-    \caption{A table showing the change in the actual vocabulary of the argument descriptions, and also change in out-of-vocabulary tokens, for different library splits.}
+    \caption{A table showing the change in vocabularies with different Library Splits.
+    The top shows the change in description vocabulary between Random Split and Library Split. This shows that in a Library Split, models learn from less diverse contexts, which overlap less with the validation set. The bottom shows the change in \% VPCs with $<$UNK$>$ code tokens between Random Split and Library Split. The Library Split drastically increases the validation set's  $<$UNK$>$ tokens.}
     \label{tab:vocabsplit}
 \end{table}
 
@@ -958,13 +972,13 @@ These facts both indicate that in our tokenized Library Split, the model is lear
 
 This behaviour is even worse when it comes to the code paths.
 Unlike the vocabulary for descriptions, the  vocabulary for code paths is set entirely by the training set - there are no Glove preembeddings of paths to help us build a list. The result is that in our tokenized Library Split, the fraction of codepaths with $<$UNK$>$ path component in the validation set rose from 38\% to 58\%, and $<$UNK$>$ terminal nodes rose from 15\% to 45\%. 
-These large increases further explain why, despite their capacity for abstraction, our Code2Vec models struggled to generalise well. A summary of these results in presented in Table \ref{tab:vocabsplit}
+These large increases further explain why, despite their capacity for abstraction, our Code2Vec models struggled to generalise well. A summary of these results in presented in Table \ref{tab:vocabsplit}.
 
-This work shows how challenging it is to generalise code across repository. Syntax trees are vast and diverse \cite{allamanis_survey_2017}, which poses a problem for vocabularies, even if only taking a small subsection of the tree. 
+This work shows how challenging it is to generalise code across repository. Syntax trees are vast and diverse \citep{allamanis_survey_2017}, which poses a problem for vocabularies, even if only taking a small subsection of the tree. 
 Furthermore, the language thats used is necessarily different and metaphorical, which leads to fitting on training that can fail generalise.
 
 Further work on this dataset should focus on different tokenizations and representations that can help capture the similarities betwen the different partitions across libraries, and avoid vocabulary problems.
-Pointer networks, such as used by Bhoopchand et al\cite{bhoopchand_learning_2016}, could be a signficant way of dealing with out-of-vocabulary tokens in code descriptions. So too could generating descriptions at a character level, though this poses its own problems, for particularly long sequences. 
+Pointer networks, such as used by \citet{bhoopchand_learning_2016}, could be a signficant way of dealing with out-of-vocabulary tokens in code descriptions. So too could generating descriptions at a character level, though this poses its own problems, for particularly long sequences. 
 Similarly different representations of AST codepaths could be investigated, allowing for a more composable version of a VPC. 
 
 \begin{table}[ht]
@@ -978,8 +992,8 @@ Similarly different representations of AST codepaths could be investigated, allo
     \textbf{Argument}: \mintinline[]{python}{kind}\\
     \textbf{Description}: interpolation mode for the frequency estimator . see :\\
      `` scipy.interpolate.interp1d `` for valid settings .\\
-    \textbf{Rote Learner}:   sample weights . \\
     \textbf{Code2Vec Decoder}: maximum number of iterations to use .\\
+    \textbf{Rote Learner}:   sample weights . \\
     \\
     
     \textbf{A}: \mintinline[]{python}{query}\\
@@ -1015,7 +1029,7 @@ Similarly different representations of AST codepaths could be investigated, allo
     \end{tabular}
     }
 
-    \caption{A sample of translations on the Library Split Dataset, in this case with the Code2Vec Decoder model}
+    \caption{A sample of translations on the Library Split Dataset, in this case with the Code2Vec Decoder model. Although translations have a degree of fluency, the overlap in this case is poor, showing the difficulty of Out-of-Project generalisation.}
     \label{tab:lib_split}
 \end{table}
 

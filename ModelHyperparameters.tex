@@ -6,10 +6,11 @@ The hyperparameters of the best model for each experiment are presented in this 
 
 \begin{table}[h!]
 \begin{center}
+\makebox[\linewidth][c]{
 \begin{tabular}{ c | c | c  }
     \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
     \hline
-    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & description vocabulary size            & $40,000$ \\
     \hline
     Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
                                       % & samples                           & $50$  \\
@@ -25,6 +26,7 @@ The hyperparameters of the best model for each experiment are presented in this 
     + \textit{dropout}                & \textit{dropout}           & $0.1$           \\
     \hline
 \end{tabular}
+}
 \caption {Hyperparameters of Experiment \ref{sub:comparing_baseline_models}: Comparing Baseline Models }
 \label{table:hyperparams_name_baseline}
 \end{center}
@@ -33,28 +35,165 @@ The hyperparameters of the best model for each experiment are presented in this 
 
 \begin{table}[h!]
 \begin{center}
+\makebox[\linewidth][c]{
 \begin{tabular}{ c | c | c  }
     \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
     \hline
-    -                                 & vocabulary size            & $40,000$ \\
+    -                                 & description vocabulary size            & $40,000$ \\
     \hline
     Rote Learner                      & feature                    & \textit{n}-character-gram overlap \\
                                       % & samples                           & $50$  \\
     \hline
-    Seq to Seq  (basic)               & learning rate              & $0.001$         \\
+    Seq to Seq   \textit{all models}  & learning rate              & $0.001$         \\
                                       & batch size                 & $128$           \\
                                       & bi-lstm size               & $(300,300) $    \\
                                       & attention size             & $300$           \\
                                       & max arg. name sequence length         & $120$   \\
                                       & max arg. description sequence length  & $120$  \\
-    \hdashline
-    - \textit{name only}              & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
-    - \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
+                                       & dropout           & $0.1$           \\
+    % \textit{name + function name}   & (basic) + \textit{dropout}           & $0.1$           \\
+    % \textit{name + other args}      & (basic) + \textit{dropout}           & $0.1$           \\
+    % \textit{name + function name + other args} & (basic) + \textit{dropout}   & $0.1$        \\
 \end{tabular}
-\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating Different Tokenizations }
+}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_different_tokenizations}: Investigating the Function Signature }
 \label{table:hyperparams_different_tokenizations}
 \end{center}
 \end{table}
 
+
+\begin{table}[h!]
+\begin{center}
+\makebox[\linewidth][c]{
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & description vocabulary size            & $40,000$ \\
+                                      & path vocabulary size            & $15,000$ \\
+                                      & node vocabulary size            & $15,000$ \\
+                                      & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & max contexts \\
+                                      & feature                    & proportional contexts \\
+                                      & feature                    & max subcontexts \\
+                                      & feature                    & proortional subcontexts \\
+                                      % & samples                           & $50$  \\
+    \hline
+    Code2Vec Decoder                  & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & dropout             & $0.1$           \\
+                                      & max arg. description sequence length  & $120$  \\
+                                      & code2vec size  (lstm decoder size)             & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+
+\end{tabular}
+}
+\caption {Hyperparameters of Experiment \ref{sub:comparing_code2vec_to_baselines}: Comparing Code2Vec Decoder to Baselines }
+\label{table:hyperparams_code2vec}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\makebox[\linewidth][c]{
+\begin{tabular}{ c | c | c  }
+      \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & description vocabulary size            & $40,000$ \\
+                                      & path vocabulary size            & $15,000$ \\
+                                      & node vocabulary size            & $15,000$ \\
+                                      & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                                  & feature                    & max contexts \\
+
+    \hline
+    Code2Vec Decoder    (all)              & learning rate              & $0.001$         \\
+                                      & batch size                 & $128$           \\
+                                      & dropout             & $0.1$           \\
+                                      & max arg. description sequence length  & $120$  \\
+                                      & code2vec size  (lstm decoder size)             & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+
+\end{tabular}
+}
+\caption {Hyperparameters of Experiment \ref{sub:comparing_code2vec_altered}: Masking Identifiers in Code2Vec Decoder }
+\label{table:hyperparams_masking}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\makebox[\linewidth][c]{
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & description vocabulary size            & $40,000$ \\
+                                      & path vocabulary size            & $15,000$ \\
+                                      & node vocabulary size            & $15,000$ \\
+                                      & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      & feature                    & max contexts\\
+                                      & feature                    & \textit{n}-character-gram overlap + max contexts\\
+    \hline
+    All Neural Models  & learning rate              & $0.001$(\textit{where applicable})          \\
+                                      & batch size                 & $64$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $0.1$           \\
+                                      & bi-lstm size               & $(300,300) $    \\
+                                      & attention size             & $300$           \\
+                                      & max arg. name sequence length         & $120$   \\
+                                      & max arg. description sequence length  & $120$  \\
+
+\end{tabular}
+}
+\caption {Hyperparameters of Experiment \ref{sub:combined_code2vec}: Investigating the Combination of Modalites }{}
+\label{table:hyperparams_c2e}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[h!]
+\begin{center}
+\makebox[\linewidth][c]{
+
+\begin{tabular}{ c | c | c  }
+    \textbf{Model}                           {}  & \textbf{Hyperparameter}  & \textbf{Value}    \\
+    \hline
+    -                                 & description vocabulary size            & $40,000$ \\
+                                      & path vocabulary size            & $15,000$ \\
+                                      & node vocabulary size            & $15,000$ \\
+                                      & max paths per point            & $5,000$ \\
+    \hline
+    Rote Learner                      &                             &  \\
+    \hdashline
+                                      & feature                    & \textit{n}-character-gram overlap \\
+                                      & feature                    & max contexts\\
+                                      & feature                    & \textit{n}-character-gram overlap + max contexts\\
+    \hline
+    All Neural Models  & learning rate              & $0.001$         \\
+       (\textit{where applicable})                               & batch size                 & $64$           \\
+                                      & code2vec size               & $300$    \\
+                                      & path embedding size               & $300$    \\
+                                      & node embedding size               & $300$    \\
+                                      & dropout             & $0.3$           \\
+                                      & bi-lstm size               & $(300,300) $    \\
+                                      & attention size             & $300$           \\
+                                      & max arg. name sequence length         & $120$   \\
+                                      & max arg. description sequence length  & $120$  \\
+
+\end{tabular}
+}
+\caption {Hyperparameters of Experiment \ref{sub:investigating_lib_split}: Investigating the Library Split }{}
+\label{table:hyperparams_libsplit}
+\end{center}
+\end{table}

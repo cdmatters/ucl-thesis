@@ -8,30 +8,30 @@ However, in order to examine the automatic documentation of individual elements 
 
 Therefore we set out to collect our own dataset, according to a number of criteria:
 
-\begin{enumerate}
+\begin{tight_enumerate}
     \item The data should be `real-world', ideally from open source code
     \item The data should have a close alignment between natural language and the code described. Ideally the natural language \textit{explicitly} describes the source code.
     \item The code used must be high quality and parsable, so that syntactic structure can be extracted.
     \item The data should require \textit{minimal} preprocessing and cleaning, to avoid mistakes and errors.
     \item The data should comparable in size to existing datasets
-\end{enumerate}
+\end{tight_enumerate}
 
-These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 112 of the most popular libaries in `PyPI', the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
+These goals were met in our collection of 40,000 function arguments with their respective natural language description, from 112 of the most popular libaries in `PyPI'\footnote{https://pypi.org/}, the Python Package Index - where open source python libraries are deployed. In the rest of this section we outline how we obtained this dataset, and the structure of the data within it. As this is a new and previously unseen dataset, we also present an analysis of its composition, both qualitatively and quantitatively.
 Finally we present the different partitions of the dataset, we used in our experiments.
 
 
 \section{Method of Collection} % (fold)
 \label{sec:method_of_collection}
 
-As mentioned in Section \ref{sub:python}, a number of conventions exist for the formatting of docstrings, the two most prominent ones being `numpy'-style and `Google'-style.
-Not all codebases use such styles, (as seen in the Edinburgh Corpus \cite{barone_parallel_2017}), but they are popular with large open source projects. 
+As mentioned in Section \ref{sub:python}, a number of conventions exist for the formatting of docstrings, the two most prominent ones being numpy-style and Google-style.
+Not all codebases use such styles, (as seen in the Edinburgh Corpus \citep{barone_parallel_2017}), but they are popular with large open source projects. 
 
-Sphinx is the industry standard for generating static HTML pages of documentation from source code. It contains a plugin - \textit{napoleon} - especially designed for Python docstrings formatted according to the numpy or Google conventions. 
+Sphinx\footnote{http://www.sphinx-doc.org/} is the industry standard for generating static HTML pages of documentation from source code. It contains a plugin - \textit{napoleon}\footnote{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/} - especially designed for Python docstrings formatted according to the numpy or Google conventions. 
 This plugin loads the source into memory and obtains the docstring from the AST itself.
 Then \textit{napoleon} uses its custom parser to parse out different features from the docstring, such as argument names and their descriptions.
 
-In order to make use of \textit{napoleon} docstring parsing facilities, we wrote a plugin, \textit{bonaparte}\footnote{https://github.com/condnsdmatters/bonaparte}, forking the \textit{napoleon}'s source. 
-Instead of generating HTML, this plugin generated a series of yaml files with the associated data we required, including argument names, descriptions, docstrings, function code and filenames.
+In order to make use of \textit{napoleon} docstring parsing facilities, we wrote a plugin, \textit{bonaparte}\footnote{https://github.com/condnsdmatters/bonaparte}, forking the \textit{napoleon} source. 
+Instead of generating HTML, this plugin generated a series of yaml\footnote{http://yaml.org/} files with the associated data we required, including argument names, descriptions, docstrings, function code and filenames.
  
 
 \begin{listing}[ht!]
@@ -67,8 +67,8 @@ Instead of generating HTML, this plugin generated a series of yaml files with th
 
 
 Having written the plugin, we required a repository of large scale projects that documented their code according to these conventions. 
-Therefore, we decided to run the bonaparte plugin on the 300 most popular libraries in PyPI, as of April 2018 \footnote{https://python3wos.appspot.com/}.
-After collecting these, we processed the data by removing arguments without descriptions (such as \mintinline[]{python}{self}) or without code bodies (from abstract base classes), or in an inappropriate documentation convention. 
+Therefore, we ran the bonaparte plugin on the 300 most popular libraries in PyPI, as of April 2018 \footnote{https://python3wos.appspot.com/}.
+We then processed our data by removing arguments without descriptions (such as \mintinline[]{python}{self}) or without code bodies (from abstract base classes), or with an inappropriate documentation convention. 
 This fulfilled our objective of obtaining a large number of arguments, descriptions and source code from popular high quality code-in-the-wild sources, with minimal processing to extract the relevant data.
 
 \section{Structure of Data}
@@ -84,7 +84,7 @@ An example datapoint is presented in Listing \ref{lst:single_point_short}. The f
 \subsection{Statistical Analysis of Libraries}
 
 We first analysed our dataset by looking at the libraries included within it.
-We found that although the criteria for choice of library was based solely on frequency of downloads from the PyPI, there was a clear bias towards scientific libraries in the composition of the data.
+We found that although the criteria for choice of library was based solely on frequency of downloads from PyPI, there was a clear bias towards scientific libraries in the composition of the data.
 
 Of the 112 libraries that eventually contributed data to the dataset, only 21 are labelled with the `Scientific/Engineering' tag on PyPI, yet these libraries contribute 68.3\% of arguments to the overall dataset, and 61.6\% of the functions. 
 Even more surprisingly one library, \mintinline{python}{tensorflow}, contributes 41\% of the arguments to the data - vastly more than any other library.
@@ -95,7 +95,7 @@ In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contribu
     \begin{tabular}{c | c | c | c}
         Library      & Arguments     & Functions  & Scientific \\
         \hline
-        tensorflow   & $ 17002 $     & $ 4340 $ & True \\
+        \textbf{tensorflow}   & $ \mathbf{17002} $     & $ \mathbf{4340} $ & \textbf{True} \\
         google   & $ 2829 $      & $ 1098 $ & False \\
         scipy    & $ 2030 $      & $ 549 $ & True \\
         networkx     & $ 1869 $      & $ 669 $ & True \\
@@ -109,7 +109,7 @@ In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contribu
         \hline
         TOTAL    & $ 41424 $     & $ 12339 $ & True: 21, False: 112 \\
     \end{tabular}
-    \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments and functions}
+    \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments (68.3\%) and functions (61.6\%). Of all the libraries \mintinline[]{}{tensorflow} contributes by far the most data - 41\% of the arguments.}
     \label{table:breakdown_by_library}
     \end{center}
 \end{table}
@@ -126,7 +126,7 @@ The necessity of these kinds of distinctions, and the precision of their use cas
     \begin{tabular}{c | c | c | c | c}
         & Top Argument Names & Count  &   Top Function Names & Count \\  
         \hline               
-        1.   &  name     &     1917    &   fit       &    122 \\        
+        1.   &  \textbf{name}     &     \textbf{1917}    &   fit       &    122 \\        
         2.   &  x        &     439     &   transform &    102 \\         
         3.   &  kwargs   &     303     &   train     &    77 \\         
         4.   &  axis     &     263     &   evaluate  &    71 \\        
@@ -138,7 +138,7 @@ The necessity of these kinds of distinctions, and the precision of their use cas
         10.  &  value    &     210     &   specgram  &    45 \\         
     
     \end{tabular}
-    \caption {The most popular variable names and function names in the raw dataset. As can be seen these are either dominated by scientific terms and single letter variable names, such as those in scientific libraries. Scientific functions which take large numbers of arguments contribute heavily to the dataset}
+    \caption {The most popular variable names and function names in the raw dataset. As can be seen these are either dominated by scientific terms  and single letter variable names, such as those in scientific libraries (x, axis, dtype). Scientific functions which take large numbers of arguments contribute heavily to the dataset. The variable ``name'' provides an outsize contribution, due its repeated presence in \mintinline[]{python}{tensorflow}, often with the same description. }
     \label{table:popular_variable_names}
     \end{center}
 \end{table}
@@ -156,7 +156,7 @@ Corresponding to our findings on a library level, we found that a large number o
     \begin{tabular}{c | c }       
         Repetitions, $N$  & \shortstack{Names Repeated $N$ Times \\ (\% of Data) } \\
         \hline     
-        1     &       11.74   \\          
+        1     &       \mathbf{11.74}   \\          
         2 - 4 &       17.30       \\      
         5 - 9 &        10.99   \\          
         10 - 19 &      11.56   \\          
@@ -180,8 +180,13 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
     \end{tabular}
 }
-
-        \caption { A table of the count and frequency of variable names as they feature in the raw dataset. Approximately half of all variables names occur over 10 times in the data. In particular a single outlier - the variable name \mintinline{python}{name} from \mintinline{python}{tensorflow}, accounts for 6.1\% of the collected data}
+    \caption{ 
+    % Two tables on the frequency of name duplication in the data. 
+    \textbf{Left}: the \% of data composed of arguments with names repeated N times \\
+    \textbf{Right}: the \% of unique argument names that are repeated N times\\
+    These indicate that approximately half of the dataset is made up of names that occur over 10 times, and only 12\% of arguments have a unique name (\textit{left}). However these account for less than 8\% of the unique names in the dataset (\textit{right}). 
+    A single outlier - the variable name \mintinline[]{python}{name} from \mintinline[]{python}{tensorflow}, accounts for 6.1\% of the collected data
+    }
     \label{table:variable_histogram}
 
 
@@ -214,7 +219,10 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
     \end{tabular}
 }
-        \caption { A table of the count and frequency of as (name, description) pairs as they feature in the dataset. Although names are often repeated, a much greater fraction of data points have unique (name, description) pairs.}
+        \caption {
+    \textbf{Left}: the \% of data composed of args with (name, desc.) pairs repeated N times \\
+    \textbf{Right}: the \% of unique (name, desc.) pairs that are repeated N times\\
+    Almost half the datapoints have a unique name + description, indicating a variety of descriptions for the same name (\textit{left}). However \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name}: \textit{``A name for operation (optional).''} still accounts for 3.3\% of the collected data.}
     \label{table:name_desc_histogram}
 
 \makebox[\linewidth][c]{
@@ -245,7 +253,11 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
 }
 
-        \caption { A table of the count and codepaths as they feature in the raw dataset. A larfe fraction of the datasets are repeated }
+        \caption { 
+    \textbf{Left}: the \% of all codepaths that are repeated N times \\
+    \textbf{Right}: the \% of unique codepaths that are repeated N times\\
+        About 15\% of unique codepaths are repeated more than 10 times (\textit{right}) yet these account for $>85\%$ of all codepaths (\textit{left}).  This indicates a small number of paths are exceptionally common, yet the range of different paths is relative great.
+        }
     \label{table:codepath_histogram} 
 
 
@@ -264,7 +276,8 @@ Apart from this we note no major irregularities the arguments. The distribution 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ImagesCodeRelated/length_distribution.png}
-    \caption{Caption here}
+    \caption{The frequency distributions of description lengths (\textit{left}) and argument name lengths (\textit{right}). 
+    \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name} outlier is visible in the descriptions graph.}
     \label{fig:length_dist}
 \end{figure}
 
@@ -275,19 +288,23 @@ Our dataset of derives from 264,056 lines of code (LOC)\footnote{Calculated with
 When each function is split into different arguments, the total LOC associated with the dataset grows to 1,340,891. The distribution of these lengths is visible in figure \ref{fig:loc}, demonstrating that most functions are shorter than 50 lines of code.
 The average length of the source code for a datapoint is 34 LOC, with a standard deviation of 57 LOC.
 
-Since we aimed to investigate the code using Alon et al's \cite{alon_general_2018} path based parameterisation, we also investigated the most popular paths present in the dataset. Specfically, for each argument, we extracted the path-contexts for which the argument was a terminal node, and counted the paths associated with these contexts.
+Since we aimed to investigate the code using \citet{alon_general_2018}'s path based parameterisation, we also investigated the most popular paths present in the dataset. Specfically, for each argument, we extracted the \textit{modified path-contexts} for which the argument was a terminal node, and counted the paths associated with these contexts.
 A table histogram, Table \ref{table:codepath_histogram}, displays the distributions of paths. 
 In it one can see that very few paths in the dataset are completely unique, which is promising if we are hoping to generalise across different sets of paths.
 Furthermore, looking at the number of paths per data point (Table \ref{table:paths_per_point}), we see most data points have a large number of paths - about half have between 50 and 500 paths, which is also promising.
 
-However, we also note from this table that some outliers have a preposterous large number of paths. These often correspond with the outliers that have exceptionally large line of code, and are often tied to items like class definitions and the like. None the less, this indicates the data set is very much source from `real-life'.
+However, we also note from this table that some outliers have a preposterous large number of paths. These often correspond with the outliers that have exceptionally large line of code, and are often tied to items like class definitions. None-the-less, this indicates the data set is very much source from `real-life'.
 
 
 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\linewidth]{ImagesCodeRelated/lines_of_code.png}
-    \caption{Caption here}
+    \caption { 
+    \textbf{Left}: distribution of lines of code in the function of each argument \\
+    \textbf{Right}: distribution of lines of code of the original functions in the dataset\\
+These indicate that most functions in the dataset are under 25 LOC (\textit{left}), yet there are still a significant number of arguments with functions over 75 LOC.
+        }
     \label{fig:loc}
 \end{figure}
 
@@ -312,26 +329,24 @@ However, we also note from this table that some outliers have a preposterous lar
         10.  & Name $\uparrow$ Call $\uparrow$ Assign $\uparrow$ Try $\uparrow$ If $\downarrow$ Assign $\downarrow$ Call $\downarrow$ keyword &  0.184 \\ 
   
     \end{tabular}
-    \caption { The most popular the paths of the the dataset. These only account for a very small amount of the data }
-    \label{table:pop_paths} 
+    \caption { The most popular the paths of the \textit{modified path-contexts} of the dataset}.  
     \begin{tabular}{c | c | c  }       
     
         Paths Per DataPoint & Count  &  \%-ile of data points \\  
         \hline
-        0 &               24  &     0.07865 \\
-        1 &               138  &    0.53090 \\
-        2 - 9 &           2451  &   8.56328 \\
-        10 - 49 &         8717  &   37.13050 \\
-        50 - 99 &         4517  &   51.93354 \\
-        100 - 499 &       10023  &  84.78076 \\
-        500 - 999 &       2449  &   92.80658 \\
-        1000 - 9999 &     2160  &   99.88530 \\
-        10000 - 99999 &   32  &     99.99017 \\
-        100000 - 999999 & 3  &      100.00000 \\
+        0 &               24  &     0.079 \\
+        1 &               138  &    0.531 \\
+        2 - 9 &           2451  &   8.563 \\
+        10 - 49 &         8717  &   37.131 \\
+        50 - 99 &         4517  &   51.934 \\
+        100 - 499 &       10023  &  84.781 \\
+        500 - 999 &       2449  &   92.807 \\
+        1000 - 9999 &     2160  &   99.885 \\
+        10000 - 99999 &   32  &     99.990 \\
+        100000 - 999999 & 3  &      100.000 \\
 
     \end{tabular}
-    \caption { A table of the count and frequency of distinct code paths as they feature in the raw dataset. 
-        These can be either due to the repetition of function name throughout libraries, or by one argument contributing many functions }
+    \caption {A table of the number of codepaths per argument. This spread covers several orders of magnitude, although 50\% of arguments fall between 50 and 500. Having 0 paths indicated an abstract class method which raised an \mintinline[]{python}{NotImplementedError}. These were filtered out. }
     \label{table:paths_per_point} 
 
 \end{table}
@@ -340,10 +355,10 @@ However, we also note from this table that some outliers have a preposterous lar
 \section{Final Preparations} % (fold)
 \label{sec:final_preparations}
 
-Our final preparations of the dataset involved the filtering of duplicates that we had discovered in section \ref{sec:analysis_of_data}, and two different partitionings of train, validation and test according to `in-project' splits and `out-project' splits.
+Our final preparations of the dataset involved the filtering of duplicates that we had discovered in Section \ref{sec:analysis_of_data}, and creating two different partitionings of train, validation and test according to `in-project' splits and `out-project' splits.
 
-First we restricted the number of duplicates of (name, description) pairs to 10. This removed the problem of exemplified by tensorflow's \mintinline[]{python}{name}, while still maintaining a 91\% of the data. This would be a \textbf{Full} dataset, which would be used to investigate syntax tree related approaches, since the syntax trees would be different for each of the duplicates.
-We also prepared a \textbf{Reduced} dataset, where (name, description) pairs where unique. This would give us the opportunity, to do a broader analysis, where we might not use the syntax tree.
+First we restricted the number of duplicates of (name, description) pairs to 10. This removed the problem of exemplified by tensorflow's \mintinline[]{python}{name}, while still maintaining a 91\% of the data. This would be a \textbf{Full} dataset, which would be used to investigate AST related approaches, since the ASTs would be different for each of the duplicates.
+We also prepared a \textbf{Reduced} dataset, where (name, description) pairs where unique. This would give us the opportunity, to do a broader analysis, where we might not use the AST.
 
 Then we partitioned our datasets into train, validation and test in two different ways:
 \begin{enumerate}
@@ -374,6 +389,6 @@ Our final datasets are presented in Table \ref{tab:final_datasets}, with their t
     \hline
     \hline
     \end{tabular}
-    \caption{Our Final Datasets}
+    \caption{Our Final Datasets. Random Split partitions training, validation and test at random, while Library Split ensures test and validation are from different libraries to training. A Reduced dataset indicates (name, description) pairs are unique, and is therefore useful for investigations that dont use the AST. }
     \label{tab:final_datasets}
 \end{table}

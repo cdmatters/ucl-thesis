@@ -37,20 +37,14 @@ The rest of this section is dedicated to presenting each of these models, summar
           Model & Uses Signature Data & Uses VPC Data \\ 
     \hline
     Rote Learner & \checkmark & \checkmark \\
-    Seq2Seq Decoder & \checkmark & \\
+    Seq2Seq Model & \checkmark & \\
     Code2Vec Decoder &    &  \checkmark \\
-    Code2Vec + Seq2Seq Decoder& \checkmark & \checkmark \\
+    Code2Vec + Seq2Seq Model& \checkmark & \checkmark \\
     \hline
     \end{tabular}
-    \caption{Overview of Our Models}
+    \caption{A Summary of the Models in our Investigation}
     \label{tab:our_models_capability}
 \end{table}
-
-
-
-
-
-
 
 
 
@@ -81,12 +75,22 @@ The benefit of this model is that the definition of `best-matching' can then be 
 \end{algorithm}
 
 \begin{enumerate}
-    \item \textbf{NCharacter-Gram Overlap} \textit{(Sig. Data)} \\This matching criterion was used for function signature data, and so operates on sequences of characters. It compiles a list of the training points which have the longest n character overlap with the test data point (or the longest common substring). If the same point has two of such overlaps, it is included twice, and so forth. This pseudo code is presented in Appendix Algorithm \ref{alg:ngram_overlap}.
-    \item \textbf{Proportional Contexts} \textit{(VPC Data)}\\This criterion matches VPCs by treating each VPC as an atomic unit. For each VPC within the test point, the criterion finds all the training points with the same VPC. It combines these into one list, returns this list. Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping VPC with the test point. The pseudocode is presented in Appendix Algorithm \ref{alg:context_algorithm} 
-    \item \textbf{Max Contexts} \textit{(VPC Data)}\\This criterion takes the list output by the \textbf{Proportional Context} criterion, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. The pseudocode is also presented in Appendix Algorithm \ref{alg:context_algorithm} 
-    \item \textbf{Proportional SubContexts} \textit{(VPC Data)}\\This criterion also match VPCs of the data, but treats each VPC as sequence of nodes. Specifically, as it creates $q = p{\downarrow}x_f$ and treats the new path, $q$, as the sequence of nodes and arrows that compose it. This allows it to match subpaths. The matching criterion takes the test point, and for each VPC within it, finds the training VPC with the longest subsequences that matches it. It collects the corresponding datapoints to these paths and combines them into one list. It then returns this list. This is equivalent to choosing the training points that best match each VPC in the test point, proportionally to how often they are the best match. The pseudocode is presented in Appendix Algorithm \ref{alg:sub_context_algorithm} 
-    \item\textbf{Max SubContexts} \textit{(VPC Data)}\\The matching criterion takes the list output by the \textbf{Proportional SubContext}, and only chooses the training points that appear most frequently in the list. This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is also presented in Appendix Algorithm \ref{alg:sub_context_algorithm} 
-    \item\textbf{[Combinations]}\textit{(Sig. Data + VPC Data)} \\ Naturally these criteria can be combined across modalities to act upon combinations of the function signature and AST. In cases where this is done, the new list is simply the combination of the lists from the combined individual criteria. 
+    \item \textbf{NCharacter-Gram Overlap} \textit{(Signature Data)} \\This matching criterion was used for function signature data, and so operates on sequences of characters. It compiles a list of the training points which have the longest n character overlap with the test data point (or the longest common substring). If the same point has two of such overlaps, it is included twice, and so forth.
+     % This pseudo code is presented in Appendix Algorithm \ref{alg:ngram_overlap}.
+    \item \textbf{Proportional Contexts} \textit{(VPC Data)}\\This criterion matches VPCs by treating each VPC as an atomic unit. For each VPC within the test point, the criterion finds all the training points with the same VPC. It combines these into one list, returns this list.
+    % Naturally, the list may have duplicates of the same training point. This is equivalent to choosing the training points proportionally to how often they have an overlapping VPC with the test point. 
+    % The pseudocode is presented in Appendix Algorithm \ref{alg:context_algorithm} 
+    \item \textbf{Max Contexts} \textit{(VPC Data)}\\This criterion takes the list output by the \textbf{Proportional Context} criterion, and only chooses the training points that appear most frequently in the list. 
+    % This is equivalent to choosing the training points that have the greatest number of overlapping path-contexts with the test point. 
+    % The pseudocode is also presented in Appendix Algorithm \ref{alg:context_algorithm} 
+    \item \textbf{Proportional SubContexts} \textit{(VPC Data)}\\This criterion also match VPCs of the data, but treats each VPC as sequence of nodes. 
+    % Specifically, as it creates $q = p{\downarrow}x_f$ and treats the new path, $q$, as the sequence of nodes and arrows that compose it. 
+    This allows it to match subpaths. The matching criterion takes the test point, and for each VPC within it, finds the training VPC with the longest subsequences that matches it. It collects the corresponding datapoints to these paths and combines them into one list, and then returns this list.
+     % This is equivalent to choosing the training points that best match each VPC in the test point, proportionally to how often they are the best match. 
+     % The pseudocode is presented in Appendix Algorithm \ref{alg:sub_context_algorithm} 
+    \item\textbf{Max SubContexts} \textit{(VPC Data)}\\The matching criterion takes the list output by the \textbf{Proportional SubContext}, and only chooses the training points that appear most frequently in the list. 
+    % This is equivalent to choosing the training points that most often are the best match for all path-contexts of the test. The pseudocode is also presented in Appendix Algorithm \ref{alg:sub_context_algorithm} 
+    \item\textbf{[Combinations]}\textit{(Signature Data + VPC Data)} \\ Naturally these criteria can be combined across modalities to act upon combinations of the function signature and AST. In cases where this is done, the new list is simply the combination of the lists from the combined individual criteria. 
 \end{enumerate}
 
 
@@ -128,7 +132,7 @@ The benefit of this model is that the definition of `best-matching' can then be 
     \end{tabular}
 }
 
-    \caption{A summary of the BestMatchingSet algorithms we use in the experiments. For sake of simplicity, a \textit{best-effort} match here refers to the match with longest matching subsequence, when treating a VPC as one long sequence}
+    \caption{A summary of the BestMatchingSet functions used in our RoteLearner (Algorithm \ref{alg:rote_learner_general}).  For sake of simplicity, a \textit{best-effort} match here refers to the match with longest matching subsequence, when treating a VPC as one long sequence}
     \label{tab:matching_summary}
 \end{table}
 
@@ -158,22 +162,22 @@ The benefit of this model is that the definition of `best-matching' can then be 
 
 \subsubsection{Overview}
 
-Our character level sequence-to-sequence model follows the standard formulation as found in Sutskever et al \cite{sutskever_sequence_2014} \cite{bahdanau_neural_2014}, but encodes a sequences of characters, and decodes a sequence words. 
-We use a bidirectional LSTM as our encoder, concatenating its outputs\cite{bahdanau_neural_2014}, and use a single LSTM as a decoder.
-We also use a Luong attentional mechanism \cite{luong_effective_2015} over encoder outputs, throughout our decoding.
+Our character level sequence-to-sequence model follows the standard formulation as found in \citet{sutskever_sequence_2014} and \citet{bahdanau_neural_2014}, but encodes a sequences of characters, and decodes a sequence words. 
+We use a bidirectional LSTM as our encoder, concatenating its outputs\citep{bahdanau_neural_2014}, and use a single LSTM as a decoder.
+We also use a Luong attentional mechanism \citep{luong_effective_2015} over encoder outputs, throughout our decoding.
 
 Since our vocabulary of characters is size 70, we embed our input into 70-dimensional space, with trainable embeddings. We initialising these with a one-hot encoding.
-Our characters are embedded into a 200 dimensional space use Glove embeddings for our decoder. 
+Our characters are embedded into a 200 dimensional space use GloVe embeddings for our decoder. 
 These are not made trainable, due to concerns that the model may overfit. 
-We apply dropout \cite{srivastava_dropout_nodate} to inputs, outputs and states in both the encoder and decoder, and clip gradients to magnitude 1. The dropout fraction is a tuned hyperparameter.
-We define our object function as the minibatch average of the summed cross entropy losses between the true words and the distributions over words at each time step.
-We train our model by minimising this with Adam \cite{kingma2014adam}. 
+We apply dropout \citep{srivastava_dropout_nodate} to inputs, outputs and states in both the encoder and decoder, and clip gradients to magnitude 1. The dropout fraction is a tuned hyperparameter.
+We define our object function as the minibatch average of the summed cross-entropy losses between the true words and the distributions over words at each time step.
+We train our model by minimising this with Adam \citep{kingma2014adam}. 
 
-We present the model in full formality below. In it we present a non-bidirectional encoder, and treat the modification for bidirectionality separately, since we experiment with both variations of model.
+We have presented the ideas behind these models in the Background and present the model in full mathematical formality below. In it we present the encoder as uni-directional, and treat the modification for bidirectionality separately, since we experiment with both variations of model.
 
 \subsubsection{Encoder}
 
-First we iteratively embed each sequence of input tokens $\{x_1,...x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
+First we iteratively embed each sequence of input tokens $\{x_1,...,x_k\}$ into its vector representation $\{\textbf{x}_1,...\textbf{x}_k\}$, according to:
 \begin{align}
     \textbf{x}^T_t = \mathbf{H}^C_{x_t,:}
 \end{align}
@@ -183,7 +187,7 @@ $V_c$ is our character vocabulary,
 $D_c$ is our encoding dimension, 
 and $\textbf{X}_{i,:}$ indicates selection of row $i$ from a matrix \textbf{X}.
 
-Then we define an LSTM with functions $f$ and $g$, which takes input vector $\textbf{x}_t$ and generates an output, $\textbf{h}_t$, and updates its own state $\textbf{c}_t$ according to the equations in Equations \ref{eq:lstm1} to \ref{eq:lstm6}.
+Then we define an LSTM with functions $f$ and $g$, which takes input vector $\textbf{x}_t$ and generates an output, $\textbf{h}_t$, and updates its own state $\textbf{c}_t$ according to Background Equations \ref{eq:lstm1} to \ref{eq:lstm6}.
 \begin{align}
     \textbf{h}_t = f(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sh}\\
     \textbf{c}_t = g(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{c}_{t-1}) \label{eq:s2sc}
@@ -222,13 +226,13 @@ $\mathbf{h_i} \in \mathbb{R}^L$,
 $L$ is the dimension of our decoding LSTM,
 and $\textbf{X}_{i,:}$ indicates selection of row $i$ from a matrix \textbf{X}.
 
-The above routine is performed at inference time. However, during training we choose   $w_{t+1} $ to be the next word token  in the true sequence $\{y_1,...y_l\}$, instead of the most likely next word generated by the decoder. Therefore in this case $w_{t+1}  = y_{t+1}$ \textbf{not}  $w_{t+1} = argmax(\textbf{w}_{t+1})$. This is known as \textit{teacher forcing} and is known to produce better results for these models\cite{Goodfellow:2016:DL:3086952}\cite{r._j._williams_learning_1989}.
+The above routine is performed at inference time. However, during training we choose   $w_{t+1} $ to be the next word token  in the true sequence $\{y_1,...y_l\}$, instead of the most likely next word generated by the decoder. Therefore in this case $w_{t+1}  = y_{t+1}$ \textbf{not}  $w_{t+1} = argmax(\textbf{w}_{t+1})$. This is known as \textit{teacher forcing} and is known to produce better results for these models \citep{Goodfellow:2016:DL:3086952,r._j._williams_learning_1989}.
 
 \subsubsection{Bidirectional LSTM}
 
 The above framework is modified when dealing with a bidirectional LSTM encoder. The bidirectional LSTM consists of two LSTMs, one which processes the vectors forward $\{\textbf{x}_1,...\textbf{x}_k\}$, producing  $\{\overrightarrow{\textbf{h}}_1,...\overrightarrow{\textbf{h}}_k\}$, and one which processes the vectors in reverse order  $\{\textbf{x}_k,...\textbf{x}_1\}$, producing  $\{\overleftarrow{\textbf{h}}_1,...\overleftarrow{\textbf{h}}_k\}$.
 
-Following Bahdanau's example \cite{bahdanau_neural_2014} we concatenate these vectors to make a new vector of twice the length. Otherwise, the model is identical:
+Following \citet{bahdanau_neural_2014}'s example we concatenate these vectors to make a new vector of twice the length. Otherwise, the model is identical:
 \begin{align}
 (\textbf{h}^b_i)^T = [\overrightarrow{\textbf{h}}^T_i,\overleftarrow{\textbf{h}}^T_i ] \\
 (\textbf{c}^b_i)^T = [\overrightarrow{\textbf{c}}^T_i,\overleftarrow{\textbf{c}}^T_i ] \\
@@ -237,9 +241,9 @@ s = (\textbf{h}^b_k, \textbf{c}^b_k)
 
 \subsubsection{Attention}
 
-To make the adjustment of adding attention, we define a modification to the above decoding sequence. Since we use Luong-style\cite{luong_effective_2015} global attention, we incorporate a contextualising vector, $\textbf{z}_t$, to the output of our LSTM at each step, before feeding through our final softmax. This is equivalent to replacing equation \ref{eq:decoder_w} in the Decoder section with the following two equations:
+To make the adjustment of adding attention, we define a modification to the above decoding sequence. Since we use \citet{luong_effective_2015}'s global attention, we incorporate a contextualising vector, $\textbf{z}_t$, to the output of our LSTM at each step, before feeding through our final softmax. This is equivalent to replacing equation \ref{eq:decoder_w} in the Decoder section with the following two equations:
 \begin{align}
-    \tilde{\textbf{h}}'^a_t =  \text{tanh}(\textbf{W}_a[\textbf{z}_t, \textbf{h}'_t])\\
+    \tilde{\textbf{h}}'^a_t =  \tanh(\textbf{W}_a[\textbf{z}_t, \textbf{h}'_t])\\
     \textbf{w}_{t+1} = softmax(\textbf{W}_p\tilde{\textbf{h}}'^a_t) \label{eq:s2syw}  
 \end{align}
 where $\textbf{W}_a \in \mathbb{R}^{(L)\text{x}(A+L)} $ is our attention matrix, and 
@@ -254,13 +258,13 @@ This attention vector $\textbf{z}_t$ is calculated as the weighted average over 
 \subsubsection{Dropout}
 
 We added random dropout layer to the three encoder and three decoder variables during training:
-$\{\textbf{x}_j, \textbf{y}_j, \textbf{h}_j, \textbf{h}'_j, \textbf{c}_j, \textbf{c}'_j\}$.  This meant that $f \in [0,1]$, fraction of elements that are set to 0 at random from a vector or matrix, during training, which has been shown to have a regularising effect  \cite{srivastava_dropout_nodate}. In our case $f$ was a tuned hyperparameter. 
+$\{\textbf{x}_j, \textbf{y}_j, \textbf{h}_j, \textbf{h}'_j, \textbf{c}_j, \textbf{c}'_j\}$.  This meant that $f \in [0,1]$, fraction of elements that are set to 0 at random from a vector or matrix during training, which has been shown to have a regularising effect  \citep{JMLR:v15:srivastava14a}. In our case $f$ was a tuned hyperparameter. 
 
 \subsubsection{Optimisation}
 
 We define the words in our true sequence as $\{y_1, ..., y_l\}$, and their one hot representations as $\{\mathbb{I}_1, ...,\mathbb{I}_l \}$.
 In decoding we calculate distributions for each target word in the sequence $\{\mathbf{w}_1, ..., \mathbf{w}_l\}$.
-We define our objective function for one point as the sum of cross entropy losses between the target words in our sequence, (represented as one hot vectors) and the corresponding distributions of those words.
+We define our objective function for one point as the sum of cross-entropy losses between the target words in our sequence, (represented as one hot vectors) and the corresponding distributions of those words.
 \begin{align}
     \mathcal{L}_{single} = -\sum_{i=1}^l\mathbb{I}_i\cdotp\log(\mathbf{w}_i)
 \end{align} 
@@ -269,20 +273,20 @@ For multiple points, we take the average over the minibatch, so the losses dont 
     \mathcal{L}_{mb} = -\frac{1}{N}\sum_{j=1}^N\sum_{i=1}^l\mathbb{I}_i\cdotp\log(\mathbf{w}_i^j)
 \end{align}.
 
-We use Adam \cite{kingma2014adam} to minimise this objective function. Adam is a stochastic gradient descent mechanism, that uses a momentum based update that adapts during training. It also maintains a separate learning rate for each parameter, and makes adjustments of this based on the gradients and square gradients. This optimiser has proven to be highly effective in training neural networks\cite{ruder_overview_2016}.
+We use Adam \citep{kingma2014adam} to minimise this objective function. Adam is a stochastic gradient descent mechanism, that uses a momentum based update that adapts during training. It also maintains a separate learning rate for each parameter, and makes adjustments of this based on the gradients and square gradients. This optimiser has proven to be highly effective in training neural networks \citep{ruder_overview_2016}.
 
 Finally we also apply gradient clipping, where gradients are constrained have a certain magnitude:
 \begin{align}
      g' = min(-x,max(g, x))
 \end{align}
-where $g$ is our old gradient, $x \in \mathbb{R}^{+}$, and $g'$ our clipped gradient. This gradient clipping prevents large shifts occuring in minima next to steep gradients, has been shown to facilitate training\cite{pascanu_difficulty_2012}.
+where $g$ is our old gradient, $x \in \mathbb{R}^{+}$, and $g'$ our clipped gradient. This gradient clipping prevents large shifts occuring in minima next to steep gradients, has been shown to facilitate training \citep{pascanu_difficulty_2012}.
 
 \subsection{Code2Vec Decoder Model} % (fold)
 \label{sec:code2vec_decoder_model}
 
 \subsubsection{Overview}
 
-Our Code2Vec Decoder model creates a modified version of Alon et al's \cite{alon_code2vec_2018} Code2Vec code-vector, and uses that as intermediate representation for decoding. We differ from Alon et al's paper by building our vector from the our argument's \textit{variable path-contexts}, instead whole AST's \textit{path-contexts}.
+Our Code2Vec Decoder model creates a modified version of the Code2Vec code-vector presented by \citet{alon_code2vec_2018}, and uses that as intermediate representation for decoding. We differ from Alon et al's paper by building our vector from our argument's \textit{variable path-contexts}, instead whole AST's \textit{path-contexts}.
 We use the same decoder model as the Seq2Seq (without attention).
 
 We encode our VPCs using a 300-dimensional vector for the path, and 300-dimensional vector for the terminal node, and produce a final code vector of size 300.
@@ -299,7 +303,7 @@ For each $v_i$ we then prepare an embedded context vector $\mathbf{c_i}$ as foll
 \textbf{p}_i = \mathbf{H}^P_{p_i,:}\\
 \textbf{n}_i = \mathbf{H}^N_{n_i,:}\\
 \tilde{\textbf{c}_i} = ([\textbf{p}_i , \textbf{n}_i])^T \\
-\textbf{c}_i = \text{tanh}(\mathbf{W_c}\tilde{\textbf{c}_i}  + \mathbf{b_c})
+\textbf{c}_i = \tanh(\mathbf{W_c}\tilde{\textbf{c}_i}  + \mathbf{b_c})
 \end{align}
 Where  $\textbf{H}^P \in \mathbb{R}^{V_p\text{x}D_p}$ is our path embedding matrix, 
 $\textbf{H}^N \in \mathbb{R}^{V_n\text{x}D_n}$ is our terminal node embedding matrix, 
@@ -395,7 +399,7 @@ If we required multiple names, we concatenated the strings, using separator toke
     \textbf{tokenized (sequence):} \mintinline[]{python}{f,o,o,<S1>,f,u,n,c,A,<S2>,b,a,r,A,<S3>,b,a,r,B,<S3>,<EOS>}\\
     \textbf{tokenized (string):} \mintinline[]{python}{"foo|funcA-barA+barB+?"}\\
 \hrulefill\\ 
-    \caption{An example of a tokenization of the signature data}
+    \caption{An example of a tokenization of the signature data. The sequence representation was used for our Seq2Seq, while the string representation was used for our Rote Learner.}
     \label{fig:tokenizatio}
 \end{figure}
 
@@ -405,20 +409,20 @@ Although in principle, the VPCs could be taken directly from the entire AST of t
 First the AST was pruned to remove terminal nodes that not variables, such as \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} nodes. Such nodes are visible in Figure \ref{fig:fullAST}. 
 
 Although these nodes carry useful information as to whether the target name was being loaded or stored, they almost doubled the number of terminal nodes, and therefore quadratically increase the number of \textit{path-contexts} in the AST. Given our memory and time considerations in both training and preparation we pruned these nodes, noting that the path $p$ for any VPCs eliminated would still be present in the corresponding variable node to which \mintinline[]{yaml}{Load} or \mintinline[]{yaml}{Store} refers. 
-Although the loading and storing information had been removed, the tree still contained a rich information about the relationships between variable - the investigation of Section \ref{the_dataset}, for instance, was done after pruning.
+Although the loading and storing information had been removed, the tree still contained a rich information about the relationships between variable - the investigation of Section \ref{the_dataset}, for instance, was done after this pruning.
 
 Finally, in extracting VPCs we also removed the paths that led to the \mintinline[]{yaml}{arguments} series of nodes, and the string node child of \mintinline[]{yaml}{FunctionDef} . These nodes contained information such as the names of the arguments or name of the function. Since we wanted the function signature data to be investigated separately we removed these paths. 
 
-Finally we had our VPCs and could prepare to tokenize them. To do this we took the $V_p$ most common paths and the $V_n$ most common terminal nodes in the training set, and used these our respective vocabularies.  All other paths and nodes were given an $<$UNK$>$ token in encoding. $V_p$ and $V_n$ were hyperparameters we tuned given the resources of the models.
+Having extracted our VPCs, we proceded to tokenize them. To do this we took the $V_p$ most common paths and the $V_n$ most common terminal nodes in the training set, and used these as our respective vocabularies.  All other paths and nodes were given an $<$UNK$>$ token in encoding. $V_p$ and $V_n$ were hyperparameters that we maximised given the resources for training.
 
 \subsection{Tokenizing Descriptions}
 \label{sub:tokenize_descriptions}
 
-Finally we tokenized all descriptions by setting them to lower case and using the \mintinline[]{python}{nltk} \cite{bird_natural_2009} Punkt \cite{Kiss:2006:UMS:1245119.1245122}tokenizer. We then formed a vocabulary of size $V_w$ from the training set and GloVe embeddings. We did this by taking all words in the training set that had appeared at least 5 times and if they appeared in the GloVe vocabulary, adding them to our training vocabulary. Once this was done, we filled the remaining space in the vocabulary with the most popular words in GloVe that had not already been included. This was done to minimize out-of-vocabulary ($<$UNK$>$) tokens. This tokenized training vocabulary was then used for all learners.
+Finally we tokenized all descriptions by setting them to lower case and using the \mintinline[]{python}{nltk} \citep{bird_natural_2009} Punkt tokenizer \citep{Kiss:2006:UMS:1245119.1245122}. We then formed a vocabulary of size $V_w$ from the training set and GloVe embeddings. We did this by taking all words in the training set that had appeared at least 5 times and if they appeared in the GloVe vocabulary, adding them to our training vocabulary. Once this was done, we filled the remaining space in the vocabulary with the most popular words in GloVe that had not already been included. This was done to minimize out-of-vocabulary ($<$UNK$>$) tokens. This tokenized training vocabulary was then used for all learners.
 
 \section{Evaluation}
 
-To evaluate our quantively models we used the corpus BLEU-4 metric\cite{papineni_bleu_2001}, common in machine translation. This is a metric that has been shown to correlate with fluency and adequancy of translations. 
+To evaluate our models quantitatively we used the corpus BLEU-4 metric \citep{papineni_bleu_2001}, common in machine translation. This is a metric that has been shown to correlate with fluency and adequancy of translations. 
 
 To calculate BLEU, we first define a modified ngram precision, $p_n$ as:
 \begin{align}
@@ -442,7 +446,7 @@ The sentence-level BLEU-4, is then brevity penalty multiplied by the geometric m
 \text{BLEU-4} = BP\cdotp\prod_{n=1}^4 p_n^{\frac{1}{4}}
 \end{align}
 
-This metric can be very harsh on individual sentences, so on a corpus level, we take our modified precisions by summing ngram matches sentence by sentence first.
+The authors note the geometric can be very harsh on individual sentences, so on a corpus level, we take our modified precisions by summing ngram matches sentence by sentence first.
 \begin{align}
     p_n = \dfrac{
     \sum_{C \in \{Candidates\}}\sum_{ngram \in \mathcal{C}} Count_{clip}(ngram)}{
@@ -458,7 +462,8 @@ For a qualitative evaluation, we always interrogated the generated descriptions,
 \section{General Procedure}
 \label{sec:general_procedure}
 
-Our general experimental procedure was straightforward. We would take our chosen dataset from Table \ref{tab:final_datasets} and  tokenize it as above. Then we would feed these into our own implementations of models, written in Tensorflow\cite{tensorflow2015-whitepaper}. Variables in these models were all initialised with Xavier initialisation \cite{glorot_understanding_nodate}. Since our objective function does not correspond well with our evaluation metric, we would train these models on GeForce GTX TITAN X GPUs for a fixed number of epochs, evaluating and saving our models every epoch, and would choose the best model according our to our evaluation metric. This is the approach taken in other papers faced with the same problem \cite{bahdanau_neural_2014}, \cite{barone_parallel_2017}.  If we were running a number of experiments conjointly all would run for the same number of epochs. In the longest cases (150 epochs with the longest sequences) some models ran for a day and half.
+Our general experimental procedure was straightforward. We would take our chosen dataset from Table \ref{tab:final_datasets} and  tokenize it as above. Then we would feed these into our own implementations of models
+\footnote{https://github.com/condnsdmatters/program\_synthesis}, written in Tensorflow \citep{tensorflow2015-whitepaper}. Variables in these models were all initialised with Xavier initialisation \citep{glorot_understanding_nodate}. Since our objective function does not correspond well with our evaluation metric, we would train these models on GeForce GTX TITAN X GPUs for a fixed number of epochs, evaluating and saving our models every epoch, and would choose the best model according our to our evaluation metric. This is the approach taken in other papers faced with the same problem \citep{bahdanau_neural_2014,barone_parallel_2017}.  If we were running a number of experiments conjointly all would run for the same number of epochs. In the longest cases (150 epochs with the longest sequences) some models ran for two days.
 
 In the case of our Rote Learner, we would run each model directly on the tokenized data 50 times, to get a sense of the variance according the inherent stochasticity of the model.
 
