@@ -95,7 +95,7 @@ In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contribu
     \begin{tabular}{c | c | c | c}
         Library      & Arguments     & Functions  & Scientific \\
         \hline
-        tensorflow   & $ 17002 $     & $ 4340 $ & True \\
+        \textbf{tensorflow}   & $ \mathbf{17002} $     & $ \mathbf{4340} $ & \textbf{True} \\
         google   & $ 2829 $      & $ 1098 $ & False \\
         scipy    & $ 2030 $      & $ 549 $ & True \\
         networkx     & $ 1869 $      & $ 669 $ & True \\
@@ -109,7 +109,7 @@ In fact, as can be seen from Table \ref{table:breakdown_by_library}, it contribu
         \hline
         TOTAL    & $ 41424 $     & $ 12339 $ & True: 21, False: 112 \\
     \end{tabular}
-    \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments and functions}
+    \caption {Break down of the largest libraries in the dataset, by contribution of arguments. Despite their relative infrequency in the overall dataset, scientific libraries contribute the majority of arguments (68.3\%) and functions (61.6\%). Of all the libraries \mintinline[]{}{tensorflow} contributes by far the most data - 41\% of the arguments.}
     \label{table:breakdown_by_library}
     \end{center}
 \end{table}
@@ -126,7 +126,7 @@ The necessity of these kinds of distinctions, and the precision of their use cas
     \begin{tabular}{c | c | c | c | c}
         & Top Argument Names & Count  &   Top Function Names & Count \\  
         \hline               
-        1.   &  name     &     1917    &   fit       &    122 \\        
+        1.   &  \textbf{name}     &     \textbf{1917}    &   fit       &    122 \\        
         2.   &  x        &     439     &   transform &    102 \\         
         3.   &  kwargs   &     303     &   train     &    77 \\         
         4.   &  axis     &     263     &   evaluate  &    71 \\        
@@ -138,7 +138,7 @@ The necessity of these kinds of distinctions, and the precision of their use cas
         10.  &  value    &     210     &   specgram  &    45 \\         
     
     \end{tabular}
-    \caption {The most popular variable names and function names in the raw dataset. As can be seen these are either dominated by scientific terms and single letter variable names, such as those in scientific libraries. Scientific functions which take large numbers of arguments contribute heavily to the dataset}
+    \caption {The most popular variable names and function names in the raw dataset. As can be seen these are either dominated by scientific terms  and single letter variable names, such as those in scientific libraries (x, axis, dtype). Scientific functions which take large numbers of arguments contribute heavily to the dataset. The variable ``name'' provides an outsize contribution, due its repeated presence in \mintinline[]{python}{tensorflow}, often with the same description. }
     \label{table:popular_variable_names}
     \end{center}
 \end{table}
@@ -156,7 +156,7 @@ Corresponding to our findings on a library level, we found that a large number o
     \begin{tabular}{c | c }       
         Repetitions, $N$  & \shortstack{Names Repeated $N$ Times \\ (\% of Data) } \\
         \hline     
-        1     &       11.74   \\          
+        1     &       \mathbf{11.74}   \\          
         2 - 4 &       17.30       \\      
         5 - 9 &        10.99   \\          
         10 - 19 &      11.56   \\          
@@ -180,8 +180,13 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
     \end{tabular}
 }
-
-        \caption { A table of the count and frequency of variable names as they feature in the raw dataset. Approximately half of all variables names occur over 10 times in the data. In particular a single outlier - the variable name \mintinline{python}{name} from \mintinline{python}{tensorflow}, accounts for 6.1\% of the collected data}
+    \caption{ 
+    % Two tables on the frequency of name duplication in the data. 
+    \textbf{Left}: the \% of data composed of arguments with names repeated N times \\
+    \textbf{Right}: the \% of unique argument names that are repeated N times\\
+    These indicate that approximately half of the dataset is made up of names that occur over 10 times, and only 12\% of arguments have a unique name (\textit{left}). However these account for less than 8\% of the unique names in the dataset (\textit{right}). 
+    A single outlier - the variable name \mintinline[]{python}{name} from \mintinline[]{python}{tensorflow}, accounts for 6.1\% of the collected data
+    }
     \label{table:variable_histogram}
 
 
@@ -214,7 +219,10 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
     \end{tabular}
 }
-        \caption { A table of the count and frequency of as (name, description) pairs as they feature in the dataset. Although names are often repeated, a much greater fraction of data points have unique (name, description) pairs.}
+        \caption {
+    \textbf{Left}: the \% of data composed of args with (name, desc.) pairs repeated N times \\
+    \textbf{Right}: the \% of unique (name, desc.) pairs that are repeated N times\\
+    Almost have the datapoints have a unique name + description, indicating a variety of descriptions for the same name (\textit{left}). However \mintinline[]{python}{tensorflow}'s \mintinline[]{python}{name}: \textit{``A name for operation (optional).''} still accounts for 3.3\% of the collected data.}
     \label{table:name_desc_histogram}
 
 \makebox[\linewidth][c]{
@@ -245,7 +253,11 @@ Corresponding to our findings on a library level, we found that a large number o
     \end{tabular}
 }
 
-        \caption { A table of the count and codepaths as they feature in the raw dataset. A larfe fraction of the datasets are repeated }
+        \caption { 
+    \textbf{Left}: the \% of all codepaths that are repeated N times \\
+    \textbf{Right}: the \% of unique codepaths that are repeated N times\\
+        About 15\% of unique codepaths are repeated more than 10 times (\textit{right}) yet these account for $>85\%$ of all codepaths (\textit{left}).  This indicates a small number of paths are exceptionally common, yet the range of different paths is relative great.
+        }
     \label{table:codepath_histogram} 
 
 
