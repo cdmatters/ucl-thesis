@@ -414,7 +414,7 @@ A second suggestion of further work is much simpler, involving our tokenization.
 
 \end{tabular}
 }
-\caption{A validation example and the a selection of training points. Despite being a long sequence, }
+\caption{A validation example and all of training points that start with the same sequence of characters: \mintinline[]{yaml}{i n p u t <S1> s t r u c t u r e}. These demonstrate that model is, to some degree, assimilating the information from its training data, in these very long sequences. }
 \label{table:example_plausible_training}
 \end{center}
 \end{table}
@@ -514,7 +514,7 @@ These results first confirmed the informative power of VPCs, and suggested that 
     % % Code2Vec                          & $ 12.64199 $ & $ 12.80257 $ & \\
     % \hline
 \end{tabular}
-\caption {BLEU Scores on the Full Random-Split Dataset, for Code2Vec Decoder and a series of code only Rote Learners}
+\caption {Results for Code2Vec Decoder and a series of code only Rote Learners on the Full Random Split Dataset}
 \label{table:name_code2vec_solo}
 \end{center}
 \end{table}
@@ -535,12 +535,13 @@ def xkcd_palette(colors):
 
 \end{minted}
 \begin{tabular}{l}
+\hline
 \textbf{Argument Name}: \mintinline[]{python}{colors}\\
 \textbf{Description}: list of keys in the `` seaborn.xkcd\_rgb `` dictionary .\\
 \textbf{Prediction}: a list of data to read . if none , all other the first will be returned .\\
 \end{tabular}
 \end{center}
-\caption{Code \& List}
+\caption{A pruned AST from which VPCs were extracted, and its source representation below. Below that the predictions that the Code2Vec Decoder made on the snippet of source. The predicted description correctly identifies a list.}
 \label{fig:single_examples_code}
 \end{listing}
 
@@ -571,7 +572,7 @@ def xkcd_palette(colors):
 % \end{table}
 
 \end{center}
-\caption{Code \& List}
+\caption{The attentions scores for the VPCs corresponding to code in Listing \ref{fig:single_examples_code}, for each of our Code2Vec models. It is interesting that Path B implies that our argument \mintline[]{python}{colors} is involved in a list comprehension and is highly weighted by most models.   }
 \label{fig:single_examples}
 \end{listing}
 
@@ -588,7 +589,7 @@ From this example it is interesting to note that the model has chosen two paths 
 \begin{center}
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/code2vec_entropies.png}
 \end{center}
-\caption{code2vec entropy}
+\caption{The distribution of entropies of the attentions of the Code2Vec Decoder model across the validation set (\textit{red}). For comparison, distributions of entropies of corresponding uniform categorical attentions is also presented (\textit{blue}). This demonstrates that the model choses a small number of paths to attend to, even though the spread of possible paths may be great.}
 \label{fig:entropy_code2vec}
 \end{figure}
 
@@ -683,7 +684,7 @@ We note this as a significant result, demonstrating the robustness of our Code2V
     % Code2Vec  (Full Masking)                & $ 13.27677 $ & $ 13.07374 $ \\
     \hline
 \end{tabular}
-\caption {Investigate code2vec but with masked variables}
+\caption {Results of investigating the Code2Vec Decoder with masked terminal nodes.}
 \label{table:code_2_vec_masked}
 \end{center}
 \end{table}
@@ -695,7 +696,7 @@ We note this as a significant result, demonstrating the robustness of our Code2V
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_mask_all.png}
 \includegraphics[width=0.8\linewidth]{ImagesCodeRelated/entropies_encoder.png}
 \end{center}
-\caption{all entropies}
+\caption{The changing distributions of entropies of attentions of the different Code2Vec Decoder variations: Mask Coarguments (\textit{top}), Mask All (\textit{middle}), Code2Vec + Seq2Seq Decoder (\textit{bottom}) }
 \label{fig:all_entropies}
 \end{figure}
 
@@ -729,7 +730,7 @@ The model is able to learn the most important features from the VPCs themselves,
 \includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_s2s.png}
 \includegraphics[width=.75\linewidth]{ImagesCodeRelated/pretty_sentence_bleu_c2e.png}
 \end{center}
-\caption{sentence bleu}
+\caption{A histogram of validation set sentence-BLEU scores for: Code2Vec Decoder (\textit{top}), Seq2Seq (\textit{middle}), Code2Vec + Seq2Seq Decoder (\textit{bottom}). The y-axis is logarithmic. }
 \label{fig:sentence_bleu}
 
 \end{figure}
@@ -806,7 +807,7 @@ None the less this demonstrates a clear improvement for the combined neural mode
     % Code2Vec  + Char to Seq           & $ 23.11775 $ & $ 22.37520 $ & \\
     \hline
 \end{tabular}
-\caption {Investigate code2vec combined with seq to seq}
+\caption {Results of the investigation into combining the individual learners.}
 \label{table:code2vec_embed}
 \end{center}
 \end{table}
@@ -902,7 +903,7 @@ Finally, the combined model of the Code2Dev + Seq-to-Seq model performed best, b
     % Code2Vec  + Char to Seq            & $ 1.84887 $ & $ 1.58697 $ \\\\
     \hline
 \end{tabular}
-\caption {Investigate split datasets}
+\caption{The results of all models on the Library Split Dataset}
 \label{table:split_datasets_embed}
 \end{center}
 \end{table}
@@ -952,17 +953,18 @@ These facts both indicate that in our tokenized Library Split, the model is lear
             & Random Split & Library Split \\
             \hline
             Tokenized Train Description Vocab Size    & 5249  &  4701 \\
-            Tokenize Valid Description Vocab Size    & 3012  &  2866 \\
-            \% of Tok. Valid Vocab not in Tok. Train Vocab                & \textbf{4.1\%} &  \textbf{15.8\%} \\
+            Tokenized Valid Description Vocab Size    & 3012  &  2866 \\
+            \% of Tokenized Valid Vocab not in Tokenized Train Vocab                & \textbf{4.1\%} &  \textbf{15.8\%} \\
             \hline
-            \% of $<$UNK$>$ path elements in Train          &  37.4\%  &  32.4 \%   \\
-            \% of $<$UNK$>$ path elements in Validation     &  \textbf{37.5\%}  &  \textbf{57.4\%} \\
-            \% of $<$UNK$>$ terminal nodes in Train         &  12.3\%  &  8.8\%  \\ 
-            \% of $<$UNK$>$ terminal nodes in Validation    &  \textbf{14.7\%} &  \textbf{44.9\%} \\   
+            \% of VPCs with $<$UNK$>$ path elements in Train          &  37.4\%  &  32.4 \%   \\
+            \% of VPCs with $<$UNK$>$ path elements in Validation     &  \textbf{37.5\%}  &  \textbf{57.4\%} \\
+            \% of VPCs with $<$UNK$>$ terminal nodes in Train         &  12.3\%  &  8.8\%  \\ 
+            \% of VPCs with $<$UNK$>$ terminal nodes in Validation    &  \textbf{14.7\%} &  \textbf{44.9\%} \\   
             \hline
         \end{tabular}
     \end{center}
-    \caption{A table showing the change in the actual vocabulary of the argument descriptions, and also change in out-of-vocabulary tokens, for different library splits.}
+    \caption{A table showing the change in vocabularies with different Library Splits.
+    The top shows the change in description vocabulary between Random Split and Library Split. This shows that in a Library Split, models learn from less diverse contexts, which overlap less with the validation set. The bottom shows the change in \% VPCs with $<$UNK$>$ code tokens between Random Split and Library Split. The Library Split drastically increases the validation set's  $<$UNK$>$ tokens.}
     \label{tab:vocabsplit}
 \end{table}
 
@@ -1027,7 +1029,7 @@ Similarly different representations of AST codepaths could be investigated, allo
     \end{tabular}
     }
 
-    \caption{A sample of translations on the Library Split Dataset, in this case with the Code2Vec Decoder model}
+    \caption{A sample of translations on the Library Split Dataset, in this case with the Code2Vec Decoder model. Although translations have a degree of fluency, the overlap in this case is poor, showing the difficulty of Out-of-Project generalisation.}
     \label{tab:lib_split}
 \end{table}
 
