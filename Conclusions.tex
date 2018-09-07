@@ -1,5 +1,42 @@
-\chapter{Conclusions}
+\chapter{Conclusions and Further Work}
 \label{chapterlabel4}
 
+
+\section{Conclusions}
+
+At the start of this report we sought to address four questions in our problem formuation:
+
+\begin{tight_enumerate}
+    \item whether reasonable summaries can be generated from just lexical names in the function signature?
+    \item whether reasonable summaries can be generated from the functions abstract syntax tree, without the lexical data?
+    \item whether these models, can be combined in a way that surpasses each individually?
+    \item whether such models can work both in an `in-project' setting and an `out-project setting'?
+\end{tight_enumerate}
+
+Over the course of this report we have provided evidence to address the answers to each of these questions. 
+
+First we conclude that reasonable summaries \textit{can} be generated from just names in the function signature. 
+In particular we have shown that reasonable descriptions can be generated from just the argument name, by looking at its the character substructure. Operating on our Reduced Random Split Dataset, our Seq2Seq model achieves test BLEU score of 12.72 - surpassing a Rote Learner that regurgitates memorised descriptions for similar names.  
+We can also conclude that other aspects of the signature, such as corguments and the function name, also prove informative, since they boost perfomance in our Rote Learner and in most of our Seq2Seq cases. 
+This highlights the informative power of the function signature, and the names that are chosen within it.
+
+Secondly we conclude that reasonable summaries \textit{can} be generated from just the AST, without any reference to the name of the argument. 
+By using the \textit{variable path-context} (VPC) representation, we showed that Rote Learner that memorised descriptions and matched VPCs could achieve a BLEU score of 12.61 on our Full Random-Split Dataset. This was then ourperformed by our neural Code2Vec Decoder, which achieved a test BLEU score of 18.13, generating original descriptions. 
+We demonstrate that this model can outperform the Rote Learner, despite partial or full occlusion of the names of objects in the AST, in achieving BLEU scores of 16.94 and 13.07.
+
+Thirdly we conclude that combining our two different modalities results in a stronger model than either of the two individually. By simply each individually concatenated encoded vectors our Code2Vec + Seq2Seq model surpasses individual models by 2 BLEU points on the Full Random-Split Dataset.
+
+Finally our investigation to the last question to proves inconclusive. We notice a significantly worse performance of our models on the `out-project' setting, though they generate sentences with fluency. We demonstrate that due to tokenizations of the dataset, a large fraction of test-set features are rendered out-of-vocabulary in this setting, raising the question of whether the models or the tokenizations are the problem in this case. 
+
 % This just dumps some pseudolatin in so you can see some text in place.
-\blindtext
+\section{Limitations}
+
+In the course of the above investigations, we came across a number of limitations that affected our investigation.
+First and foremost, over the course
+* Small dataset \& Poor tokenization of data
+* Overwhelming tensorflow
+* Overwhelming scientific
+* Difficult Vocabularies
+
+
+\section{Further Work}
