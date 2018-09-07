@@ -5,9 +5,10 @@
 % In langugages such as C++, the signature of function may be all that is presented to the user of a third-party library, when using that library. 
 % Therefore being able to generate reasonable descriptions from signature items alone would already be of value. 
 % This does not seem an unrealistic target, since good developer practice often involves giving insightful names to variables and functions\footnote{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#s3.16-naming}.
+In this section we first present a summary of our areas of investigation. We then present our models compositionally, first with an overview and then with a detailed description of each of the components. Finally we outline three sections that are key to the implementation of our project: the tokenization of the data, the evaluation method, and the general experimental procedure.
 
 
-\section{Overview}
+\section{Areas of Investigation}
 
 In our investigations we focus on two main aspects of the code to generate descriptions for our arguments. 
 These are the names in the function's signature, and the \textit{variable path-contexts} (VPCs) in the function's AST. 
@@ -17,7 +18,7 @@ In our experiments, we model the names of the signature as sequences of characte
 In this case both parts of the name might indicate a different clue to the argument:  the  \mintinline[]{python}{web} prefix may indicate a use in the internet domain; the \mintinline[]{python}{ctx} suffix may indicate a context object. 
 In designing our models, we aim to pick up these patterns and conventions on the character-level.
 
-We also focused on generating descriptions solely from the argument's VPCs. We feel that this most robust way of drawing inferences from the code, as it only examines instructions given directly to the computer. 
+We also focus on generating descriptions solely from the argument's VPCs. We feel that this is the most robust way of drawing inferences from the code, as it only examines instructions given directly to the computer. 
 Any inferences here would be invariant under transformations such as renaming of variable. 
 We hoped that by examining all the VPCs present for an argument, the model would learn representation for variables that indicate common usage (such as which methods are called on it), or perhaps even type.
 
@@ -26,7 +27,7 @@ We hoped that by examining all the VPCs present for an argument, the model would
 
 We prepared four models to investigate these data: A Rote Learner to act as baseline for our investigations; a character-level Seq2Seq Model to investigate the signature names; an original Code2Vec Decoder model to investigate the VPCs; and a Code2Vec + Seq2Seq Model to investigate both inputs combined.
 
-The rest of this section is dedicated to presenting each of these models, summarised in Table \ref{tab:our_models_capability}, the  tokenization methods to obtain our data, and the implementation in conducting our experiments.
+% The rest of this section is dedicated to presenting each of these models, summarised in Table \ref{tab:our_models_capability}, the  tokenization methods to obtain our data, and the implementation in conducting our experiments.
 
 
 
