@@ -2,16 +2,28 @@
 % \makedeclaration
 
 \begin{abstract} % 300 word limit
-My research is about stuff.
-It begins with a study of some stuff, and then some other stuff and things.
-There is a 300-word limit on your abstract.
+Code documentation is the natural language component of code, designed to help humans in code comprehension. 
+Documenting fine-grained elements of code, such as individual arguments, is a laborious manual task prone to error, inaccuracy or neglect. 
+Automating this task would be valuable to the software engineering industry, while providing a stepping stone to research tasks such as type inference.
+However, automatic generation of such descriptions has so far not been attempted in the literature, in part due to a lack of an appropriate dataset.
+
+In this paper we present a novel dataset sourced from most popular open-source Python libraries, to investigate the automatic documentation of function arguments from their source code. In particular we investigate generation from  two modalities of the underlying code: the names in function signature, and the structure of the abstract syntax tree. 
+We find that by analysing names as a sequence of characters, we are able to generate plausible descriptions from combinations of argument names, function names and co-argument names, by both rote learning and sequence-to-sequence models. 
+We also find that by representing our abstract syntax tree as a sequence of paths, we are able generate descriptions using an original architecture, our Code2Vec Decoder. We demonstrate that this model surpasses a comparable rote learner, even under partial or full occlusion of lexical data from the syntax tree.
+
+We demonstrate that the combination of these modalities yields an improvement on each of the individual models, suggesting that multimodal models may be a promising future direction of research, and finally we investigate the challenge of applying our trained model to code from different libraries. 
+
+
+
+
+
+
 \end{abstract}
 
 
 
 \setcounter{tocdepth}{2} 
-% Setting this higher means you get contents entries for
-%  more minor section headers.
+
 
 \tableofcontents
 % \listoffigures
