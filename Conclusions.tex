@@ -4,29 +4,29 @@
 
 \section{Conclusions}
 
-At the start of this report we sought to address four questions in our problem formuation:
+At the start of this report we sought to address four questions in our problem formulation:
 
 \begin{tight_enumerate}
-    \item whether reasonable summaries can be generated from just lexical names in the function signature?
-    \item whether reasonable summaries can be generated from the functions abstract syntax tree, without the lexical data?
-    \item whether these models, can be combined in a way that surpasses each individually?
-    \item whether such models can work both in an `in-project' setting and an `out-project setting'?
+    \item \textit{whether reasonable descriptions can be generated from just lexical names in the function signature?}
+    \item \textit{whether reasonable descriptions can be generated from the function's abstract syntax tree, without the lexical data?}
+    \item \textit{whether these models, can be combined in a way that surpasses each individually?}
+    \item \textit{whether such models can work both in an `in-project' setting and an `out-project setting'?}
 \end{tight_enumerate}
 
-Over the course of this report we have provided evidence to address the answers to each of these questions. 
+Over the course of this report we have provided evidence to address answers to each of these questions. 
 
 First we conclude that reasonable summaries \textit{can} be generated from just names in the function signature. 
-In particular we have shown that reasonable descriptions can be generated from just the argument name, by looking at its the character substructure. Operating on our Reduced Random Split Dataset, our Seq2Seq model achieves test BLEU score of 12.72 - surpassing a Rote Learner that regurgitates memorised descriptions for similar names.  
+In particular we have shown that reasonable descriptions can be generated from just the argument name, by looking at its character substructure. Operating on our Reduced Random Split Dataset, our Seq2Seq model generated fluent original descriptions, achieving test BLEU score of 12.72 - surpassing a Rote Learner that regurgitates memorised descriptions based on name similarity.  
 We can also conclude that other aspects of the signature, such as corguments and the function name, also prove informative, since they boost perfomance in our Rote Learner and in most of our Seq2Seq cases. 
 This highlights the informative power of the function signature, and the names that are chosen within it.
 
 Secondly we conclude that reasonable summaries \textit{can} be generated from just the AST, without any reference to the name of the argument. 
-By using the \textit{variable path-context} (VPC) representation, we showed that Rote Learner that memorised descriptions and matched VPCs could achieve a BLEU score of 12.61 on our Full Random-Split Dataset. This was then ourperformed by our neural Code2Vec Decoder, which achieved a test BLEU score of 18.13, generating original descriptions. 
-We demonstrate that this model can outperform the Rote Learner despite partial or full occlusion of the names of objects in the AST, achieving BLEU scores of 16.94 and 13.07 respectively.
+By using the \textit{variable path-context} (VPC) representation, we showed that a Rote Learner that memorised descriptions and matched VPCs could achieve a BLEU score of 12.61 on our Full Random-Split Dataset. This was then significantly outperformed by our Code2Vec Decoder, which achieved a test BLEU score of 18.13, while generating original descriptions. 
+We then demonstrated that this model can still outperform the Rote Learner despite partial or full occlusion of the names of objects in the AST, achieving BLEU scores of 16.94 and 13.07 respectively.
 
-Thirdly we conclude that combining our two different modalities results in a stronger model than either of the two individually. By simply each individually concatenated encoded vectors our Code2Vec + Seq2Seq model surpasses individual models by 2 BLEU points on the Full Random-Split Dataset.
+Thirdly we conclude that combining our two different modalities results in a stronger model than either of the two individually. By simply concatenating each encoded vector before decoding, our Code2Vec + Seq2Seq model surpassed individual models by 2 BLEU points on the Full Random-Split Dataset.
 
-Finally our investigation to our the last question to proves inconclusive. We notice a significantly worse performance of our models on the `out-project' setting, though they generate sentences with fluency. We demonstrate that due to tokenizations of the dataset, a large fraction of test-set features are rendered out-of-vocabulary in this setting, raising the question of whether the models or the tokenizations are the problem in this case. 
+Finally our investigation to the last question proves inconclusive, but promising. We notice a significantly worse performance of our models on the `out-project' setting, though they generate sentences with fluency. We demonstrate that due to tokenizations of the dataset, a large fraction of test-set features are rendered out-of-vocabulary in this setting, and combined with a lack of diversity in the training data, this raised the question of whether the models or the tokenizations are the problem in this case. 
 
 % This just dumps some pseudolatin in so you can see some text in place.
 \section{Limitations \& Critique}
@@ -34,18 +34,46 @@ Finally our investigation to our the last question to proves inconclusive. We no
 In the course of the above investigations, we encountered a number of limitations that affected our progress.
 
 \paragraph{Dataset} 
-First and foremost, we noted that the composition of our dataset disproportionately originates from a single source - 41\% of our arguments are from \mintinline[]{python}{tensorflow}. This proved less problematic for Random Split Dataset but in a Library Split setting this accounts for most of the training data - which also includes \mintinline[]{python}{scipy} and \mintinline[]{python}{numpy}. Therefore the variance of our training set would have been much reduced, hindering our investigation into Library Split Data.
+First and foremost, we noted that the composition of our dataset disproportionately originates from a single source - 41\% of our arguments are from \mintinline[]{python}{tensorflow}. This proved less problematic for Random Split Dataset but in a Library Split setting this accounts for most of the training data - which also includes \mintinline[]{python}{scipy} and \mintinline[]{python}{numpy}. Therefore the variance of our training set would have been much reduced, hindering our investigation into generalisation across project.
 
-Secondly, although the size of our Full Datasets are comparable to others\footnote{such as the Stack Overflow SQL dataset}, our Reduced Dataset are arguably too small for our neural methods in character-level tasks. In particular this small dataset may explain the overfitting in these tasks, and should have ideally have been bigger in these investigations, or subject to data augmentation.
+Secondly, although the size of our Full Datasets are comparable to others\footnote{such as the Stack Overflow SQL dataset}, our Reduced Datasets are smaller than we desired for our character-level tasks. In particular this small dataset may explain the overfitting that occurred in these tasks. Ideally these sets should have been bigger in the investigations, or subject to data augmentation techniques.
 
 \paragraph{Metric} 
-A major limitation of our overall investigation is a lack of automatic metrics for assessing description quality. Without skilled human intervention in reading the source code, it is hard to evaluate whether an argument description is true, even if the n-gram precisions (as measure by BLEU) is poor. In machine translation, often multiple synonymous reference sentences are provided to improve the validity of n-gram precision \citep{papineni_bleu_2001}, but in our case no multiple translations exist. Automating a measure of evaluating description would greatly assist in-depth analysis of where the models fail.
+A major limitation of our overall investigation was a lack of automatic metrics for assessing description quality. Without skilled human intervention in reading the source code, it was hard to evaluate whether an argument description is true, even if the n-gram precisions maybe poor. In BLEU evaluations, often multiple synonymous sentences are provided as reference translations in order to improve the validity of n-gram precision. In our case no multiple translations exist. Automating a measure of evaluating descriptions would greatly assist in statistical analysis of where the models fail.
 
 \paragraph{Resources} 
 
-Finally a limitation of our overall investigation is our resources available. Since we aimed to fit all our work on one GPU, we were constrained to use a limited vocabulary of paths, terminal nodes. Increasing these would likely help in both Random Split and Library Split contexts
+Finally a limitation of our overall investigation was the computational resource available of our hardware. Since we aimed to fit all our work on one GPU, we were constrained to use a limited vocabulary of paths and terminal nodes. Increasing these would likely help in both Random Split and Library Split contexts.
 
 \section{Further Work}
 
-* Seq2Seq
-* 
+To the best of our knowledge, the work of this report is the first of its kind into the generation of documentation from fine-grained elements of source code.
+We believe it presents a number of opportunities for future work.
+
+%  our dataset and models indicate a great deal of wo 
+% However, with the dataset herein now available to researchers, a number of future research opportunities present themselves in this task.
+
+First of all, further work should focus on the use of code's syntactic information, in generating descriptions. 
+Our investigations have highlighted the success this approach, and echo advances made in related tasks of variable naming \citep{allamanis_learning_2017,alon_code2vec_2018}. 
+We therefore suggest applying other syntactic models to this dataset: semantically annotated graphs \citep{allamanis_learning_2017}, TreeLSTMs \citep{tai_improved_2015}, or other syntactic models \citep{yin_syntactic_2017}. 
+
+We also think future work should research decomposable representations of AST structures. \citet{alon_code2vec_2018} demonstrated this value in their Code2Vec \textit{path-context} model, and we echo it here in our \textit{variable path-context} model. However, our representation of these VPCs as indivisble paths leads to problem of out-of-vocabulary code. By representing VPCs as their decomposed path elements, we may further take advantage of sub patterns in paths while simultaneously addressing this problem. 
+Indeed in recent weeks, a preprint paper has been released by \citep{alon_code2seq_2018} using this approach on a code captioning task - claiming the first use of syntactic information in end-to-end code-to-sequence task.
+
+We also suggest that more work be done on the function signature. The names in this section of code is highly informative, as seen from the proliferation of function-naming tasks \cite{allamanis_convolutional_2016,allamanis_learning_2017}, and we suggest that advances here could be applied to `reading' other names in the code. As suggested earlier, investigations here should focus on improved attention mechanisms \cite{niculae_regularized_2017}, or perhaps pointer networks \citep{NIPS2015_5866}, to help the networks pay attention to different tokens and include them in the description.
+
+Finally there is an opportunity for further work in generating larger dataset. We collected data from the list of 300 most popular libraries on PyPI, but our Sphinx plugin could have been applied much more widely. There is still a great deal of well-documented code to be collected - if the right organisations or projects are targeted. Future work could involve collecting data a number of respected organisations on GitHub, as well as all of PyPI.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
